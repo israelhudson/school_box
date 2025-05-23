@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'routes/app_router.dart';
+import 'theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,23 +11,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'School Box App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green.shade900,
-          brightness: Brightness.dark,
-        ),
-        scaffoldBackgroundColor: Colors.green.shade800,
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-              fontSize: 48.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white70),
-        ),
-        useMaterial3: true,
-      ),
-      home: const HelloWorldScreen(),
+    return MaterialApp.router(
+      title: 'School Box',
+      theme: SchoolTheme.theme,
+      routerConfig: appRouter,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
