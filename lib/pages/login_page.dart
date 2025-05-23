@@ -36,12 +36,12 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => context.go('/home'),
+                onPressed: () => context.goNamed('home'),
                 child: const Text('Entrar'),
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => context.go('/about'),
+                onPressed: () => context.goNamed('about'),
                 child: const Text('Sobre o aplicativo'),
               ),
             ],

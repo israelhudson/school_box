@@ -10,9 +10,26 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/login',
   errorBuilder: (context, state) => const NotFoundPage(),
   routes: [
-    GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
-    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
-    GoRoute(path: '/about', builder: (context, state) => const AboutPage()),
-    GoRoute(path: '/contact', builder: (context, state) => const ContactPage()),
+    GoRoute(
+      path: '/login',
+      name: 'login',
+      builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/home',
+      name: 'home',
+      builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/about',
+      name: 'about',
+      builder: (context, state) => const AboutPage(),
+    ),
+    GoRoute(
+      path: '/contact',
+      name: 'contact',
+      builder: (context, state) => const ContactPage(),
+    ),
   ],
+  debugLogDiagnostics: true,
 );
