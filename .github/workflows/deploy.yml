@@ -27,7 +27,7 @@ jobs:
       run: flutter analyze
       
     - name: Build web
-      run: flutter build web --release --base-href="/school_box/"
+      run: flutter build web --release
       
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
