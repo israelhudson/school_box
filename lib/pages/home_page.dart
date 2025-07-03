@@ -50,6 +50,22 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text('Usuários'),
+              onTap: () {
+                context.goNamed('usuarios');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.school),
+              title: const Text('Alunos'),
+              onTap: () {
+                context.goNamed('alunos');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.info),
               title: const Text('Sobre'),
               onTap: () {
@@ -99,18 +115,36 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     ListTile(
+                      leading: const Icon(Icons.people),
+                      title: const Text('Usuários'),
+                      subtitle: const Text(
+                        'Visualizar e gerenciar usuários do sistema',
+                      ),
+                      onTap: () {
+                        context.goNamed('usuarios');
+                      },
+                    ),
+                    const Divider(),
+                    ListTile(
                       leading: const Icon(Icons.photo_library),
                       title: const Text('Galeria de Fotos'),
+                      subtitle: const Text('Visualizar fotos dos alunos'),
                       onTap: () {},
                     ),
                     ListTile(
-                      leading: const Icon(Icons.people),
-                      title: const Text('Gerenciar Alunos'),
-                      onTap: () {},
+                      leading: const Icon(Icons.school),
+                      title: const Text('Alunos'),
+                      subtitle: const Text(
+                        'Buscar alunos por turma, série e filtros',
+                      ),
+                      onTap: () {
+                        context.goNamed('alunos');
+                      },
                     ),
                     ListTile(
                       leading: const Icon(Icons.settings),
                       title: const Text('Configurações'),
+                      subtitle: const Text('Configurar o sistema'),
                       onTap: () {},
                     ),
                   ],
