@@ -1,0 +1,9491 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.4
+-- Dumped by pg_dump version 17.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: _realtime; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA _realtime;
+
+
+ALTER SCHEMA _realtime OWNER TO postgres;
+
+--
+-- Name: auth; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA auth;
+
+
+ALTER SCHEMA auth OWNER TO supabase_admin;
+
+--
+-- Name: extensions; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA extensions;
+
+
+ALTER SCHEMA extensions OWNER TO postgres;
+
+--
+-- Name: graphql; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA graphql;
+
+
+ALTER SCHEMA graphql OWNER TO supabase_admin;
+
+--
+-- Name: graphql_public; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA graphql_public;
+
+
+ALTER SCHEMA graphql_public OWNER TO supabase_admin;
+
+--
+-- Name: pg_net; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_net WITH SCHEMA extensions;
+
+
+--
+-- Name: EXTENSION pg_net; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pg_net IS 'Async HTTP';
+
+
+--
+-- Name: pgbouncer; Type: SCHEMA; Schema: -; Owner: pgbouncer
+--
+
+CREATE SCHEMA pgbouncer;
+
+
+ALTER SCHEMA pgbouncer OWNER TO pgbouncer;
+
+--
+-- Name: realtime; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA realtime;
+
+
+ALTER SCHEMA realtime OWNER TO supabase_admin;
+
+--
+-- Name: storage; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA storage;
+
+
+ALTER SCHEMA storage OWNER TO supabase_admin;
+
+--
+-- Name: supabase_functions; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA supabase_functions;
+
+
+ALTER SCHEMA supabase_functions OWNER TO supabase_admin;
+
+--
+-- Name: vault; Type: SCHEMA; Schema: -; Owner: supabase_admin
+--
+
+CREATE SCHEMA vault;
+
+
+ALTER SCHEMA vault OWNER TO supabase_admin;
+
+--
+-- Name: pg_graphql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_graphql WITH SCHEMA graphql;
+
+
+--
+-- Name: EXTENSION pg_graphql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pg_graphql IS 'pg_graphql: GraphQL support';
+
+
+--
+-- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA extensions;
+
+
+--
+-- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pg_stat_statements IS 'track planning and execution statistics of all SQL statements executed';
+
+
+--
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
+
+
+--
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
+--
+-- Name: supabase_vault; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS supabase_vault WITH SCHEMA vault;
+
+
+--
+-- Name: EXTENSION supabase_vault; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION supabase_vault IS 'Supabase Vault Extension';
+
+
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA extensions;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
+-- Name: aal_level; Type: TYPE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TYPE auth.aal_level AS ENUM (
+    'aal1',
+    'aal2',
+    'aal3'
+);
+
+
+ALTER TYPE auth.aal_level OWNER TO supabase_auth_admin;
+
+--
+-- Name: code_challenge_method; Type: TYPE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TYPE auth.code_challenge_method AS ENUM (
+    's256',
+    'plain'
+);
+
+
+ALTER TYPE auth.code_challenge_method OWNER TO supabase_auth_admin;
+
+--
+-- Name: factor_status; Type: TYPE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TYPE auth.factor_status AS ENUM (
+    'unverified',
+    'verified'
+);
+
+
+ALTER TYPE auth.factor_status OWNER TO supabase_auth_admin;
+
+--
+-- Name: factor_type; Type: TYPE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TYPE auth.factor_type AS ENUM (
+    'totp',
+    'webauthn',
+    'phone'
+);
+
+
+ALTER TYPE auth.factor_type OWNER TO supabase_auth_admin;
+
+--
+-- Name: one_time_token_type; Type: TYPE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TYPE auth.one_time_token_type AS ENUM (
+    'confirmation_token',
+    'reauthentication_token',
+    'recovery_token',
+    'email_change_token_new',
+    'email_change_token_current',
+    'phone_change_token'
+);
+
+
+ALTER TYPE auth.one_time_token_type OWNER TO supabase_auth_admin;
+
+--
+-- Name: tipo_acesso; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.tipo_acesso AS ENUM (
+    'por_serie',
+    'por_turma',
+    'por_aluno',
+    'personalizado'
+);
+
+
+ALTER TYPE public.tipo_acesso OWNER TO postgres;
+
+--
+-- Name: user_type; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.user_type AS ENUM (
+    'admin',
+    'moderador',
+    'responsavel',
+    'aluno'
+);
+
+
+ALTER TYPE public.user_type OWNER TO postgres;
+
+--
+-- Name: action; Type: TYPE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TYPE realtime.action AS ENUM (
+    'INSERT',
+    'UPDATE',
+    'DELETE',
+    'TRUNCATE',
+    'ERROR'
+);
+
+
+ALTER TYPE realtime.action OWNER TO supabase_admin;
+
+--
+-- Name: equality_op; Type: TYPE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TYPE realtime.equality_op AS ENUM (
+    'eq',
+    'neq',
+    'lt',
+    'lte',
+    'gt',
+    'gte',
+    'in'
+);
+
+
+ALTER TYPE realtime.equality_op OWNER TO supabase_admin;
+
+--
+-- Name: user_defined_filter; Type: TYPE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TYPE realtime.user_defined_filter AS (
+	column_name text,
+	op realtime.equality_op,
+	value text
+);
+
+
+ALTER TYPE realtime.user_defined_filter OWNER TO supabase_admin;
+
+--
+-- Name: wal_column; Type: TYPE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TYPE realtime.wal_column AS (
+	name text,
+	type_name text,
+	type_oid oid,
+	value jsonb,
+	is_pkey boolean,
+	is_selectable boolean
+);
+
+
+ALTER TYPE realtime.wal_column OWNER TO supabase_admin;
+
+--
+-- Name: wal_rls; Type: TYPE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TYPE realtime.wal_rls AS (
+	wal jsonb,
+	is_rls_enabled boolean,
+	subscription_ids uuid[],
+	errors text[]
+);
+
+
+ALTER TYPE realtime.wal_rls OWNER TO supabase_admin;
+
+--
+-- Name: email(); Type: FUNCTION; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE FUNCTION auth.email() RETURNS text
+    LANGUAGE sql STABLE
+    AS $$
+  select 
+  coalesce(
+    nullif(current_setting('request.jwt.claim.email', true), ''),
+    (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'email')
+  )::text
+$$;
+
+
+ALTER FUNCTION auth.email() OWNER TO supabase_auth_admin;
+
+--
+-- Name: FUNCTION email(); Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON FUNCTION auth.email() IS 'Deprecated. Use auth.jwt() -> ''email'' instead.';
+
+
+--
+-- Name: jwt(); Type: FUNCTION; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE FUNCTION auth.jwt() RETURNS jsonb
+    LANGUAGE sql STABLE
+    AS $$
+  select 
+    coalesce(
+        nullif(current_setting('request.jwt.claim', true), ''),
+        nullif(current_setting('request.jwt.claims', true), '')
+    )::jsonb
+$$;
+
+
+ALTER FUNCTION auth.jwt() OWNER TO supabase_auth_admin;
+
+--
+-- Name: role(); Type: FUNCTION; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE FUNCTION auth.role() RETURNS text
+    LANGUAGE sql STABLE
+    AS $$
+  select 
+  coalesce(
+    nullif(current_setting('request.jwt.claim.role', true), ''),
+    (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role')
+  )::text
+$$;
+
+
+ALTER FUNCTION auth.role() OWNER TO supabase_auth_admin;
+
+--
+-- Name: FUNCTION role(); Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON FUNCTION auth.role() IS 'Deprecated. Use auth.jwt() -> ''role'' instead.';
+
+
+--
+-- Name: uid(); Type: FUNCTION; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE FUNCTION auth.uid() RETURNS uuid
+    LANGUAGE sql STABLE
+    AS $$
+  select 
+  coalesce(
+    nullif(current_setting('request.jwt.claim.sub', true), ''),
+    (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub')
+  )::uuid
+$$;
+
+
+ALTER FUNCTION auth.uid() OWNER TO supabase_auth_admin;
+
+--
+-- Name: FUNCTION uid(); Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON FUNCTION auth.uid() IS 'Deprecated. Use auth.jwt() -> ''sub'' instead.';
+
+
+--
+-- Name: grant_pg_cron_access(); Type: FUNCTION; Schema: extensions; Owner: supabase_admin
+--
+
+CREATE FUNCTION extensions.grant_pg_cron_access() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS (
+    SELECT
+    FROM pg_event_trigger_ddl_commands() AS ev
+    JOIN pg_extension AS ext
+    ON ev.objid = ext.oid
+    WHERE ext.extname = 'pg_cron'
+  )
+  THEN
+    grant usage on schema cron to postgres with grant option;
+
+    alter default privileges in schema cron grant all on tables to postgres with grant option;
+    alter default privileges in schema cron grant all on functions to postgres with grant option;
+    alter default privileges in schema cron grant all on sequences to postgres with grant option;
+
+    alter default privileges for user supabase_admin in schema cron grant all
+        on sequences to postgres with grant option;
+    alter default privileges for user supabase_admin in schema cron grant all
+        on tables to postgres with grant option;
+    alter default privileges for user supabase_admin in schema cron grant all
+        on functions to postgres with grant option;
+
+    grant all privileges on all tables in schema cron to postgres with grant option;
+    revoke all on table cron.job from postgres;
+    grant select on table cron.job to postgres with grant option;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION extensions.grant_pg_cron_access() OWNER TO supabase_admin;
+
+--
+-- Name: FUNCTION grant_pg_cron_access(); Type: COMMENT; Schema: extensions; Owner: supabase_admin
+--
+
+COMMENT ON FUNCTION extensions.grant_pg_cron_access() IS 'Grants access to pg_cron';
+
+
+--
+-- Name: grant_pg_graphql_access(); Type: FUNCTION; Schema: extensions; Owner: supabase_admin
+--
+
+CREATE FUNCTION extensions.grant_pg_graphql_access() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+    func_is_graphql_resolve bool;
+BEGIN
+    func_is_graphql_resolve = (
+        SELECT n.proname = 'resolve'
+        FROM pg_event_trigger_ddl_commands() AS ev
+        LEFT JOIN pg_catalog.pg_proc AS n
+        ON ev.objid = n.oid
+    );
+
+    IF func_is_graphql_resolve
+    THEN
+        -- Update public wrapper to pass all arguments through to the pg_graphql resolve func
+        DROP FUNCTION IF EXISTS graphql_public.graphql;
+        create or replace function graphql_public.graphql(
+            "operationName" text default null,
+            query text default null,
+            variables jsonb default null,
+            extensions jsonb default null
+        )
+            returns jsonb
+            language sql
+        as $$
+            select graphql.resolve(
+                query := query,
+                variables := coalesce(variables, '{}'),
+                "operationName" := "operationName",
+                extensions := extensions
+            );
+        $$;
+
+        -- This hook executes when `graphql.resolve` is created. That is not necessarily the last
+        -- function in the extension so we need to grant permissions on existing entities AND
+        -- update default permissions to any others that are created after `graphql.resolve`
+        grant usage on schema graphql to postgres, anon, authenticated, service_role;
+        grant select on all tables in schema graphql to postgres, anon, authenticated, service_role;
+        grant execute on all functions in schema graphql to postgres, anon, authenticated, service_role;
+        grant all on all sequences in schema graphql to postgres, anon, authenticated, service_role;
+        alter default privileges in schema graphql grant all on tables to postgres, anon, authenticated, service_role;
+        alter default privileges in schema graphql grant all on functions to postgres, anon, authenticated, service_role;
+        alter default privileges in schema graphql grant all on sequences to postgres, anon, authenticated, service_role;
+
+        -- Allow postgres role to allow granting usage on graphql and graphql_public schemas to custom roles
+        grant usage on schema graphql_public to postgres with grant option;
+        grant usage on schema graphql to postgres with grant option;
+    END IF;
+
+END;
+$_$;
+
+
+ALTER FUNCTION extensions.grant_pg_graphql_access() OWNER TO supabase_admin;
+
+--
+-- Name: FUNCTION grant_pg_graphql_access(); Type: COMMENT; Schema: extensions; Owner: supabase_admin
+--
+
+COMMENT ON FUNCTION extensions.grant_pg_graphql_access() IS 'Grants access to pg_graphql';
+
+
+--
+-- Name: grant_pg_net_access(); Type: FUNCTION; Schema: extensions; Owner: supabase_admin
+--
+
+CREATE FUNCTION extensions.grant_pg_net_access() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_event_trigger_ddl_commands() AS ev
+    JOIN pg_extension AS ext
+    ON ev.objid = ext.oid
+    WHERE ext.extname = 'pg_net'
+  )
+  THEN
+    GRANT USAGE ON SCHEMA net TO supabase_functions_admin, postgres, anon, authenticated, service_role;
+
+    ALTER function net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) SECURITY DEFINER;
+    ALTER function net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) SECURITY DEFINER;
+
+    ALTER function net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) SET search_path = net;
+    ALTER function net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) SET search_path = net;
+
+    REVOKE ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) FROM PUBLIC;
+    REVOKE ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) FROM PUBLIC;
+
+    GRANT EXECUTE ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) TO supabase_functions_admin, postgres, anon, authenticated, service_role;
+    GRANT EXECUTE ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) TO supabase_functions_admin, postgres, anon, authenticated, service_role;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION extensions.grant_pg_net_access() OWNER TO supabase_admin;
+
+--
+-- Name: FUNCTION grant_pg_net_access(); Type: COMMENT; Schema: extensions; Owner: supabase_admin
+--
+
+COMMENT ON FUNCTION extensions.grant_pg_net_access() IS 'Grants access to pg_net';
+
+
+--
+-- Name: pgrst_ddl_watch(); Type: FUNCTION; Schema: extensions; Owner: supabase_admin
+--
+
+CREATE FUNCTION extensions.pgrst_ddl_watch() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  cmd record;
+BEGIN
+  FOR cmd IN SELECT * FROM pg_event_trigger_ddl_commands()
+  LOOP
+    IF cmd.command_tag IN (
+      'CREATE SCHEMA', 'ALTER SCHEMA'
+    , 'CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO', 'ALTER TABLE'
+    , 'CREATE FOREIGN TABLE', 'ALTER FOREIGN TABLE'
+    , 'CREATE VIEW', 'ALTER VIEW'
+    , 'CREATE MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW'
+    , 'CREATE FUNCTION', 'ALTER FUNCTION'
+    , 'CREATE TRIGGER'
+    , 'CREATE TYPE', 'ALTER TYPE'
+    , 'CREATE RULE'
+    , 'COMMENT'
+    )
+    -- don't notify in case of CREATE TEMP table or other objects created on pg_temp
+    AND cmd.schema_name is distinct from 'pg_temp'
+    THEN
+      NOTIFY pgrst, 'reload schema';
+    END IF;
+  END LOOP;
+END; $$;
+
+
+ALTER FUNCTION extensions.pgrst_ddl_watch() OWNER TO supabase_admin;
+
+--
+-- Name: pgrst_drop_watch(); Type: FUNCTION; Schema: extensions; Owner: supabase_admin
+--
+
+CREATE FUNCTION extensions.pgrst_drop_watch() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  obj record;
+BEGIN
+  FOR obj IN SELECT * FROM pg_event_trigger_dropped_objects()
+  LOOP
+    IF obj.object_type IN (
+      'schema'
+    , 'table'
+    , 'foreign table'
+    , 'view'
+    , 'materialized view'
+    , 'function'
+    , 'trigger'
+    , 'type'
+    , 'rule'
+    )
+    AND obj.is_temporary IS false -- no pg_temp objects
+    THEN
+      NOTIFY pgrst, 'reload schema';
+    END IF;
+  END LOOP;
+END; $$;
+
+
+ALTER FUNCTION extensions.pgrst_drop_watch() OWNER TO supabase_admin;
+
+--
+-- Name: set_graphql_placeholder(); Type: FUNCTION; Schema: extensions; Owner: supabase_admin
+--
+
+CREATE FUNCTION extensions.set_graphql_placeholder() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $_$
+    DECLARE
+    graphql_is_dropped bool;
+    BEGIN
+    graphql_is_dropped = (
+        SELECT ev.schema_name = 'graphql_public'
+        FROM pg_event_trigger_dropped_objects() AS ev
+        WHERE ev.schema_name = 'graphql_public'
+    );
+
+    IF graphql_is_dropped
+    THEN
+        create or replace function graphql_public.graphql(
+            "operationName" text default null,
+            query text default null,
+            variables jsonb default null,
+            extensions jsonb default null
+        )
+            returns jsonb
+            language plpgsql
+        as $$
+            DECLARE
+                server_version float;
+            BEGIN
+                server_version = (SELECT (SPLIT_PART((select version()), ' ', 2))::float);
+
+                IF server_version >= 14 THEN
+                    RETURN jsonb_build_object(
+                        'errors', jsonb_build_array(
+                            jsonb_build_object(
+                                'message', 'pg_graphql extension is not enabled.'
+                            )
+                        )
+                    );
+                ELSE
+                    RETURN jsonb_build_object(
+                        'errors', jsonb_build_array(
+                            jsonb_build_object(
+                                'message', 'pg_graphql is only available on projects running Postgres 14 onwards.'
+                            )
+                        )
+                    );
+                END IF;
+            END;
+        $$;
+    END IF;
+
+    END;
+$_$;
+
+
+ALTER FUNCTION extensions.set_graphql_placeholder() OWNER TO supabase_admin;
+
+--
+-- Name: FUNCTION set_graphql_placeholder(); Type: COMMENT; Schema: extensions; Owner: supabase_admin
+--
+
+COMMENT ON FUNCTION extensions.set_graphql_placeholder() IS 'Reintroduces placeholder function for graphql_public.graphql';
+
+
+--
+-- Name: get_auth(text); Type: FUNCTION; Schema: pgbouncer; Owner: supabase_admin
+--
+
+CREATE FUNCTION pgbouncer.get_auth(p_usename text) RETURNS TABLE(username text, password text)
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $_$
+begin
+    raise debug 'PgBouncer auth request: %', p_usename;
+
+    return query
+    select 
+        rolname::text, 
+        case when rolvaliduntil < now() 
+            then null 
+            else rolpassword::text 
+        end 
+    from pg_authid 
+    where rolname=$1 and rolcanlogin;
+end;
+$_$;
+
+
+ALTER FUNCTION pgbouncer.get_auth(p_usename text) OWNER TO supabase_admin;
+
+--
+-- Name: fn_buscar_alunos(character varying, character varying, uuid, uuid, uuid, uuid); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_buscar_alunos(p_nome character varying DEFAULT NULL::character varying, p_matricula character varying DEFAULT NULL::character varying, p_escola_id uuid DEFAULT NULL::uuid, p_turma_id uuid DEFAULT NULL::uuid, p_serie_id uuid DEFAULT NULL::uuid, p_turno_id uuid DEFAULT NULL::uuid) RETURNS TABLE(usuario_id uuid, nome character varying, matricula character varying, turma character varying, serie character varying, turno character varying, escola character varying, ano_letivo integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  RETURN QUERY
+    SELECT 
+      u.id,
+      u.nome,
+      at.matricula,
+      t.nome AS turma,
+      s.nome AS serie,
+      tu.nome AS turno,
+      e.nome AS escola,
+      at.ano_letivo
+    FROM usuarios u
+    JOIN alunos_turmas at ON at.usuario_id = u.id
+    JOIN turmas t ON t.id = at.turma_id
+    JOIN series s ON s.id = t.serie_id
+    JOIN turnos tu ON tu.id = s.turno_id
+    JOIN escolas e ON e.id = t.escola_id
+    WHERE u.tipo = 'aluno'
+      AND (p_nome IS NULL OR u.nome ILIKE '%' || p_nome || '%')
+      AND (p_matricula IS NULL OR at.matricula = p_matricula)
+      AND (p_escola_id IS NULL OR e.id = p_escola_id)
+      AND (p_turma_id IS NULL OR t.id = p_turma_id)
+      AND (p_serie_id IS NULL OR s.id = p_serie_id)
+      AND (p_turno_id IS NULL OR tu.id = p_turno_id)
+    ORDER BY at.ano_letivo DESC, u.nome;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_buscar_alunos(p_nome character varying, p_matricula character varying, p_escola_id uuid, p_turma_id uuid, p_serie_id uuid, p_turno_id uuid) OWNER TO postgres;
+
+--
+-- Name: fn_cadastrar_aluno(character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, uuid, integer, uuid[]); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_matricula character varying, p_turma_id uuid, p_ano_letivo integer, p_responsaveis uuid[]) RETURNS uuid
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    v_aluno_id uuid;
+    v_now timestamp := now();
+    v_usuario_id uuid;
+BEGIN
+    -- 1. Insere o usuário
+    INSERT INTO usuarios (
+        nome, email, senha, tipo, cpf, rg, celular,
+        logradouro, complemento, bairro, cidade, uf, cep,
+        created_at, updated_at, user_type
+    ) VALUES (
+        p_nome, p_email, p_senha, NULL, p_cpf, p_rg, p_celular,
+        p_logradouro, p_complemento, p_bairro, p_cidade, p_uf, p_cep,
+        v_now, v_now, 'aluno'
+    )
+    RETURNING id INTO v_aluno_id;
+
+    -- 2. Insere na tabela alunos_turmas
+    INSERT INTO alunos_turmas (aluno_id, turma_id, ano_letivo)
+    VALUES (v_aluno_id, p_turma_id, p_ano_letivo);
+
+    -- 3. Associa os responsáveis ao aluno
+    IF p_responsaveis IS NOT NULL THEN
+        FOREACH v_usuario_id IN ARRAY p_responsaveis
+        LOOP
+            INSERT INTO responsaveis_alunos (aluno_id, responsavel_id)
+            VALUES (v_aluno_id, v_usuario_id);
+        END LOOP;
+    END IF;
+
+    RETURN v_aluno_id;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_matricula character varying, p_turma_id uuid, p_ano_letivo integer, p_responsaveis uuid[]) OWNER TO postgres;
+
+--
+-- Name: fn_cadastrar_aluno(character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, uuid, uuid, integer, character varying, uuid); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_escola_id uuid, p_turma_id uuid, p_ano_letivo integer, p_matricula character varying, p_created_by uuid) RETURNS uuid
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  v_usuario_id uuid;
+BEGIN
+  INSERT INTO usuarios (
+    nome, email, senha, tipo, cpf, rg, celular, logradouro, complemento, bairro, cidade, uf, cep, created_by
+  ) VALUES (
+    p_nome, p_email, p_senha, 'aluno', p_cpf, p_rg, p_celular, p_logradouro, p_complemento, p_bairro, p_cidade, p_uf, p_cep, p_created_by
+  ) RETURNING id INTO v_usuario_id;
+
+  -- associa à escola (opcional)
+  INSERT INTO usuarios_escolas (usuario_id, escola_id, created_by)
+    VALUES (v_usuario_id, p_escola_id, p_created_by);
+
+  -- vincula na turma do ano letivo
+  INSERT INTO alunos_turmas (usuario_id, turma_id, ano_letivo, matricula, created_by)
+    VALUES (v_usuario_id, p_turma_id, p_ano_letivo, p_matricula, p_created_by);
+
+  RETURN v_usuario_id;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_escola_id uuid, p_turma_id uuid, p_ano_letivo integer, p_matricula character varying, p_created_by uuid) OWNER TO postgres;
+
+--
+-- Name: apply_rls(jsonb, integer); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer DEFAULT (1024 * 1024)) RETURNS SETOF realtime.wal_rls
+    LANGUAGE plpgsql
+    AS $$
+declare
+-- Regclass of the table e.g. public.notes
+entity_ regclass = (quote_ident(wal ->> 'schema') || '.' || quote_ident(wal ->> 'table'))::regclass;
+
+-- I, U, D, T: insert, update ...
+action realtime.action = (
+    case wal ->> 'action'
+        when 'I' then 'INSERT'
+        when 'U' then 'UPDATE'
+        when 'D' then 'DELETE'
+        else 'ERROR'
+    end
+);
+
+-- Is row level security enabled for the table
+is_rls_enabled bool = relrowsecurity from pg_class where oid = entity_;
+
+subscriptions realtime.subscription[] = array_agg(subs)
+    from
+        realtime.subscription subs
+    where
+        subs.entity = entity_;
+
+-- Subscription vars
+roles regrole[] = array_agg(distinct us.claims_role::text)
+    from
+        unnest(subscriptions) us;
+
+working_role regrole;
+claimed_role regrole;
+claims jsonb;
+
+subscription_id uuid;
+subscription_has_access bool;
+visible_to_subscription_ids uuid[] = '{}';
+
+-- structured info for wal's columns
+columns realtime.wal_column[];
+-- previous identity values for update/delete
+old_columns realtime.wal_column[];
+
+error_record_exceeds_max_size boolean = octet_length(wal::text) > max_record_bytes;
+
+-- Primary jsonb output for record
+output jsonb;
+
+begin
+perform set_config('role', null, true);
+
+columns =
+    array_agg(
+        (
+            x->>'name',
+            x->>'type',
+            x->>'typeoid',
+            realtime.cast(
+                (x->'value') #>> '{}',
+                coalesce(
+                    (x->>'typeoid')::regtype, -- null when wal2json version <= 2.4
+                    (x->>'type')::regtype
+                )
+            ),
+            (pks ->> 'name') is not null,
+            true
+        )::realtime.wal_column
+    )
+    from
+        jsonb_array_elements(wal -> 'columns') x
+        left join jsonb_array_elements(wal -> 'pk') pks
+            on (x ->> 'name') = (pks ->> 'name');
+
+old_columns =
+    array_agg(
+        (
+            x->>'name',
+            x->>'type',
+            x->>'typeoid',
+            realtime.cast(
+                (x->'value') #>> '{}',
+                coalesce(
+                    (x->>'typeoid')::regtype, -- null when wal2json version <= 2.4
+                    (x->>'type')::regtype
+                )
+            ),
+            (pks ->> 'name') is not null,
+            true
+        )::realtime.wal_column
+    )
+    from
+        jsonb_array_elements(wal -> 'identity') x
+        left join jsonb_array_elements(wal -> 'pk') pks
+            on (x ->> 'name') = (pks ->> 'name');
+
+for working_role in select * from unnest(roles) loop
+
+    -- Update `is_selectable` for columns and old_columns
+    columns =
+        array_agg(
+            (
+                c.name,
+                c.type_name,
+                c.type_oid,
+                c.value,
+                c.is_pkey,
+                pg_catalog.has_column_privilege(working_role, entity_, c.name, 'SELECT')
+            )::realtime.wal_column
+        )
+        from
+            unnest(columns) c;
+
+    old_columns =
+            array_agg(
+                (
+                    c.name,
+                    c.type_name,
+                    c.type_oid,
+                    c.value,
+                    c.is_pkey,
+                    pg_catalog.has_column_privilege(working_role, entity_, c.name, 'SELECT')
+                )::realtime.wal_column
+            )
+            from
+                unnest(old_columns) c;
+
+    if action <> 'DELETE' and count(1) = 0 from unnest(columns) c where c.is_pkey then
+        return next (
+            jsonb_build_object(
+                'schema', wal ->> 'schema',
+                'table', wal ->> 'table',
+                'type', action
+            ),
+            is_rls_enabled,
+            -- subscriptions is already filtered by entity
+            (select array_agg(s.subscription_id) from unnest(subscriptions) as s where claims_role = working_role),
+            array['Error 400: Bad Request, no primary key']
+        )::realtime.wal_rls;
+
+    -- The claims role does not have SELECT permission to the primary key of entity
+    elsif action <> 'DELETE' and sum(c.is_selectable::int) <> count(1) from unnest(columns) c where c.is_pkey then
+        return next (
+            jsonb_build_object(
+                'schema', wal ->> 'schema',
+                'table', wal ->> 'table',
+                'type', action
+            ),
+            is_rls_enabled,
+            (select array_agg(s.subscription_id) from unnest(subscriptions) as s where claims_role = working_role),
+            array['Error 401: Unauthorized']
+        )::realtime.wal_rls;
+
+    else
+        output = jsonb_build_object(
+            'schema', wal ->> 'schema',
+            'table', wal ->> 'table',
+            'type', action,
+            'commit_timestamp', to_char(
+                ((wal ->> 'timestamp')::timestamptz at time zone 'utc'),
+                'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'
+            ),
+            'columns', (
+                select
+                    jsonb_agg(
+                        jsonb_build_object(
+                            'name', pa.attname,
+                            'type', pt.typname
+                        )
+                        order by pa.attnum asc
+                    )
+                from
+                    pg_attribute pa
+                    join pg_type pt
+                        on pa.atttypid = pt.oid
+                where
+                    attrelid = entity_
+                    and attnum > 0
+                    and pg_catalog.has_column_privilege(working_role, entity_, pa.attname, 'SELECT')
+            )
+        )
+        -- Add "record" key for insert and update
+        || case
+            when action in ('INSERT', 'UPDATE') then
+                jsonb_build_object(
+                    'record',
+                    (
+                        select
+                            jsonb_object_agg(
+                                -- if unchanged toast, get column name and value from old record
+                                coalesce((c).name, (oc).name),
+                                case
+                                    when (c).name is null then (oc).value
+                                    else (c).value
+                                end
+                            )
+                        from
+                            unnest(columns) c
+                            full outer join unnest(old_columns) oc
+                                on (c).name = (oc).name
+                        where
+                            coalesce((c).is_selectable, (oc).is_selectable)
+                            and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
+                    )
+                )
+            else '{}'::jsonb
+        end
+        -- Add "old_record" key for update and delete
+        || case
+            when action = 'UPDATE' then
+                jsonb_build_object(
+                        'old_record',
+                        (
+                            select jsonb_object_agg((c).name, (c).value)
+                            from unnest(old_columns) c
+                            where
+                                (c).is_selectable
+                                and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
+                        )
+                    )
+            when action = 'DELETE' then
+                jsonb_build_object(
+                    'old_record',
+                    (
+                        select jsonb_object_agg((c).name, (c).value)
+                        from unnest(old_columns) c
+                        where
+                            (c).is_selectable
+                            and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
+                            and ( not is_rls_enabled or (c).is_pkey ) -- if RLS enabled, we can't secure deletes so filter to pkey
+                    )
+                )
+            else '{}'::jsonb
+        end;
+
+        -- Create the prepared statement
+        if is_rls_enabled and action <> 'DELETE' then
+            if (select 1 from pg_prepared_statements where name = 'walrus_rls_stmt' limit 1) > 0 then
+                deallocate walrus_rls_stmt;
+            end if;
+            execute realtime.build_prepared_statement_sql('walrus_rls_stmt', entity_, columns);
+        end if;
+
+        visible_to_subscription_ids = '{}';
+
+        for subscription_id, claims in (
+                select
+                    subs.subscription_id,
+                    subs.claims
+                from
+                    unnest(subscriptions) subs
+                where
+                    subs.entity = entity_
+                    and subs.claims_role = working_role
+                    and (
+                        realtime.is_visible_through_filters(columns, subs.filters)
+                        or (
+                          action = 'DELETE'
+                          and realtime.is_visible_through_filters(old_columns, subs.filters)
+                        )
+                    )
+        ) loop
+
+            if not is_rls_enabled or action = 'DELETE' then
+                visible_to_subscription_ids = visible_to_subscription_ids || subscription_id;
+            else
+                -- Check if RLS allows the role to see the record
+                perform
+                    -- Trim leading and trailing quotes from working_role because set_config
+                    -- doesn't recognize the role as valid if they are included
+                    set_config('role', trim(both '"' from working_role::text), true),
+                    set_config('request.jwt.claims', claims::text, true);
+
+                execute 'execute walrus_rls_stmt' into subscription_has_access;
+
+                if subscription_has_access then
+                    visible_to_subscription_ids = visible_to_subscription_ids || subscription_id;
+                end if;
+            end if;
+        end loop;
+
+        perform set_config('role', null, true);
+
+        return next (
+            output,
+            is_rls_enabled,
+            visible_to_subscription_ids,
+            case
+                when error_record_exceeds_max_size then array['Error 413: Payload Too Large']
+                else '{}'
+            end
+        )::realtime.wal_rls;
+
+    end if;
+end loop;
+
+perform set_config('role', null, true);
+end;
+$$;
+
+
+ALTER FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) OWNER TO supabase_admin;
+
+--
+-- Name: broadcast_changes(text, text, text, text, text, record, record, text); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text DEFAULT 'ROW'::text) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    -- Declare a variable to hold the JSONB representation of the row
+    row_data jsonb := '{}'::jsonb;
+BEGIN
+    IF level = 'STATEMENT' THEN
+        RAISE EXCEPTION 'function can only be triggered for each row, not for each statement';
+    END IF;
+    -- Check the operation type and handle accordingly
+    IF operation = 'INSERT' OR operation = 'UPDATE' OR operation = 'DELETE' THEN
+        row_data := jsonb_build_object('old_record', OLD, 'record', NEW, 'operation', operation, 'table', table_name, 'schema', table_schema);
+        PERFORM realtime.send (row_data, event_name, topic_name);
+    ELSE
+        RAISE EXCEPTION 'Unexpected operation type: %', operation;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Failed to process the row: %', SQLERRM;
+END;
+
+$$;
+
+
+ALTER FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text) OWNER TO supabase_admin;
+
+--
+-- Name: build_prepared_statement_sql(text, regclass, realtime.wal_column[]); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) RETURNS text
+    LANGUAGE sql
+    AS $$
+      /*
+      Builds a sql string that, if executed, creates a prepared statement to
+      tests retrive a row from *entity* by its primary key columns.
+      Example
+          select realtime.build_prepared_statement_sql('public.notes', '{"id"}'::text[], '{"bigint"}'::text[])
+      */
+          select
+      'prepare ' || prepared_statement_name || ' as
+          select
+              exists(
+                  select
+                      1
+                  from
+                      ' || entity || '
+                  where
+                      ' || string_agg(quote_ident(pkc.name) || '=' || quote_nullable(pkc.value #>> '{}') , ' and ') || '
+              )'
+          from
+              unnest(columns) pkc
+          where
+              pkc.is_pkey
+          group by
+              entity
+      $$;
+
+
+ALTER FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) OWNER TO supabase_admin;
+
+--
+-- Name: cast(text, regtype); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime."cast"(val text, type_ regtype) RETURNS jsonb
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+    declare
+      res jsonb;
+    begin
+      execute format('select to_jsonb(%L::'|| type_::text || ')', val)  into res;
+      return res;
+    end
+    $$;
+
+
+ALTER FUNCTION realtime."cast"(val text, type_ regtype) OWNER TO supabase_admin;
+
+--
+-- Name: check_equality_op(realtime.equality_op, regtype, text, text); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) RETURNS boolean
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+      /*
+      Casts *val_1* and *val_2* as type *type_* and check the *op* condition for truthiness
+      */
+      declare
+          op_symbol text = (
+              case
+                  when op = 'eq' then '='
+                  when op = 'neq' then '!='
+                  when op = 'lt' then '<'
+                  when op = 'lte' then '<='
+                  when op = 'gt' then '>'
+                  when op = 'gte' then '>='
+                  when op = 'in' then '= any'
+                  else 'UNKNOWN OP'
+              end
+          );
+          res boolean;
+      begin
+          execute format(
+              'select %L::'|| type_::text || ' ' || op_symbol
+              || ' ( %L::'
+              || (
+                  case
+                      when op = 'in' then type_::text || '[]'
+                      else type_::text end
+              )
+              || ')', val_1, val_2) into res;
+          return res;
+      end;
+      $$;
+
+
+ALTER FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) OWNER TO supabase_admin;
+
+--
+-- Name: is_visible_through_filters(realtime.wal_column[], realtime.user_defined_filter[]); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) RETURNS boolean
+    LANGUAGE sql IMMUTABLE
+    AS $_$
+    /*
+    Should the record be visible (true) or filtered out (false) after *filters* are applied
+    */
+        select
+            -- Default to allowed when no filters present
+            $2 is null -- no filters. this should not happen because subscriptions has a default
+            or array_length($2, 1) is null -- array length of an empty array is null
+            or bool_and(
+                coalesce(
+                    realtime.check_equality_op(
+                        op:=f.op,
+                        type_:=coalesce(
+                            col.type_oid::regtype, -- null when wal2json version <= 2.4
+                            col.type_name::regtype
+                        ),
+                        -- cast jsonb to text
+                        val_1:=col.value #>> '{}',
+                        val_2:=f.value
+                    ),
+                    false -- if null, filter does not match
+                )
+            )
+        from
+            unnest(filters) f
+            join unnest(columns) col
+                on f.column_name = col.name;
+    $_$;
+
+
+ALTER FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) OWNER TO supabase_admin;
+
+--
+-- Name: list_changes(name, name, integer, integer); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) RETURNS SETOF realtime.wal_rls
+    LANGUAGE sql
+    SET log_min_messages TO 'fatal'
+    AS $$
+      with pub as (
+        select
+          concat_ws(
+            ',',
+            case when bool_or(pubinsert) then 'insert' else null end,
+            case when bool_or(pubupdate) then 'update' else null end,
+            case when bool_or(pubdelete) then 'delete' else null end
+          ) as w2j_actions,
+          coalesce(
+            string_agg(
+              realtime.quote_wal2json(format('%I.%I', schemaname, tablename)::regclass),
+              ','
+            ) filter (where ppt.tablename is not null and ppt.tablename not like '% %'),
+            ''
+          ) w2j_add_tables
+        from
+          pg_publication pp
+          left join pg_publication_tables ppt
+            on pp.pubname = ppt.pubname
+        where
+          pp.pubname = publication
+        group by
+          pp.pubname
+        limit 1
+      ),
+      w2j as (
+        select
+          x.*, pub.w2j_add_tables
+        from
+          pub,
+          pg_logical_slot_get_changes(
+            slot_name, null, max_changes,
+            'include-pk', 'true',
+            'include-transaction', 'false',
+            'include-timestamp', 'true',
+            'include-type-oids', 'true',
+            'format-version', '2',
+            'actions', pub.w2j_actions,
+            'add-tables', pub.w2j_add_tables
+          ) x
+      )
+      select
+        xyz.wal,
+        xyz.is_rls_enabled,
+        xyz.subscription_ids,
+        xyz.errors
+      from
+        w2j,
+        realtime.apply_rls(
+          wal := w2j.data::jsonb,
+          max_record_bytes := max_record_bytes
+        ) xyz(wal, is_rls_enabled, subscription_ids, errors)
+      where
+        w2j.w2j_add_tables <> ''
+        and xyz.subscription_ids[1] is not null
+    $$;
+
+
+ALTER FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) OWNER TO supabase_admin;
+
+--
+-- Name: quote_wal2json(regclass); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.quote_wal2json(entity regclass) RETURNS text
+    LANGUAGE sql IMMUTABLE STRICT
+    AS $$
+      select
+        (
+          select string_agg('' || ch,'')
+          from unnest(string_to_array(nsp.nspname::text, null)) with ordinality x(ch, idx)
+          where
+            not (x.idx = 1 and x.ch = '"')
+            and not (
+              x.idx = array_length(string_to_array(nsp.nspname::text, null), 1)
+              and x.ch = '"'
+            )
+        )
+        || '.'
+        || (
+          select string_agg('' || ch,'')
+          from unnest(string_to_array(pc.relname::text, null)) with ordinality x(ch, idx)
+          where
+            not (x.idx = 1 and x.ch = '"')
+            and not (
+              x.idx = array_length(string_to_array(nsp.nspname::text, null), 1)
+              and x.ch = '"'
+            )
+          )
+      from
+        pg_class pc
+        join pg_namespace nsp
+          on pc.relnamespace = nsp.oid
+      where
+        pc.oid = entity
+    $$;
+
+
+ALTER FUNCTION realtime.quote_wal2json(entity regclass) OWNER TO supabase_admin;
+
+--
+-- Name: send(jsonb, text, text, boolean); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean DEFAULT true) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  BEGIN
+    -- Set the topic configuration
+    EXECUTE format('SET LOCAL realtime.topic TO %L', topic);
+
+    -- Attempt to insert the message
+    INSERT INTO realtime.messages (payload, event, topic, private, extension)
+    VALUES (payload, event, topic, private, 'broadcast');
+  EXCEPTION
+    WHEN OTHERS THEN
+      -- Capture and notify the error
+      PERFORM pg_notify(
+          'realtime:system',
+          jsonb_build_object(
+              'error', SQLERRM,
+              'function', 'realtime.send',
+              'event', event,
+              'topic', topic,
+              'private', private
+          )::text
+      );
+  END;
+END;
+$$;
+
+
+ALTER FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean) OWNER TO supabase_admin;
+
+--
+-- Name: subscription_check_filters(); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.subscription_check_filters() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+    /*
+    Validates that the user defined filters for a subscription:
+    - refer to valid columns that the claimed role may access
+    - values are coercable to the correct column type
+    */
+    declare
+        col_names text[] = coalesce(
+                array_agg(c.column_name order by c.ordinal_position),
+                '{}'::text[]
+            )
+            from
+                information_schema.columns c
+            where
+                format('%I.%I', c.table_schema, c.table_name)::regclass = new.entity
+                and pg_catalog.has_column_privilege(
+                    (new.claims ->> 'role'),
+                    format('%I.%I', c.table_schema, c.table_name)::regclass,
+                    c.column_name,
+                    'SELECT'
+                );
+        filter realtime.user_defined_filter;
+        col_type regtype;
+
+        in_val jsonb;
+    begin
+        for filter in select * from unnest(new.filters) loop
+            -- Filtered column is valid
+            if not filter.column_name = any(col_names) then
+                raise exception 'invalid column for filter %', filter.column_name;
+            end if;
+
+            -- Type is sanitized and safe for string interpolation
+            col_type = (
+                select atttypid::regtype
+                from pg_catalog.pg_attribute
+                where attrelid = new.entity
+                      and attname = filter.column_name
+            );
+            if col_type is null then
+                raise exception 'failed to lookup type for column %', filter.column_name;
+            end if;
+
+            -- Set maximum number of entries for in filter
+            if filter.op = 'in'::realtime.equality_op then
+                in_val = realtime.cast(filter.value, (col_type::text || '[]')::regtype);
+                if coalesce(jsonb_array_length(in_val), 0) > 100 then
+                    raise exception 'too many values for `in` filter. Maximum 100';
+                end if;
+            else
+                -- raises an exception if value is not coercable to type
+                perform realtime.cast(filter.value, col_type);
+            end if;
+
+        end loop;
+
+        -- Apply consistent order to filters so the unique constraint on
+        -- (subscription_id, entity, filters) can't be tricked by a different filter order
+        new.filters = coalesce(
+            array_agg(f order by f.column_name, f.op, f.value),
+            '{}'
+        ) from unnest(new.filters) f;
+
+        return new;
+    end;
+    $$;
+
+
+ALTER FUNCTION realtime.subscription_check_filters() OWNER TO supabase_admin;
+
+--
+-- Name: to_regrole(text); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE FUNCTION realtime.to_regrole(role_name text) RETURNS regrole
+    LANGUAGE sql IMMUTABLE
+    AS $$ select role_name::regrole $$;
+
+
+ALTER FUNCTION realtime.to_regrole(role_name text) OWNER TO supabase_admin;
+
+--
+-- Name: topic(); Type: FUNCTION; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+CREATE FUNCTION realtime.topic() RETURNS text
+    LANGUAGE sql STABLE
+    AS $$
+select nullif(current_setting('realtime.topic', true), '')::text;
+$$;
+
+
+ALTER FUNCTION realtime.topic() OWNER TO supabase_realtime_admin;
+
+--
+-- Name: add_prefixes(text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.add_prefixes(_bucket_id text, _name text) RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+DECLARE
+    prefixes text[];
+BEGIN
+    prefixes := "storage"."get_prefixes"("_name");
+
+    IF array_length(prefixes, 1) > 0 THEN
+        INSERT INTO storage.prefixes (name, bucket_id)
+        SELECT UNNEST(prefixes) as name, "_bucket_id" ON CONFLICT DO NOTHING;
+    END IF;
+END;
+$$;
+
+
+ALTER FUNCTION storage.add_prefixes(_bucket_id text, _name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: can_insert_object(text, text, uuid, jsonb); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.can_insert_object(bucketid text, name text, owner uuid, metadata jsonb) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  INSERT INTO "storage"."objects" ("bucket_id", "name", "owner", "metadata") VALUES (bucketid, name, owner, metadata);
+  -- hack to rollback the successful insert
+  RAISE sqlstate 'PT200' using
+  message = 'ROLLBACK',
+  detail = 'rollback successful insert';
+END
+$$;
+
+
+ALTER FUNCTION storage.can_insert_object(bucketid text, name text, owner uuid, metadata jsonb) OWNER TO supabase_storage_admin;
+
+--
+-- Name: delete_prefix(text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.delete_prefix(_bucket_id text, _name text) RETURNS boolean
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+BEGIN
+    -- Check if we can delete the prefix
+    IF EXISTS(
+        SELECT FROM "storage"."prefixes"
+        WHERE "prefixes"."bucket_id" = "_bucket_id"
+          AND level = "storage"."get_level"("_name") + 1
+          AND "prefixes"."name" COLLATE "C" LIKE "_name" || '/%'
+        LIMIT 1
+    )
+    OR EXISTS(
+        SELECT FROM "storage"."objects"
+        WHERE "objects"."bucket_id" = "_bucket_id"
+          AND "storage"."get_level"("objects"."name") = "storage"."get_level"("_name") + 1
+          AND "objects"."name" COLLATE "C" LIKE "_name" || '/%'
+        LIMIT 1
+    ) THEN
+    -- There are sub-objects, skip deletion
+    RETURN false;
+    ELSE
+        DELETE FROM "storage"."prefixes"
+        WHERE "prefixes"."bucket_id" = "_bucket_id"
+          AND level = "storage"."get_level"("_name")
+          AND "prefixes"."name" = "_name";
+        RETURN true;
+    END IF;
+END;
+$$;
+
+
+ALTER FUNCTION storage.delete_prefix(_bucket_id text, _name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: delete_prefix_hierarchy_trigger(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.delete_prefix_hierarchy_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    prefix text;
+BEGIN
+    prefix := "storage"."get_prefix"(OLD."name");
+
+    IF coalesce(prefix, '') != '' THEN
+        PERFORM "storage"."delete_prefix"(OLD."bucket_id", prefix);
+    END IF;
+
+    RETURN OLD;
+END;
+$$;
+
+
+ALTER FUNCTION storage.delete_prefix_hierarchy_trigger() OWNER TO supabase_storage_admin;
+
+--
+-- Name: enforce_bucket_name_length(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.enforce_bucket_name_length() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    if length(new.name) > 100 then
+        raise exception 'bucket name "%" is too long (% characters). Max is 100.', new.name, length(new.name);
+    end if;
+    return new;
+end;
+$$;
+
+
+ALTER FUNCTION storage.enforce_bucket_name_length() OWNER TO supabase_storage_admin;
+
+--
+-- Name: extension(text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.extension(name text) RETURNS text
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+DECLARE
+    _parts text[];
+    _filename text;
+BEGIN
+    SELECT string_to_array(name, '/') INTO _parts;
+    SELECT _parts[array_length(_parts,1)] INTO _filename;
+    RETURN reverse(split_part(reverse(_filename), '.', 1));
+END
+$$;
+
+
+ALTER FUNCTION storage.extension(name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: filename(text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.filename(name text) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+_parts text[];
+BEGIN
+	select string_to_array(name, '/') into _parts;
+	return _parts[array_length(_parts,1)];
+END
+$$;
+
+
+ALTER FUNCTION storage.filename(name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: foldername(text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.foldername(name text) RETURNS text[]
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+DECLARE
+    _parts text[];
+BEGIN
+    -- Split on "/" to get path segments
+    SELECT string_to_array(name, '/') INTO _parts;
+    -- Return everything except the last segment
+    RETURN _parts[1 : array_length(_parts,1) - 1];
+END
+$$;
+
+
+ALTER FUNCTION storage.foldername(name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: get_level(text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.get_level(name text) RETURNS integer
+    LANGUAGE sql IMMUTABLE STRICT
+    AS $$
+SELECT array_length(string_to_array("name", '/'), 1);
+$$;
+
+
+ALTER FUNCTION storage.get_level(name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: get_prefix(text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.get_prefix(name text) RETURNS text
+    LANGUAGE sql IMMUTABLE STRICT
+    AS $_$
+SELECT
+    CASE WHEN strpos("name", '/') > 0 THEN
+             regexp_replace("name", '[\/]{1}[^\/]+\/?$', '')
+         ELSE
+             ''
+        END;
+$_$;
+
+
+ALTER FUNCTION storage.get_prefix(name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: get_prefixes(text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.get_prefixes(name text) RETURNS text[]
+    LANGUAGE plpgsql IMMUTABLE STRICT
+    AS $$
+DECLARE
+    parts text[];
+    prefixes text[];
+    prefix text;
+BEGIN
+    -- Split the name into parts by '/'
+    parts := string_to_array("name", '/');
+    prefixes := '{}';
+
+    -- Construct the prefixes, stopping one level below the last part
+    FOR i IN 1..array_length(parts, 1) - 1 LOOP
+            prefix := array_to_string(parts[1:i], '/');
+            prefixes := array_append(prefixes, prefix);
+    END LOOP;
+
+    RETURN prefixes;
+END;
+$$;
+
+
+ALTER FUNCTION storage.get_prefixes(name text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: get_size_by_bucket(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.get_size_by_bucket() RETURNS TABLE(size bigint, bucket_id text)
+    LANGUAGE plpgsql STABLE
+    AS $$
+BEGIN
+    return query
+        select sum((metadata->>'size')::bigint) as size, obj.bucket_id
+        from "storage".objects as obj
+        group by obj.bucket_id;
+END
+$$;
+
+
+ALTER FUNCTION storage.get_size_by_bucket() OWNER TO supabase_storage_admin;
+
+--
+-- Name: list_multipart_uploads_with_delimiter(text, text, text, integer, text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.list_multipart_uploads_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer DEFAULT 100, next_key_token text DEFAULT ''::text, next_upload_token text DEFAULT ''::text) RETURNS TABLE(key text, id text, created_at timestamp with time zone)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+    RETURN QUERY EXECUTE
+        'SELECT DISTINCT ON(key COLLATE "C") * from (
+            SELECT
+                CASE
+                    WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
+                        substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1)))
+                    ELSE
+                        key
+                END AS key, id, created_at
+            FROM
+                storage.s3_multipart_uploads
+            WHERE
+                bucket_id = $5 AND
+                key ILIKE $1 || ''%'' AND
+                CASE
+                    WHEN $4 != '''' AND $6 = '''' THEN
+                        CASE
+                            WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
+                                substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1))) COLLATE "C" > $4
+                            ELSE
+                                key COLLATE "C" > $4
+                            END
+                    ELSE
+                        true
+                END AND
+                CASE
+                    WHEN $6 != '''' THEN
+                        id COLLATE "C" > $6
+                    ELSE
+                        true
+                    END
+            ORDER BY
+                key COLLATE "C" ASC, created_at ASC) as e order by key COLLATE "C" LIMIT $3'
+        USING prefix_param, delimiter_param, max_keys, next_key_token, bucket_id, next_upload_token;
+END;
+$_$;
+
+
+ALTER FUNCTION storage.list_multipart_uploads_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer, next_key_token text, next_upload_token text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: list_objects_with_delimiter(text, text, text, integer, text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.list_objects_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer DEFAULT 100, start_after text DEFAULT ''::text, next_token text DEFAULT ''::text) RETURNS TABLE(name text, id uuid, metadata jsonb, updated_at timestamp with time zone)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+    RETURN QUERY EXECUTE
+        'SELECT DISTINCT ON(name COLLATE "C") * from (
+            SELECT
+                CASE
+                    WHEN position($2 IN substring(name from length($1) + 1)) > 0 THEN
+                        substring(name from 1 for length($1) + position($2 IN substring(name from length($1) + 1)))
+                    ELSE
+                        name
+                END AS name, id, metadata, updated_at
+            FROM
+                storage.objects
+            WHERE
+                bucket_id = $5 AND
+                name ILIKE $1 || ''%'' AND
+                CASE
+                    WHEN $6 != '''' THEN
+                    name COLLATE "C" > $6
+                ELSE true END
+                AND CASE
+                    WHEN $4 != '''' THEN
+                        CASE
+                            WHEN position($2 IN substring(name from length($1) + 1)) > 0 THEN
+                                substring(name from 1 for length($1) + position($2 IN substring(name from length($1) + 1))) COLLATE "C" > $4
+                            ELSE
+                                name COLLATE "C" > $4
+                            END
+                    ELSE
+                        true
+                END
+            ORDER BY
+                name COLLATE "C" ASC) as e order by name COLLATE "C" LIMIT $3'
+        USING prefix_param, delimiter_param, max_keys, next_token, bucket_id, start_after;
+END;
+$_$;
+
+
+ALTER FUNCTION storage.list_objects_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer, start_after text, next_token text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: objects_insert_prefix_trigger(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.objects_insert_prefix_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    PERFORM "storage"."add_prefixes"(NEW."bucket_id", NEW."name");
+    NEW.level := "storage"."get_level"(NEW."name");
+
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION storage.objects_insert_prefix_trigger() OWNER TO supabase_storage_admin;
+
+--
+-- Name: objects_update_prefix_trigger(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.objects_update_prefix_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    old_prefixes TEXT[];
+BEGIN
+    -- Ensure this is an update operation and the name has changed
+    IF TG_OP = 'UPDATE' AND (NEW."name" <> OLD."name" OR NEW."bucket_id" <> OLD."bucket_id") THEN
+        -- Retrieve old prefixes
+        old_prefixes := "storage"."get_prefixes"(OLD."name");
+
+        -- Remove old prefixes that are only used by this object
+        WITH all_prefixes as (
+            SELECT unnest(old_prefixes) as prefix
+        ),
+        can_delete_prefixes as (
+             SELECT prefix
+             FROM all_prefixes
+             WHERE NOT EXISTS (
+                 SELECT 1 FROM "storage"."objects"
+                 WHERE "bucket_id" = OLD."bucket_id"
+                   AND "name" <> OLD."name"
+                   AND "name" LIKE (prefix || '%')
+             )
+         )
+        DELETE FROM "storage"."prefixes" WHERE name IN (SELECT prefix FROM can_delete_prefixes);
+
+        -- Add new prefixes
+        PERFORM "storage"."add_prefixes"(NEW."bucket_id", NEW."name");
+    END IF;
+    -- Set the new level
+    NEW."level" := "storage"."get_level"(NEW."name");
+
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION storage.objects_update_prefix_trigger() OWNER TO supabase_storage_admin;
+
+--
+-- Name: operation(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.operation() RETURNS text
+    LANGUAGE plpgsql STABLE
+    AS $$
+BEGIN
+    RETURN current_setting('storage.operation', true);
+END;
+$$;
+
+
+ALTER FUNCTION storage.operation() OWNER TO supabase_storage_admin;
+
+--
+-- Name: prefixes_insert_trigger(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.prefixes_insert_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    PERFORM "storage"."add_prefixes"(NEW."bucket_id", NEW."name");
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION storage.prefixes_insert_trigger() OWNER TO supabase_storage_admin;
+
+--
+-- Name: search(text, text, integer, integer, integer, text, text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.search(prefix text, bucketname text, limits integer DEFAULT 100, levels integer DEFAULT 1, offsets integer DEFAULT 0, search text DEFAULT ''::text, sortcolumn text DEFAULT 'name'::text, sortorder text DEFAULT 'asc'::text) RETURNS TABLE(name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone, metadata jsonb)
+    LANGUAGE plpgsql
+    AS $$
+declare
+    can_bypass_rls BOOLEAN;
+begin
+    SELECT rolbypassrls
+    INTO can_bypass_rls
+    FROM pg_roles
+    WHERE rolname = coalesce(nullif(current_setting('role', true), 'none'), current_user);
+
+    IF can_bypass_rls THEN
+        RETURN QUERY SELECT * FROM storage.search_v1_optimised(prefix, bucketname, limits, levels, offsets, search, sortcolumn, sortorder);
+    ELSE
+        RETURN QUERY SELECT * FROM storage.search_legacy_v1(prefix, bucketname, limits, levels, offsets, search, sortcolumn, sortorder);
+    END IF;
+end;
+$$;
+
+
+ALTER FUNCTION storage.search(prefix text, bucketname text, limits integer, levels integer, offsets integer, search text, sortcolumn text, sortorder text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: search_legacy_v1(text, text, integer, integer, integer, text, text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.search_legacy_v1(prefix text, bucketname text, limits integer DEFAULT 100, levels integer DEFAULT 1, offsets integer DEFAULT 0, search text DEFAULT ''::text, sortcolumn text DEFAULT 'name'::text, sortorder text DEFAULT 'asc'::text) RETURNS TABLE(name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone, metadata jsonb)
+    LANGUAGE plpgsql STABLE
+    AS $_$
+declare
+    v_order_by text;
+    v_sort_order text;
+begin
+    case
+        when sortcolumn = 'name' then
+            v_order_by = 'name';
+        when sortcolumn = 'updated_at' then
+            v_order_by = 'updated_at';
+        when sortcolumn = 'created_at' then
+            v_order_by = 'created_at';
+        when sortcolumn = 'last_accessed_at' then
+            v_order_by = 'last_accessed_at';
+        else
+            v_order_by = 'name';
+        end case;
+
+    case
+        when sortorder = 'asc' then
+            v_sort_order = 'asc';
+        when sortorder = 'desc' then
+            v_sort_order = 'desc';
+        else
+            v_sort_order = 'asc';
+        end case;
+
+    v_order_by = v_order_by || ' ' || v_sort_order;
+
+    return query execute
+        'with folders as (
+           select path_tokens[$1] as folder
+           from storage.objects
+             where objects.name ilike $2 || $3 || ''%''
+               and bucket_id = $4
+               and array_length(objects.path_tokens, 1) <> $1
+           group by folder
+           order by folder ' || v_sort_order || '
+     )
+     (select folder as "name",
+            null as id,
+            null as updated_at,
+            null as created_at,
+            null as last_accessed_at,
+            null as metadata from folders)
+     union all
+     (select path_tokens[$1] as "name",
+            id,
+            updated_at,
+            created_at,
+            last_accessed_at,
+            metadata
+     from storage.objects
+     where objects.name ilike $2 || $3 || ''%''
+       and bucket_id = $4
+       and array_length(objects.path_tokens, 1) = $1
+     order by ' || v_order_by || ')
+     limit $5
+     offset $6' using levels, prefix, search, bucketname, limits, offsets;
+end;
+$_$;
+
+
+ALTER FUNCTION storage.search_legacy_v1(prefix text, bucketname text, limits integer, levels integer, offsets integer, search text, sortcolumn text, sortorder text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: search_v1_optimised(text, text, integer, integer, integer, text, text, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.search_v1_optimised(prefix text, bucketname text, limits integer DEFAULT 100, levels integer DEFAULT 1, offsets integer DEFAULT 0, search text DEFAULT ''::text, sortcolumn text DEFAULT 'name'::text, sortorder text DEFAULT 'asc'::text) RETURNS TABLE(name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone, metadata jsonb)
+    LANGUAGE plpgsql STABLE
+    AS $_$
+declare
+    v_order_by text;
+    v_sort_order text;
+begin
+    case
+        when sortcolumn = 'name' then
+            v_order_by = 'name';
+        when sortcolumn = 'updated_at' then
+            v_order_by = 'updated_at';
+        when sortcolumn = 'created_at' then
+            v_order_by = 'created_at';
+        when sortcolumn = 'last_accessed_at' then
+            v_order_by = 'last_accessed_at';
+        else
+            v_order_by = 'name';
+        end case;
+
+    case
+        when sortorder = 'asc' then
+            v_sort_order = 'asc';
+        when sortorder = 'desc' then
+            v_sort_order = 'desc';
+        else
+            v_sort_order = 'asc';
+        end case;
+
+    v_order_by = v_order_by || ' ' || v_sort_order;
+
+    return query execute
+        'with folders as (
+           select (string_to_array(name, ''/''))[level] as name
+           from storage.prefixes
+             where lower(prefixes.name) like lower($2 || $3) || ''%''
+               and bucket_id = $4
+               and level = $1
+           order by name ' || v_sort_order || '
+     )
+     (select name,
+            null as id,
+            null as updated_at,
+            null as created_at,
+            null as last_accessed_at,
+            null as metadata from folders)
+     union all
+     (select path_tokens[level] as "name",
+            id,
+            updated_at,
+            created_at,
+            last_accessed_at,
+            metadata
+     from storage.objects
+     where lower(objects.name) like lower($2 || $3) || ''%''
+       and bucket_id = $4
+       and level = $1
+     order by ' || v_order_by || ')
+     limit $5
+     offset $6' using levels, prefix, search, bucketname, limits, offsets;
+end;
+$_$;
+
+
+ALTER FUNCTION storage.search_v1_optimised(prefix text, bucketname text, limits integer, levels integer, offsets integer, search text, sortcolumn text, sortorder text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: search_v2(text, text, integer, integer, text); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.search_v2(prefix text, bucket_name text, limits integer DEFAULT 100, levels integer DEFAULT 1, start_after text DEFAULT ''::text) RETURNS TABLE(key text, name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, metadata jsonb)
+    LANGUAGE plpgsql STABLE
+    AS $_$
+BEGIN
+    RETURN query EXECUTE
+        $sql$
+        SELECT * FROM (
+            (
+                SELECT
+                    split_part(name, '/', $4) AS key,
+                    name || '/' AS name,
+                    NULL::uuid AS id,
+                    NULL::timestamptz AS updated_at,
+                    NULL::timestamptz AS created_at,
+                    NULL::jsonb AS metadata
+                FROM storage.prefixes
+                WHERE name COLLATE "C" LIKE $1 || '%'
+                AND bucket_id = $2
+                AND level = $4
+                AND name COLLATE "C" > $5
+                ORDER BY prefixes.name COLLATE "C" LIMIT $3
+            )
+            UNION ALL
+            (SELECT split_part(name, '/', $4) AS key,
+                name,
+                id,
+                updated_at,
+                created_at,
+                metadata
+            FROM storage.objects
+            WHERE name COLLATE "C" LIKE $1 || '%'
+                AND bucket_id = $2
+                AND level = $4
+                AND name COLLATE "C" > $5
+            ORDER BY name COLLATE "C" LIMIT $3)
+        ) obj
+        ORDER BY name COLLATE "C" LIMIT $3;
+        $sql$
+        USING prefix, bucket_name, limits, levels, start_after;
+END;
+$_$;
+
+
+ALTER FUNCTION storage.search_v2(prefix text, bucket_name text, limits integer, levels integer, start_after text) OWNER TO supabase_storage_admin;
+
+--
+-- Name: update_updated_at_column(); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE FUNCTION storage.update_updated_at_column() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW; 
+END;
+$$;
+
+
+ALTER FUNCTION storage.update_updated_at_column() OWNER TO supabase_storage_admin;
+
+--
+-- Name: http_request(); Type: FUNCTION; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+CREATE FUNCTION supabase_functions.http_request() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'supabase_functions'
+    AS $$
+  DECLARE
+    request_id bigint;
+    payload jsonb;
+    url text := TG_ARGV[0]::text;
+    method text := TG_ARGV[1]::text;
+    headers jsonb DEFAULT '{}'::jsonb;
+    params jsonb DEFAULT '{}'::jsonb;
+    timeout_ms integer DEFAULT 1000;
+  BEGIN
+    IF url IS NULL OR url = 'null' THEN
+      RAISE EXCEPTION 'url argument is missing';
+    END IF;
+
+    IF method IS NULL OR method = 'null' THEN
+      RAISE EXCEPTION 'method argument is missing';
+    END IF;
+
+    IF TG_ARGV[2] IS NULL OR TG_ARGV[2] = 'null' THEN
+      headers = '{"Content-Type": "application/json"}'::jsonb;
+    ELSE
+      headers = TG_ARGV[2]::jsonb;
+    END IF;
+
+    IF TG_ARGV[3] IS NULL OR TG_ARGV[3] = 'null' THEN
+      params = '{}'::jsonb;
+    ELSE
+      params = TG_ARGV[3]::jsonb;
+    END IF;
+
+    IF TG_ARGV[4] IS NULL OR TG_ARGV[4] = 'null' THEN
+      timeout_ms = 1000;
+    ELSE
+      timeout_ms = TG_ARGV[4]::integer;
+    END IF;
+
+    CASE
+      WHEN method = 'GET' THEN
+        SELECT http_get INTO request_id FROM net.http_get(
+          url,
+          params,
+          headers,
+          timeout_ms
+        );
+      WHEN method = 'POST' THEN
+        payload = jsonb_build_object(
+          'old_record', OLD,
+          'record', NEW,
+          'type', TG_OP,
+          'table', TG_TABLE_NAME,
+          'schema', TG_TABLE_SCHEMA
+        );
+
+        SELECT http_post INTO request_id FROM net.http_post(
+          url,
+          payload,
+          params,
+          headers,
+          timeout_ms
+        );
+      ELSE
+        RAISE EXCEPTION 'method argument % is invalid', method;
+    END CASE;
+
+    INSERT INTO supabase_functions.hooks
+      (hook_table_id, hook_name, request_id)
+    VALUES
+      (TG_RELID, TG_NAME, request_id);
+
+    RETURN NEW;
+  END
+$$;
+
+
+ALTER FUNCTION supabase_functions.http_request() OWNER TO supabase_functions_admin;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: extensions; Type: TABLE; Schema: _realtime; Owner: supabase_admin
+--
+
+CREATE TABLE _realtime.extensions (
+    id uuid NOT NULL,
+    type text,
+    settings jsonb,
+    tenant_external_id text,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE _realtime.extensions OWNER TO supabase_admin;
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: _realtime; Owner: supabase_admin
+--
+
+CREATE TABLE _realtime.schema_migrations (
+    version bigint NOT NULL,
+    inserted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE _realtime.schema_migrations OWNER TO supabase_admin;
+
+--
+-- Name: tenants; Type: TABLE; Schema: _realtime; Owner: supabase_admin
+--
+
+CREATE TABLE _realtime.tenants (
+    id uuid NOT NULL,
+    name text,
+    external_id text,
+    jwt_secret text,
+    max_concurrent_users integer DEFAULT 200 NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL,
+    max_events_per_second integer DEFAULT 100 NOT NULL,
+    postgres_cdc_default text DEFAULT 'postgres_cdc_rls'::text,
+    max_bytes_per_second integer DEFAULT 100000 NOT NULL,
+    max_channels_per_client integer DEFAULT 100 NOT NULL,
+    max_joins_per_second integer DEFAULT 500 NOT NULL,
+    suspend boolean DEFAULT false,
+    jwt_jwks jsonb,
+    notify_private_alpha boolean DEFAULT false,
+    private_only boolean DEFAULT false NOT NULL,
+    migrations_ran integer DEFAULT 0,
+    broadcast_adapter character varying(255) DEFAULT 'phoenix'::character varying
+);
+
+
+ALTER TABLE _realtime.tenants OWNER TO supabase_admin;
+
+--
+-- Name: audit_log_entries; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.audit_log_entries (
+    instance_id uuid,
+    id uuid NOT NULL,
+    payload json,
+    created_at timestamp with time zone,
+    ip_address character varying(64) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE auth.audit_log_entries OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE audit_log_entries; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.audit_log_entries IS 'Auth: Audit trail for user actions.';
+
+
+--
+-- Name: flow_state; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.flow_state (
+    id uuid NOT NULL,
+    user_id uuid,
+    auth_code text NOT NULL,
+    code_challenge_method auth.code_challenge_method NOT NULL,
+    code_challenge text NOT NULL,
+    provider_type text NOT NULL,
+    provider_access_token text,
+    provider_refresh_token text,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    authentication_method text NOT NULL,
+    auth_code_issued_at timestamp with time zone
+);
+
+
+ALTER TABLE auth.flow_state OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE flow_state; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.flow_state IS 'stores metadata for pkce logins';
+
+
+--
+-- Name: identities; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.identities (
+    provider_id text NOT NULL,
+    user_id uuid NOT NULL,
+    identity_data jsonb NOT NULL,
+    provider text NOT NULL,
+    last_sign_in_at timestamp with time zone,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    email text GENERATED ALWAYS AS (lower((identity_data ->> 'email'::text))) STORED,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE auth.identities OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE identities; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.identities IS 'Auth: Stores identities associated to a user.';
+
+
+--
+-- Name: COLUMN identities.email; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON COLUMN auth.identities.email IS 'Auth: Email is a generated column that references the optional email property in the identity_data';
+
+
+--
+-- Name: instances; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.instances (
+    id uuid NOT NULL,
+    uuid uuid,
+    raw_base_config text,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE auth.instances OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE instances; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.instances IS 'Auth: Manages users across multiple sites.';
+
+
+--
+-- Name: mfa_amr_claims; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.mfa_amr_claims (
+    session_id uuid NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    authentication_method text NOT NULL,
+    id uuid NOT NULL
+);
+
+
+ALTER TABLE auth.mfa_amr_claims OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE mfa_amr_claims; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.mfa_amr_claims IS 'auth: stores authenticator method reference claims for multi factor authentication';
+
+
+--
+-- Name: mfa_challenges; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.mfa_challenges (
+    id uuid NOT NULL,
+    factor_id uuid NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    verified_at timestamp with time zone,
+    ip_address inet NOT NULL,
+    otp_code text,
+    web_authn_session_data jsonb
+);
+
+
+ALTER TABLE auth.mfa_challenges OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE mfa_challenges; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.mfa_challenges IS 'auth: stores metadata about challenge requests made';
+
+
+--
+-- Name: mfa_factors; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.mfa_factors (
+    id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    friendly_name text,
+    factor_type auth.factor_type NOT NULL,
+    status auth.factor_status NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    secret text,
+    phone text,
+    last_challenged_at timestamp with time zone,
+    web_authn_credential jsonb,
+    web_authn_aaguid uuid
+);
+
+
+ALTER TABLE auth.mfa_factors OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE mfa_factors; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.mfa_factors IS 'auth: stores metadata about factors';
+
+
+--
+-- Name: one_time_tokens; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.one_time_tokens (
+    id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    token_type auth.one_time_token_type NOT NULL,
+    token_hash text NOT NULL,
+    relates_to text NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT one_time_tokens_token_hash_check CHECK ((char_length(token_hash) > 0))
+);
+
+
+ALTER TABLE auth.one_time_tokens OWNER TO supabase_auth_admin;
+
+--
+-- Name: refresh_tokens; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.refresh_tokens (
+    instance_id uuid,
+    id bigint NOT NULL,
+    token character varying(255),
+    user_id character varying(255),
+    revoked boolean,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    parent character varying(255),
+    session_id uuid
+);
+
+
+ALTER TABLE auth.refresh_tokens OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE refresh_tokens; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.refresh_tokens IS 'Auth: Store of tokens used to refresh JWT tokens once they expire.';
+
+
+--
+-- Name: refresh_tokens_id_seq; Type: SEQUENCE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE SEQUENCE auth.refresh_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE auth.refresh_tokens_id_seq OWNER TO supabase_auth_admin;
+
+--
+-- Name: refresh_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER SEQUENCE auth.refresh_tokens_id_seq OWNED BY auth.refresh_tokens.id;
+
+
+--
+-- Name: saml_providers; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.saml_providers (
+    id uuid NOT NULL,
+    sso_provider_id uuid NOT NULL,
+    entity_id text NOT NULL,
+    metadata_xml text NOT NULL,
+    metadata_url text,
+    attribute_mapping jsonb,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    name_id_format text,
+    CONSTRAINT "entity_id not empty" CHECK ((char_length(entity_id) > 0)),
+    CONSTRAINT "metadata_url not empty" CHECK (((metadata_url = NULL::text) OR (char_length(metadata_url) > 0))),
+    CONSTRAINT "metadata_xml not empty" CHECK ((char_length(metadata_xml) > 0))
+);
+
+
+ALTER TABLE auth.saml_providers OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE saml_providers; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.saml_providers IS 'Auth: Manages SAML Identity Provider connections.';
+
+
+--
+-- Name: saml_relay_states; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.saml_relay_states (
+    id uuid NOT NULL,
+    sso_provider_id uuid NOT NULL,
+    request_id text NOT NULL,
+    for_email text,
+    redirect_to text,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    flow_state_id uuid,
+    CONSTRAINT "request_id not empty" CHECK ((char_length(request_id) > 0))
+);
+
+
+ALTER TABLE auth.saml_relay_states OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE saml_relay_states; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.saml_relay_states IS 'Auth: Contains SAML Relay State information for each Service Provider initiated login.';
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.schema_migrations (
+    version character varying(255) NOT NULL
+);
+
+
+ALTER TABLE auth.schema_migrations OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE schema_migrations; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.schema_migrations IS 'Auth: Manages updates to the auth system.';
+
+
+--
+-- Name: sessions; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.sessions (
+    id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    factor_id uuid,
+    aal auth.aal_level,
+    not_after timestamp with time zone,
+    refreshed_at timestamp without time zone,
+    user_agent text,
+    ip inet,
+    tag text
+);
+
+
+ALTER TABLE auth.sessions OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE sessions; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.sessions IS 'Auth: Stores session data associated to a user.';
+
+
+--
+-- Name: COLUMN sessions.not_after; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON COLUMN auth.sessions.not_after IS 'Auth: Not after is a nullable column that contains a timestamp after which the session should be regarded as expired.';
+
+
+--
+-- Name: sso_domains; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.sso_domains (
+    id uuid NOT NULL,
+    sso_provider_id uuid NOT NULL,
+    domain text NOT NULL,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    CONSTRAINT "domain not empty" CHECK ((char_length(domain) > 0))
+);
+
+
+ALTER TABLE auth.sso_domains OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE sso_domains; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.sso_domains IS 'Auth: Manages SSO email address domain mapping to an SSO Identity Provider.';
+
+
+--
+-- Name: sso_providers; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.sso_providers (
+    id uuid NOT NULL,
+    resource_id text,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    CONSTRAINT "resource_id not empty" CHECK (((resource_id = NULL::text) OR (char_length(resource_id) > 0)))
+);
+
+
+ALTER TABLE auth.sso_providers OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE sso_providers; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.sso_providers IS 'Auth: Manages SSO identity provider information; see saml_providers for SAML.';
+
+
+--
+-- Name: COLUMN sso_providers.resource_id; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON COLUMN auth.sso_providers.resource_id IS 'Auth: Uniquely identifies a SSO provider according to a user-chosen resource ID (case insensitive), useful in infrastructure as code.';
+
+
+--
+-- Name: users; Type: TABLE; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TABLE auth.users (
+    instance_id uuid,
+    id uuid NOT NULL,
+    aud character varying(255),
+    role character varying(255),
+    email character varying(255),
+    encrypted_password character varying(255),
+    email_confirmed_at timestamp with time zone,
+    invited_at timestamp with time zone,
+    confirmation_token character varying(255),
+    confirmation_sent_at timestamp with time zone,
+    recovery_token character varying(255),
+    recovery_sent_at timestamp with time zone,
+    email_change_token_new character varying(255),
+    email_change character varying(255),
+    email_change_sent_at timestamp with time zone,
+    last_sign_in_at timestamp with time zone,
+    raw_app_meta_data jsonb,
+    raw_user_meta_data jsonb,
+    is_super_admin boolean,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    phone text DEFAULT NULL::character varying,
+    phone_confirmed_at timestamp with time zone,
+    phone_change text DEFAULT ''::character varying,
+    phone_change_token character varying(255) DEFAULT ''::character varying,
+    phone_change_sent_at timestamp with time zone,
+    confirmed_at timestamp with time zone GENERATED ALWAYS AS (LEAST(email_confirmed_at, phone_confirmed_at)) STORED,
+    email_change_token_current character varying(255) DEFAULT ''::character varying,
+    email_change_confirm_status smallint DEFAULT 0,
+    banned_until timestamp with time zone,
+    reauthentication_token character varying(255) DEFAULT ''::character varying,
+    reauthentication_sent_at timestamp with time zone,
+    is_sso_user boolean DEFAULT false NOT NULL,
+    deleted_at timestamp with time zone,
+    is_anonymous boolean DEFAULT false NOT NULL,
+    CONSTRAINT users_email_change_confirm_status_check CHECK (((email_change_confirm_status >= 0) AND (email_change_confirm_status <= 2)))
+);
+
+
+ALTER TABLE auth.users OWNER TO supabase_auth_admin;
+
+--
+-- Name: TABLE users; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON TABLE auth.users IS 'Auth: Stores user login data within a secure schema.';
+
+
+--
+-- Name: COLUMN users.is_sso_user; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON COLUMN auth.users.is_sso_user IS 'Auth: Set this column to true when the account comes from SSO. These accounts can have duplicate emails.';
+
+
+--
+-- Name: albuns; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.albuns (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    titulo character varying NOT NULL,
+    descricao text,
+    data_evento date,
+    tipo_acesso public.tipo_acesso NOT NULL,
+    criado_por_id uuid,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.albuns OWNER TO postgres;
+
+--
+-- Name: albuns_alunos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.albuns_alunos (
+    album_id uuid NOT NULL,
+    aluno_usuario_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.albuns_alunos OWNER TO postgres;
+
+--
+-- Name: albuns_escolas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.albuns_escolas (
+    album_id uuid NOT NULL,
+    escola_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.albuns_escolas OWNER TO postgres;
+
+--
+-- Name: albuns_series; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.albuns_series (
+    album_id uuid NOT NULL,
+    serie_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.albuns_series OWNER TO postgres;
+
+--
+-- Name: albuns_turmas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.albuns_turmas (
+    album_id uuid NOT NULL,
+    turma_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.albuns_turmas OWNER TO postgres;
+
+--
+-- Name: alunos_turmas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.alunos_turmas (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    usuario_id uuid NOT NULL,
+    turma_id uuid NOT NULL,
+    ano_letivo integer NOT NULL,
+    matricula character varying,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.alunos_turmas OWNER TO postgres;
+
+--
+-- Name: escolas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.escolas (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    nome character varying NOT NULL,
+    cidade character varying,
+    estado character varying,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.escolas OWNER TO postgres;
+
+--
+-- Name: fotos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.fotos (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    album_id uuid,
+    caminho_arquivo character varying,
+    qualidade integer,
+    criado_por_id uuid,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.fotos OWNER TO postgres;
+
+--
+-- Name: logs_auditoria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.logs_auditoria (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    tabela character varying,
+    registro_id uuid,
+    acao character varying,
+    usuario_id uuid,
+    data_hora timestamp without time zone DEFAULT now(),
+    origem character varying DEFAULT 'trigger'::character varying,
+    detalhes text
+);
+
+
+ALTER TABLE public.logs_auditoria OWNER TO postgres;
+
+--
+-- Name: responsaveis_alunos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.responsaveis_alunos (
+    usuario_id uuid NOT NULL,
+    aluno_usuario_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.responsaveis_alunos OWNER TO postgres;
+
+--
+-- Name: segmentos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.segmentos (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    nome character varying NOT NULL,
+    is_extra_curricular boolean DEFAULT false,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.segmentos OWNER TO postgres;
+
+--
+-- Name: series; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.series (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    nome character varying NOT NULL,
+    segmento_id uuid NOT NULL,
+    turno_id uuid NOT NULL,
+    escola_id uuid NOT NULL,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.series OWNER TO postgres;
+
+--
+-- Name: turmas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.turmas (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    nome character varying NOT NULL,
+    serie_id uuid NOT NULL,
+    escola_id uuid NOT NULL,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.turmas OWNER TO postgres;
+
+--
+-- Name: turnos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.turnos (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    nome character varying NOT NULL,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.turnos OWNER TO postgres;
+
+--
+-- Name: usuarios; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuarios (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    nome character varying NOT NULL,
+    email character varying,
+    senha character varying,
+    tipo public.user_type NOT NULL,
+    cpf character varying,
+    rg character varying,
+    celular character varying,
+    logradouro character varying,
+    complemento character varying,
+    bairro character varying,
+    cidade character varying,
+    uf character varying,
+    cep character varying,
+    ativo boolean DEFAULT true,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now(),
+    telefone character varying(20),
+    tel_outro character varying(20)
+);
+
+
+ALTER TABLE public.usuarios OWNER TO postgres;
+
+--
+-- Name: usuarios_escolas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuarios_escolas (
+    usuario_id uuid NOT NULL,
+    escola_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    updated_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.usuarios_escolas OWNER TO postgres;
+
+--
+-- Name: messages; Type: TABLE; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+CREATE TABLE realtime.messages (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+)
+PARTITION BY RANGE (inserted_at);
+
+
+ALTER TABLE realtime.messages OWNER TO supabase_realtime_admin;
+
+--
+-- Name: messages_2025_06_23; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_23 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_23 OWNER TO postgres;
+
+--
+-- Name: messages_2025_06_24; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_24 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_24 OWNER TO postgres;
+
+--
+-- Name: messages_2025_06_25; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_25 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_25 OWNER TO postgres;
+
+--
+-- Name: messages_2025_06_26; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_26 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_26 OWNER TO postgres;
+
+--
+-- Name: messages_2025_06_27; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_27 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_27 OWNER TO postgres;
+
+--
+-- Name: messages_2025_06_28; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_28 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_28 OWNER TO postgres;
+
+--
+-- Name: messages_2025_06_29; Type: TABLE; Schema: realtime; Owner: postgres
+--
+
+CREATE TABLE realtime.messages_2025_06_29 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_06_29 OWNER TO postgres;
+
+--
+-- Name: messages_2025_07_01; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.messages_2025_07_01 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_07_01 OWNER TO supabase_admin;
+
+--
+-- Name: messages_2025_07_02; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.messages_2025_07_02 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_07_02 OWNER TO supabase_admin;
+
+--
+-- Name: messages_2025_07_03; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.messages_2025_07_03 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_07_03 OWNER TO supabase_admin;
+
+--
+-- Name: messages_2025_07_04; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.messages_2025_07_04 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_07_04 OWNER TO supabase_admin;
+
+--
+-- Name: messages_2025_07_05; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.messages_2025_07_05 (
+    topic text NOT NULL,
+    extension text NOT NULL,
+    payload jsonb,
+    event text,
+    private boolean DEFAULT false,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    inserted_at timestamp without time zone DEFAULT now() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE realtime.messages_2025_07_05 OWNER TO supabase_admin;
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.schema_migrations (
+    version bigint NOT NULL,
+    inserted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE realtime.schema_migrations OWNER TO supabase_admin;
+
+--
+-- Name: subscription; Type: TABLE; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TABLE realtime.subscription (
+    id bigint NOT NULL,
+    subscription_id uuid NOT NULL,
+    entity regclass NOT NULL,
+    filters realtime.user_defined_filter[] DEFAULT '{}'::realtime.user_defined_filter[] NOT NULL,
+    claims jsonb NOT NULL,
+    claims_role regrole GENERATED ALWAYS AS (realtime.to_regrole((claims ->> 'role'::text))) STORED NOT NULL,
+    created_at timestamp without time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+
+ALTER TABLE realtime.subscription OWNER TO supabase_admin;
+
+--
+-- Name: subscription_id_seq; Type: SEQUENCE; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE realtime.subscription ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME realtime.subscription_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: buckets; Type: TABLE; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TABLE storage.buckets (
+    id text NOT NULL,
+    name text NOT NULL,
+    owner uuid,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    public boolean DEFAULT false,
+    avif_autodetection boolean DEFAULT false,
+    file_size_limit bigint,
+    allowed_mime_types text[],
+    owner_id text
+);
+
+
+ALTER TABLE storage.buckets OWNER TO supabase_storage_admin;
+
+--
+-- Name: COLUMN buckets.owner; Type: COMMENT; Schema: storage; Owner: supabase_storage_admin
+--
+
+COMMENT ON COLUMN storage.buckets.owner IS 'Field is deprecated, use owner_id instead';
+
+
+--
+-- Name: migrations; Type: TABLE; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TABLE storage.migrations (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    hash character varying(40) NOT NULL,
+    executed_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE storage.migrations OWNER TO supabase_storage_admin;
+
+--
+-- Name: objects; Type: TABLE; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TABLE storage.objects (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    bucket_id text,
+    name text,
+    owner uuid,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    last_accessed_at timestamp with time zone DEFAULT now(),
+    metadata jsonb,
+    path_tokens text[] GENERATED ALWAYS AS (string_to_array(name, '/'::text)) STORED,
+    version text,
+    owner_id text,
+    user_metadata jsonb,
+    level integer
+);
+
+
+ALTER TABLE storage.objects OWNER TO supabase_storage_admin;
+
+--
+-- Name: COLUMN objects.owner; Type: COMMENT; Schema: storage; Owner: supabase_storage_admin
+--
+
+COMMENT ON COLUMN storage.objects.owner IS 'Field is deprecated, use owner_id instead';
+
+
+--
+-- Name: prefixes; Type: TABLE; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TABLE storage.prefixes (
+    bucket_id text NOT NULL,
+    name text NOT NULL COLLATE pg_catalog."C",
+    level integer GENERATED ALWAYS AS (storage.get_level(name)) STORED NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE storage.prefixes OWNER TO supabase_storage_admin;
+
+--
+-- Name: s3_multipart_uploads; Type: TABLE; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TABLE storage.s3_multipart_uploads (
+    id text NOT NULL,
+    in_progress_size bigint DEFAULT 0 NOT NULL,
+    upload_signature text NOT NULL,
+    bucket_id text NOT NULL,
+    key text NOT NULL COLLATE pg_catalog."C",
+    version text NOT NULL,
+    owner_id text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    user_metadata jsonb
+);
+
+
+ALTER TABLE storage.s3_multipart_uploads OWNER TO supabase_storage_admin;
+
+--
+-- Name: s3_multipart_uploads_parts; Type: TABLE; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TABLE storage.s3_multipart_uploads_parts (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    upload_id text NOT NULL,
+    size bigint DEFAULT 0 NOT NULL,
+    part_number integer NOT NULL,
+    bucket_id text NOT NULL,
+    key text NOT NULL COLLATE pg_catalog."C",
+    etag text NOT NULL,
+    owner_id text,
+    version text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE storage.s3_multipart_uploads_parts OWNER TO supabase_storage_admin;
+
+--
+-- Name: hooks; Type: TABLE; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+CREATE TABLE supabase_functions.hooks (
+    id bigint NOT NULL,
+    hook_table_id integer NOT NULL,
+    hook_name text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    request_id bigint
+);
+
+
+ALTER TABLE supabase_functions.hooks OWNER TO supabase_functions_admin;
+
+--
+-- Name: TABLE hooks; Type: COMMENT; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+COMMENT ON TABLE supabase_functions.hooks IS 'Supabase Functions Hooks: Audit trail for triggered hooks.';
+
+
+--
+-- Name: hooks_id_seq; Type: SEQUENCE; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+CREATE SEQUENCE supabase_functions.hooks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE supabase_functions.hooks_id_seq OWNER TO supabase_functions_admin;
+
+--
+-- Name: hooks_id_seq; Type: SEQUENCE OWNED BY; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+ALTER SEQUENCE supabase_functions.hooks_id_seq OWNED BY supabase_functions.hooks.id;
+
+
+--
+-- Name: migrations; Type: TABLE; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+CREATE TABLE supabase_functions.migrations (
+    version text NOT NULL,
+    inserted_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE supabase_functions.migrations OWNER TO supabase_functions_admin;
+
+--
+-- Name: messages_2025_06_23; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_23 FOR VALUES FROM ('2025-06-23 00:00:00') TO ('2025-06-24 00:00:00');
+
+
+--
+-- Name: messages_2025_06_24; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_24 FOR VALUES FROM ('2025-06-24 00:00:00') TO ('2025-06-25 00:00:00');
+
+
+--
+-- Name: messages_2025_06_25; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_25 FOR VALUES FROM ('2025-06-25 00:00:00') TO ('2025-06-26 00:00:00');
+
+
+--
+-- Name: messages_2025_06_26; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_26 FOR VALUES FROM ('2025-06-26 00:00:00') TO ('2025-06-27 00:00:00');
+
+
+--
+-- Name: messages_2025_06_27; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_27 FOR VALUES FROM ('2025-06-27 00:00:00') TO ('2025-06-28 00:00:00');
+
+
+--
+-- Name: messages_2025_06_28; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_28 FOR VALUES FROM ('2025-06-28 00:00:00') TO ('2025-06-29 00:00:00');
+
+
+--
+-- Name: messages_2025_06_29; Type: TABLE ATTACH; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_06_29 FOR VALUES FROM ('2025-06-29 00:00:00') TO ('2025-06-30 00:00:00');
+
+
+--
+-- Name: messages_2025_07_01; Type: TABLE ATTACH; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_07_01 FOR VALUES FROM ('2025-07-01 00:00:00') TO ('2025-07-02 00:00:00');
+
+
+--
+-- Name: messages_2025_07_02; Type: TABLE ATTACH; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_07_02 FOR VALUES FROM ('2025-07-02 00:00:00') TO ('2025-07-03 00:00:00');
+
+
+--
+-- Name: messages_2025_07_03; Type: TABLE ATTACH; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_07_03 FOR VALUES FROM ('2025-07-03 00:00:00') TO ('2025-07-04 00:00:00');
+
+
+--
+-- Name: messages_2025_07_04; Type: TABLE ATTACH; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_07_04 FOR VALUES FROM ('2025-07-04 00:00:00') TO ('2025-07-05 00:00:00');
+
+
+--
+-- Name: messages_2025_07_05; Type: TABLE ATTACH; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages ATTACH PARTITION realtime.messages_2025_07_05 FOR VALUES FROM ('2025-07-05 00:00:00') TO ('2025-07-06 00:00:00');
+
+
+--
+-- Name: refresh_tokens id; Type: DEFAULT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.refresh_tokens ALTER COLUMN id SET DEFAULT nextval('auth.refresh_tokens_id_seq'::regclass);
+
+
+--
+-- Name: hooks id; Type: DEFAULT; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+ALTER TABLE ONLY supabase_functions.hooks ALTER COLUMN id SET DEFAULT nextval('supabase_functions.hooks_id_seq'::regclass);
+
+
+--
+-- Data for Name: extensions; Type: TABLE DATA; Schema: _realtime; Owner: supabase_admin
+--
+
+COPY _realtime.extensions (id, type, settings, tenant_external_id, inserted_at, updated_at) FROM stdin;
+d4dd89ce-1ec6-4517-89bc-21d64f0bf92e	postgres_cdc_rls	{"region": "us-east-1", "db_host": "O1baSb7/TSTbNStrwW/tMbdjgR/GK557sVh49B5r5TY=", "db_name": "sWBpZNdjggEPTQVlI52Zfw==", "db_port": "+enMDFi1J/3IrrquHHwUmA==", "db_user": "uxbEq/zz8DXVD53TOI1zmw==", "slot_name": "supabase_realtime_replication_slot", "db_password": "sWBpZNdjggEPTQVlI52Zfw==", "publication": "supabase_realtime", "ssl_enforced": false, "poll_interval_ms": 100, "poll_max_changes": 100, "poll_max_record_bytes": 1048576}	realtime-dev	2025-07-02 23:32:46	2025-07-02 23:32:46
+\.
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: _realtime; Owner: supabase_admin
+--
+
+COPY _realtime.schema_migrations (version, inserted_at) FROM stdin;
+20210706140551	2025-07-02 23:32:24
+20220329161857	2025-07-02 23:32:24
+20220410212326	2025-07-02 23:32:24
+20220506102948	2025-07-02 23:32:24
+20220527210857	2025-07-02 23:32:24
+20220815211129	2025-07-02 23:32:24
+20220815215024	2025-07-02 23:32:24
+20220818141501	2025-07-02 23:32:24
+20221018173709	2025-07-02 23:32:24
+20221102172703	2025-07-02 23:32:24
+20221223010058	2025-07-02 23:32:24
+20230110180046	2025-07-02 23:32:24
+20230810220907	2025-07-02 23:32:24
+20230810220924	2025-07-02 23:32:24
+20231024094642	2025-07-02 23:32:24
+20240306114423	2025-07-02 23:32:24
+20240418082835	2025-07-02 23:32:24
+20240625211759	2025-07-02 23:32:24
+20240704172020	2025-07-02 23:32:24
+20240902173232	2025-07-02 23:32:24
+20241106103258	2025-07-02 23:32:24
+20250424203323	2025-07-02 23:32:24
+20250613072131	2025-07-02 23:32:24
+\.
+
+
+--
+-- Data for Name: tenants; Type: TABLE DATA; Schema: _realtime; Owner: supabase_admin
+--
+
+COPY _realtime.tenants (id, name, external_id, jwt_secret, max_concurrent_users, inserted_at, updated_at, max_events_per_second, postgres_cdc_default, max_bytes_per_second, max_channels_per_client, max_joins_per_second, suspend, jwt_jwks, notify_private_alpha, private_only, migrations_ran, broadcast_adapter) FROM stdin;
+fffa90cb-6b3b-4e11-966d-d39f1bdb7db3	realtime-dev	realtime-dev	iNjicxc4+llvc9wovDvqymwfnj9teWMlyOIbJ8Fh6j2WNU8CIJ2ZgjR6MUIKqSmeDmvpsKLsZ9jgXJmQPpwL8w==	200	2025-07-02 23:32:46	2025-07-02 23:32:46	100	postgres_cdc_rls	100000	100	100	f	{"keys": [{"k": "c3VwZXItc2VjcmV0LWp3dC10b2tlbi13aXRoLWF0LWxlYXN0LTMyLWNoYXJhY3RlcnMtbG9uZw", "kty": "oct"}]}	f	f	62	phoenix
+\.
+
+
+--
+-- Data for Name: audit_log_entries; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.audit_log_entries (instance_id, id, payload, created_at, ip_address) FROM stdin;
+\.
+
+
+--
+-- Data for Name: flow_state; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.flow_state (id, user_id, auth_code, code_challenge_method, code_challenge, provider_type, provider_access_token, provider_refresh_token, created_at, updated_at, authentication_method, auth_code_issued_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: identities; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.identities (provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: instances; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.instances (id, uuid, raw_base_config, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mfa_amr_claims; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.mfa_amr_claims (session_id, created_at, updated_at, authentication_method, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mfa_challenges; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.mfa_challenges (id, factor_id, created_at, verified_at, ip_address, otp_code, web_authn_session_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mfa_factors; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.mfa_factors (id, user_id, friendly_name, factor_type, status, created_at, updated_at, secret, phone, last_challenged_at, web_authn_credential, web_authn_aaguid) FROM stdin;
+\.
+
+
+--
+-- Data for Name: one_time_tokens; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.one_time_tokens (id, user_id, token_type, token_hash, relates_to, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: refresh_tokens; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.refresh_tokens (instance_id, id, token, user_id, revoked, created_at, updated_at, parent, session_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: saml_providers; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.saml_providers (id, sso_provider_id, entity_id, metadata_xml, metadata_url, attribute_mapping, created_at, updated_at, name_id_format) FROM stdin;
+\.
+
+
+--
+-- Data for Name: saml_relay_states; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.saml_relay_states (id, sso_provider_id, request_id, for_email, redirect_to, created_at, updated_at, flow_state_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.schema_migrations (version) FROM stdin;
+20171026211738
+20171026211808
+20171026211834
+20180103212743
+20180108183307
+20180119214651
+20180125194653
+00
+20210710035447
+20210722035447
+20210730183235
+20210909172000
+20210927181326
+20211122151130
+20211124214934
+20211202183645
+20220114185221
+20220114185340
+20220224000811
+20220323170000
+20220429102000
+20220531120530
+20220614074223
+20220811173540
+20221003041349
+20221003041400
+20221011041400
+20221020193600
+20221021073300
+20221021082433
+20221027105023
+20221114143122
+20221114143410
+20221125140132
+20221208132122
+20221215195500
+20221215195800
+20221215195900
+20230116124310
+20230116124412
+20230131181311
+20230322519590
+20230402418590
+20230411005111
+20230508135423
+20230523124323
+20230818113222
+20230914180801
+20231027141322
+20231114161723
+20231117164230
+20240115144230
+20240214120130
+20240306115329
+20240314092811
+20240427152123
+20240612123726
+20240729123726
+20240802193726
+20240806073726
+20241009103726
+\.
+
+
+--
+-- Data for Name: sessions; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.sessions (id, user_id, created_at, updated_at, factor_id, aal, not_after, refreshed_at, user_agent, ip, tag) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sso_domains; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.sso_domains (id, sso_provider_id, domain, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sso_providers; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.sso_providers (id, resource_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user, deleted_at, is_anonymous) FROM stdin;
+00000000-0000-0000-0000-000000000000	06fc9ecc-f499-43c3-a14e-1a0dff49664c	authenticated	authenticated	israelhudson@gmail.com	$2a$10$bhmNly5K2DujvkxwCefSt.wg8P5Q90yoGSwWueLYiIbyZDn6AX0Ki	2025-06-26 14:11:13.438956+00	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"email_verified": true}	\N	2025-06-26 14:11:13.431279+00	2025-06-26 14:11:13.439758+00	\N	\N			\N		0	\N		\N	f	\N	f
+\.
+
+
+--
+-- Data for Name: albuns; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.albuns (id, titulo, descricao, data_evento, tipo_acesso, criado_por_id, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: albuns_alunos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.albuns_alunos (album_id, aluno_usuario_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: albuns_escolas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.albuns_escolas (album_id, escola_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: albuns_series; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.albuns_series (album_id, serie_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: albuns_turmas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.albuns_turmas (album_id, turma_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: alunos_turmas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.alunos_turmas (id, usuario_id, turma_id, ano_letivo, matricula, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+1a4f14d3-c039-447b-8e77-0a293f54bf82	29dfac1a-c088-48e8-bb96-8cd5047a5753	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+d04b9580-ea05-4866-9074-ec647642a04a	460ad15f-eb6b-45f1-a6d3-021bd0996a5c	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+7aa21d5a-c59f-43fa-aad6-b809452eca93	930d571a-1e30-4d90-b6bc-04dae19f21c9	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025040	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+2edad25c-3b8f-4d56-b564-e6e5e3c1e12a	1fdbfd3a-4e01-4747-b3a7-5a0d0d62a8a3	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2024439	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+9223b328-6b5d-463e-b7d6-0b864cf26aca	2c849607-2b9f-49dc-bce2-c2ae439741ec	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025091	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+0c25572a-6361-4583-8b04-12ef89855bfd	2453c955-d5c6-4ac7-ba51-5bfcd641a170	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025015	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+2b0f1ff3-9645-4580-a570-0f582b97e45c	73d038f7-9202-45fd-86a6-b5e4b3e9b41b	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025035	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+40883981-a5c2-499b-a136-80574f8f6ee7	66f47400-fd54-4bd0-957d-56a96975b69a	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025019	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+c2aeba09-2e45-425a-8d5e-af23eda69ef3	b21f68ce-2fd7-480d-afb6-52d4273c3b4b	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025146	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+506e87bb-92dc-46a3-b5a1-f389bad9d0b5	eb2ac56d-9736-4ba7-a26e-aad7bb617a45	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+5b95d03f-0f89-47e6-9f5e-0ce67e1c625f	b668f6a3-6cf8-4b3c-ad1d-10c7760c8346	b10e77ac-df25-4ff6-b9e3-b3157ad57608	2025	2025065	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+34804911-9d1e-4a7f-b519-f9127aa80fdf	8d3a166a-c357-4a71-ba79-9dc5c97ccc24	b10e77ac-df25-4ff6-b9e3-b3157ad57608	2025	2024119	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+87abe117-f300-4861-8b2e-5e05fcef8c94	10ee762c-bc4f-405c-b3b8-aab8125f2a62	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025191	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+c786913b-b5ca-4bc2-b7f0-95b24ae8dae1	335f75e0-6b92-4939-af7b-f0ec317d6bc6	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025171	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+f5d64eed-9bb7-44a5-83ff-c16d63562e38	b8a9e724-5d93-4e29-9f61-99f2823926b4	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025182	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+640fdb7f-44f6-4637-a4ff-5d255120bbad	a4ab9469-ff39-410b-86af-45c848bbef11	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025088	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+31cec176-c015-49be-82ee-9a001370dadd	18829e19-9590-4815-a58b-0d1aa6acc08f	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+da1555e2-1898-4436-9d4b-8b97c8c76fc0	001fa38a-bf8f-448e-9e34-752bcae64896	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025217	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+5aedca39-5ed0-44b7-9472-4944e0ae31ef	bd77713d-5004-4fc4-89e5-0fcacb1a3821	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2025011	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+552cadd0-be50-4866-be85-73b396badd58	4a2c3cf4-e103-46c6-ad3b-85e6f59189a4	ee6b62e8-125c-4c7a-95f7-d8cb925213cc	2025	2023257	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+5d8cae5e-30fd-4f01-bd92-ffb71682b196	5d23bb88-5efc-42e6-8685-3c43fc7cfd1c	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2024022	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+4c9f25ad-9f84-4d0d-9ef0-96870113ab5a	d8d21223-4a04-47fa-9f21-46df507da9b9	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025027	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+d1cefcb7-5566-41d1-8d6e-5d3e9b0d7638	b272750f-f00c-47a8-99e7-a9a65f7631b6	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2024085	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+ce84920d-750d-4959-a644-58685c15357b	94737b5d-645f-41fc-8b67-4678ad3b8038	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2024436	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+d5f546a8-f419-4a36-b385-b5ea0649ce66	8279708a-3c9c-4144-84b5-398f8083a286	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2024009	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+92fb175a-774a-4442-87f5-7a930408f3fb	d20cf6c5-efc7-4ca4-b988-378ac76f5935	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025036	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+885d52fd-3757-4ed8-a57f-3ebb9d4b4478	a656bc04-380a-4397-934a-a59dbdbf0065	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+68cf212b-21d4-4674-9f66-ae3480a00edc	5e7d86a3-eda3-4d14-8ac1-ede1f8056374	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2023248	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+2d875405-a77d-4419-a1f6-c6dfb92df10e	877503b5-50bc-455e-aa32-0d60943eb925	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025037	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+af5837d9-f57b-43db-b324-21373b8f3d8c	e869ac49-c58c-4448-aa31-bce70c53eec7	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025087	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+ca8bea93-58ac-436f-ac0c-3d9939638e9b	bbf2fcf2-6f64-47ec-806e-8d57d4ab04bf	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025056	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+86ff4313-8b5c-4570-bf8a-36922de8a08d	6481e5b2-9fe3-4eaa-8be5-6733aa4c1db3	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025131	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+412b342e-8999-4536-89bd-a6baade0dc9d	19d92e2b-2f85-483d-9076-d4b1c0fdbb16	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2024225	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+77ee5d38-b727-4c97-8a75-86bdf9a0edaf	bf9833e8-5b25-47fa-821b-dc73f6cd6fca	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2025111	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+bd2519cf-1dcb-4bf4-908b-7bd6aaeac9ed	e412ab71-88cc-4f6f-b70c-3b027ceee08a	34045582-b3d1-437a-b6ee-974dbfd79d9b	2025	2023214	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+8f851593-6d83-45be-9b3a-de4c206964c3	0a4e5244-7938-4489-af7e-43e75a5ba8fb	0564795e-761c-43fc-a937-4b19a07c9765	2025	2022284	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+00769dfc-cd8f-4831-92ec-7d545c547e0f	f0537fc5-9f4a-43a5-9285-0277d7442ea7	0564795e-761c-43fc-a937-4b19a07c9765	2025	2025193	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+01923d71-5fe8-4595-930f-5d8b74c02a1c	41d48a63-a0a3-4dbd-aecd-9bb9b3601274	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023003	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+b1b31ec7-1fa6-4fe4-9bea-23fee25e2540	e76bfa8c-23d2-42b6-b032-417aab2b2ada	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023183	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+7eaa5971-9020-4055-8f8b-2c0604f870d4	d8167e52-47ee-4479-bb18-434778d6efb9	0564795e-761c-43fc-a937-4b19a07c9765	2025	2025192	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+234c3dd5-172a-4360-a1d9-3b73bd441dec	2f467226-b1a0-41a4-ba45-2ecbd6935172	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	11498071309	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+58c304bb-ab45-4338-8607-1cd5fa87a8e1	be112a65-7925-4915-bf82-85a3eff9a6f5	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2024146	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+37948a1c-922e-4f42-8586-0c7beb536245	a8c5235c-d96e-4114-bbde-cf125e55ba83	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2023046	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+b790de44-6046-4a47-b3f4-d0d7bd2dcb49	55060a14-e129-4f8f-81b1-af74f80e26b3	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025163	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+e2481e75-e7b3-40d6-b9ea-ad52bcf6a7d8	041dcd6a-d057-494c-9ec8-28a765c25108	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2023134	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+2e396b0e-cb24-439c-a4ca-b23e4d9abdf3	be44c96b-f3f6-4c6e-9d34-6f091820d34d	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2024090	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+1dbb0aae-46c9-436a-bea9-32678d814afc	3d166b4f-24c6-42ea-8886-ffd90cfbe66d	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025108	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+29d04eb5-b954-4224-a9bf-14b20de122c4	102fc50b-e8ef-450f-9d93-117b339d8504	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2023025	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+f39fdcd6-d993-4ea0-b86c-06d4a7f861f6	824a1d08-9a60-46f1-8d04-1a3b441c692d	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025164	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+847e5c81-c8d5-4f5f-aca3-cb109203f9a7	b20d4cd8-2e3c-40bd-add0-b64ae72d2452	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2022310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+32b5e46b-ab19-411a-b6a9-3f23b22b0d93	7733e2fa-49b6-4894-af26-fd1b68c6b5a3	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2024045	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+c52d55a0-1602-4ab0-9134-13b5a10b2790	53129718-ac6a-4e22-b590-0121b8282cfb	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025107	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+502df14d-cc03-4552-a8e0-62d57c47b66d	59508ca8-ba2b-476e-b815-57674bd6b327	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2023159	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+ea1f4fa9-eda1-4065-a117-e4d0cec98d70	a4039b0d-5a28-423f-86cb-e8fe4115a61e	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025155	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+6398b618-6a21-4dc2-bf8a-97cce5384bf6	91d07adc-9eb1-4a03-a6f8-4b01c2b0df98	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2024089	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+6dbf68dc-9428-467a-ad32-014460adad63	70b2bc99-9a61-4718-9ff3-9ac2c77c8e84	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2023022	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+f7154651-9f70-491b-9a59-8943fe150576	d2006e22-bce0-4dc4-8ce4-51f7b7ae175c	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025033	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+68a06cd5-f3f7-4f73-9782-c675d8f942c6	9d8320cb-d7e1-48b0-9bd7-1c236588ebaf	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2022012	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+6a20d6d8-08b8-4c42-841e-dfc71b0013c2	0d928583-0517-492f-bbb1-d66e03671ca6	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2023070	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+38757665-505e-4190-a607-ff90e4f7e9e4	77a55cba-e833-4502-89a1-30210979c62b	804d3bdc-72fd-4cc0-8228-291b17968a5e	2025	2025072	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+6ec0738a-6d5a-4bba-9f42-186e62b42925	f8d91315-8b8f-4002-925f-f471a071cfd7	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024076	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+ad718fa2-2253-4622-83b7-22f718c73b4d	83a0eb0c-98d3-4480-9363-b916d52a720a	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023222	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+e80a5f89-6852-424c-82ad-5adabffd8e17	b04f669c-4a58-40a0-a5c3-4b97b66fd4a9	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024161	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+aaa5d8a7-01b7-4fb5-a433-8de17245cb4f	185480ac-a08c-4e76-9a45-da9f6d6a71bc	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024219	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+edb3bcf5-b275-4bf6-b4c5-8d3768e96863	3f9ff1bd-2821-4851-8c21-1cf625d22502	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024071	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+0b9eb611-6a50-4145-a5ee-e15167ec5f74	1ce4afef-8d3b-47bb-8009-ea4890fc701e	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023029	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+02911c71-4642-4d8a-b4db-6fe90c6431e3	09b904f4-3b9e-4ccd-ab6a-fea154fd237b	0564795e-761c-43fc-a937-4b19a07c9765	2025	2025073	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+448589eb-c846-4152-b706-6d5a99240b2a	8529c434-09ed-4254-bfff-71202a6c5b9b	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024192	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+842f3117-24aa-47cb-9a7b-23ee41fd2925	6e416023-c323-4948-a496-9b9a6c5fe247	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023062	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+447f3131-73f2-4ce7-8e5d-8f10d721c2e7	bff3badf-9fd7-459d-b91d-a888c75b2423	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023139	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+70855434-e56f-41d2-bc59-37133a05a70d	bcaecb53-b5da-4512-80ee-fbdbe101736f	0564795e-761c-43fc-a937-4b19a07c9765	2025	2025115	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+4c90c635-d145-46a8-8900-c99718233065	2afd7bd7-12e1-4af1-b5aa-1e9b1a6faf04	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023126	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+b3cfa1c9-eab9-44a4-b1bc-a777a8d35686	b9b22892-763e-470c-953b-08c2d2ddc38b	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024164	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+274997df-4c3d-48bf-81f7-5d8da4b412c3	9dcbcb67-a444-4161-9fb8-5570d4fe8b16	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023226	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+c9ba6f47-2f1e-4d56-af3e-5a0bf28f509e	a59defaa-c1fe-4828-8875-eb7910339455	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024221	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+9fa48930-ca93-43b0-9eb0-4a2dcb848c7b	c9ae2760-6e38-429b-a136-7b0c53a188b2	0564795e-761c-43fc-a937-4b19a07c9765	2025	2025104	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+b1afd296-a2c7-48c4-abe1-2b721f6ef73c	a063c267-d2df-4b47-8bac-ce9a58fb443c	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023165	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+74d33448-e3ca-41e5-8f0c-7c0ad4e6f4a8	603d54d2-6b38-4d27-8517-2f2156b8c1f7	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023143	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+9fc17a0d-5dd8-43c0-95c4-1a701e5e7b9a	1b87bc13-b47b-48c3-9c1c-b56604063467	0564795e-761c-43fc-a937-4b19a07c9765	2025	2023054	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+413ae0aa-79ef-4d74-93ac-a7d9e0e95857	38eabc19-5c6f-4b28-a30a-b030f58d873c	0564795e-761c-43fc-a937-4b19a07c9765	2025	2024038	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+988fbb1e-0060-4580-bdb0-36b4f529e314	d940bb5b-c3f9-418a-b243-2a78910dfbed	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2025176	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+976849de-abf1-47c8-b333-6e282bdcadf4	b94a738d-6c3c-4996-95cd-9c62877209e9	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2022158	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+5c6bcd9e-2fa9-412f-b415-facea5a650b4	60be4667-adce-43e6-93c9-cd861a9e4a06	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2022144	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+f3f8541f-8793-4427-9310-1994b05408c2	070822fb-b89c-45ff-808f-71daf0d742ba	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2022045	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+0618cc3d-973b-41c3-b935-17a2ebbec1f0	87024c6f-4b8c-48d0-b762-2b73ea02e574	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2022272	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+bc015dd2-e75f-483c-95f4-4b9e0ea77ad3	cdf56de0-49f2-499b-a785-d607a1deedba	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2025069	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+41943c5b-c5eb-48b7-8f35-3384fb19dbad	1e0e68db-1ec3-4f47-bf9b-0a62fa4d2d48	4516314c-bc9e-4bea-9189-42f3bf13828e	2025	2023037	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+55a02878-0bba-46ec-afb4-83e035d12aa1	774e2d69-7182-4ba4-bfc5-630d8fe55a7d	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2021153	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+1e9a9154-5872-46df-8b11-2ed3df751b4f	7779046c-8d48-4452-8793-d73992a3b13d	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2022074	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+ab9d8c7d-76b6-4e6d-8098-ededf138a94c	3de38d26-6f6f-4ef9-a033-158b7ac5e610	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2022023	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+28272516-f004-47e4-9533-ae136af21778	dbb7b3a4-ae80-4c0c-8b0b-57d329833c7a	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2022296	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+87f6dcf9-22c8-4e20-9647-756f3a946069	ec4500bc-34f4-47fe-90ba-1a4787dae59e	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2024180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+a73bba45-8394-4fb3-a674-0ff98868da18	628d96dd-177b-4fe7-a745-9b35be890c0b	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2024034	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+9786edbf-3592-4061-82ba-4a20bb17d5fa	c9af76c9-9a08-4681-93de-02f404534a2a	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2023163	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+0e9d80ed-5881-4f24-899d-09f925b8635f	f8db6e77-5270-4e2b-a17b-9ceb1794eddc	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2023229	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+7f4806b0-565f-4614-9169-8bfb66477910	ce32718e-2a93-4d28-8d7c-4f08bc13cd94	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2023195	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+43a3f9d1-54e4-4f68-b066-73e22fec0aad	8fce0e6b-2100-46fb-a7ff-7d5b3cef25fe	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2025208	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+33c52ad6-ed8e-495e-96df-c4a9f41b8699	12c8d06c-1a21-4b65-82e8-eb790be0940c	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2024162	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+bc78b56f-ae11-46b4-bf6b-d3fba2d23a90	796e4b7e-2876-45c3-a2f9-0d2a495c663d	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2022085	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+e8198f89-94eb-49fb-8354-ebc2c19426db	bc26f7ec-7c7a-4deb-956a-8dff26782e60	4be78645-53bd-4b9a-8b74-67eef031c463	2025	2022044	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+303038c2-f258-4cb2-bade-516d6b6a2c2f	be864bfc-1b1c-4df1-99bf-c2d04fad9d36	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022245	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+f5bb9161-0ec8-4893-90d3-456648110756	caf215e9-0cc0-4408-a503-1f79b0131d46	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025085	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+5f833946-f767-49ff-82d9-b002fe73bdd0	5e8ce300-1697-4659-a360-5c26dfb72371	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022215	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+85754f1d-9f62-46ea-8fb9-7e9e3a73b869	c7a8c4b1-bb34-4f91-822e-dceab3b49def	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2024111	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+89e9209a-29db-4c62-86aa-ffc6b3e34917	7e024b8d-7207-4874-8982-68ebcfe96af2	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022019	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+55a28a48-2e60-4c64-9870-eb7cad7313b6	da75ef35-d86c-4814-9a2a-157cc48890b9	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023167	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+d1e08363-abdf-446a-aa2d-46cb04f6a4f9	97e01d1f-38f5-4166-a34d-a3b9da1c5312	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023144	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+ff4d448c-a4de-4477-b4f6-d047f9481225	ca3a9457-aab2-49e6-a0cc-eb9c7481fe43	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022033	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+cabaee0e-bb0b-4758-93f9-5b2c2daa0793	b0d41809-9333-483c-9315-6cc2c88a7bc5	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023035	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+f610e64e-1f19-41bf-b474-a0e59fe7804c	6220514e-f179-4e0d-9ba4-b90a136456dd	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022105	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+2a42f7fc-5a81-47f6-9806-52c6dc3a70b3	69f55746-83b8-426f-84dc-0d58b53796b9	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023198	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+01c6689f-57b3-4a3b-b5d3-a79f87ccf3d2	b31fc402-4e14-4c2b-9cae-0cb28f4e0d56	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2024027	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+9905c64b-9d00-47b6-b3b4-75cb1f34eb2a	f1696ebf-14ac-4be9-8d0d-176a2e1df5fb	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2021269	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+f4c370d4-6046-4801-9710-79f931ab68dc	f1d8b6e6-09ef-4588-a2e5-e6f97135e90d	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022022	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+6c5652a1-c952-4748-9580-0c1a59c8d8e5	8c294ad9-e819-4681-a2ee-365a01ed05a3	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025075	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+324f0e72-0d95-4978-9e03-0cddea8dae9d	a0a9e324-f391-4e18-b805-56ae6abfdd40	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022273	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+afbe2672-8264-4201-ad38-20e2143a1cca	83cb2ac2-4576-45e2-af69-d39a1cbc568e	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2024014	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+334d9cd1-a989-446b-82e5-39e5b0bb7c47	a3206023-fb89-4e4b-9724-2ae02cecc050	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022109	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+93fb673c-c6df-4816-906c-11dad55c799d	59ce1e32-8a6f-4c5c-a6cd-0d0f069e625c	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023206	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+fe463f0c-048f-41f2-a526-475492a4d9be	2c37e928-75a3-40d6-83a2-997e66bca1d6	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025187	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+529688da-f11c-4211-b75d-5b72d5b1c243	270deb4d-deb3-4a35-8a52-b4f8fb3f45d1	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022014	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+7922bd8d-2c44-4e89-937f-46258419d6e7	18fb13f2-68cb-433e-8a4d-2fd7cf113a17	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025147	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+a3c1cb14-6b13-4d0c-9004-5af4465e8507	ac559e4e-eaa1-4d93-86d2-d541c0efe677	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025174	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+a08b5028-9ffd-40f4-a6d8-db221566e1b2	9dc7b5fa-5bd9-43f4-b887-2f072b318818	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025083	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+3ed122e3-1f70-425f-b8f7-ee18489d584e	63a69220-ff13-4a66-b5a7-f9ae85393f57	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022147	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+fa84882d-b457-4606-bc36-fe8087b0f493	3ff87827-0074-4319-9af5-7445a8e77336	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2024186	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+7943b0f1-a218-4f12-b0f1-cc50976eb8bc	92f0c00e-12dc-49f9-9687-1de8656cee47	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2020188	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+5eb9031e-dc7a-4e95-82af-426805481ed2	b7c0eba5-85ae-4095-a18b-8989fd31b015	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2023090	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+7e7f8476-11c5-4475-95e9-7c7ac142c920	b3a4f230-1ebb-469c-85f7-21ce7f8fd96f	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025129	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+1bfbf466-e76f-4ebc-9585-870561ef1c1f	f8ecdb26-3125-4566-878a-ed6e37b8086f	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022062	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+90c4c53f-ec8a-4476-8916-99ebed77a61f	92070f2a-f130-423d-a302-31dfa8159d45	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025062	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+a81f077e-5820-4108-95e9-403f1c151646	74feaeef-63f4-4068-9c1d-616984a19369	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025058	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+922a05b2-95c3-4ce4-8bb1-71e49bd1c84a	55e2b6a0-e74e-4d57-b0bb-c624b03a3094	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022191	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+367daf62-7749-4a6b-8785-ae3e798ae836	e09f0788-fdf8-4706-98f7-13c894ae99b6	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025219	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+19074288-d710-49ff-8a72-87859a45b254	e96e3475-7c09-4ecc-a7fb-a09a394f4ab4	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022098	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+1c8ffc76-6858-4d9f-8991-8e817adf6254	6a671081-7433-46f5-be28-82708995f788	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025213	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+28c6511c-e8c2-469b-a2a3-2f20877f2be5	0c081099-ec29-47ca-b19c-01de9a41fd21	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023023	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+2e884f17-2b87-46a4-a8bd-6a2b2f94b614	d2c6640e-8470-496d-8e62-4a0c601894bc	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025231	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+ba6fe70b-b3b6-455a-90f0-aaf2c4ab8ad0	0771648d-223e-414c-b2f2-d2827eef2f90	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022139	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+5d3b9f93-49e4-4e85-b497-23c3a4af061f	afd8ef00-f6b3-423c-afc0-83b4e6f23da5	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022095	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+9f31e099-e863-4ad0-a215-da3caf0b860a	670ce4b5-e5f4-419b-a42e-00f9f49cec91	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022159	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+b6fe3527-046e-4be7-8025-80289f2b84e5	63ee4541-911d-4602-a25d-0ae17a4f41e1	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022299	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+d52aaca4-0ec4-4849-bffc-74eeae87a8ed	4c4bc37a-fe10-4465-b293-c081d5ab3b0f	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025184	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+88238399-f4f0-4933-9c3e-c632a531f9e1	2f29d0fe-5a04-4988-a151-8fe9d5af0ab0	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023096	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+5fc5aff0-ab3b-4215-b6df-33e57ba1c445	d229af88-089d-4a43-8033-4738aeb12447	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025026	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+f4e7c4de-2eb2-4cea-bfce-d5957e59f0b2	b0972435-7a24-40b0-ab17-5fe820e80c5e	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2025234	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+deb18a9d-0f42-481b-b1d8-a830d798737d	1c5fe022-db1d-49a3-aaf1-fa28d7e8e1f5	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2023231	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+39945d45-8484-46b5-8fc8-2e76d29621af	155c87ce-5415-448b-88c8-2b99a1a5545a	a01e7d8a-74a9-441a-bc9b-49eefad1a549	2025	2022030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+47aee671-2237-4976-bbf5-07ec2573210e	66fe4025-7f52-42a0-9cbe-0a9796582674	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025079	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+de25a883-8890-47a2-b069-7f70b0242cf5	2995576d-fb65-41f7-b070-6b958c66f5ac	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025178	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+a1accf73-26ce-4cd0-a78a-53300819056c	0ad8e4f7-277c-4cdf-8a3d-b51077d6f0d1	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025215	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+902ec15b-a9b0-4aa2-b342-863bb2ec4fdf	34d2f57d-ff2f-43a6-8499-a4b7ace36c4a	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022046	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+d30df8da-9fe9-45fb-9fac-e56d8456eadb	1d5ebd96-e423-4b5a-b9d9-279a72cedde6	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2024051	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+72a685ef-86da-4ba8-859f-9f30b0bd215d	c881048b-547f-41c1-b02b-f23cfb5d501f	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022134	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+bac50c9e-2948-4ee9-84a2-42cf284fd1ba	bfbc6574-0c40-4e98-9301-855eef0ac12e	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2021114	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+cbb3c526-cb53-4c71-975f-4172d930a035	db3aac63-8066-47dc-9dbe-8f941582fef8	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2023032	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+4e197691-02f2-4f33-94ff-253576166ad8	f0580bcb-a020-4721-8467-c49d1cf01c62	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022170	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+066c238d-1d16-4ed4-8acf-d56421eb62d6	e824e9c6-2630-4f55-8e85-5d2730f645e8	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2025216	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+cc2b35d2-734c-4f0a-9f70-65ee9e202752	6cda155b-fe73-41f2-b643-0e45d83d46eb	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+5a5f76d5-14d6-4611-a4fd-61de5754de1a	5fe245ee-c222-4195-a445-aecfb8421aeb	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2023044	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+013145e2-0101-4eba-8db1-42f847e88214	d960648d-5087-4ad5-8f93-403bd5bd8bed	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2024232	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+241f6686-afe4-4db2-a8b8-99b08f65c017	ffb797b2-241e-4585-82d1-92ef755ee8ec	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+6022a5e3-8b69-42bb-8848-dd99c1e81cf2	9cdac8e6-aee8-4efb-adfc-57d0f36d589e	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022285	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+debdf557-9836-461c-8ad1-d9db0e3ec921	776f737a-74f8-4eba-9049-b18818d289d9	d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	2025	2022140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+52e41d94-62fb-4562-8838-755ab81ddb22	5cc00474-554a-442c-99d1-3844eae1be95	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2020055	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+c1c61772-2253-4830-8803-e569366dbfd2	eeac23ac-5b8b-4999-9cb3-59867213cc81	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2020113	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+4053de83-ec54-4075-a5f7-c6bd56e8df64	a2a838b2-d660-4196-932b-3bfcb05a3dbe	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2025090	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+8edbfb46-fb8e-44dd-b91c-250354090ff1	1962ef89-220b-4676-8bbd-463f918450be	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2020049	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+da05b049-73d3-43eb-b7af-20152eab49f0	219d6064-63b5-4923-8e9d-52f92df71725	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2021092	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+83c6346b-9860-4ee1-9c3f-c72b30667432	06419dfd-40a3-45c6-b5b9-8aba57cb24ea	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2020213	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+cda358ae-5266-4bad-9140-8c13d3d4f6e4	78f0ed55-7920-4be6-a148-c10eaa25c53a	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2024068	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+b6168b8c-1e10-4323-895e-f9349713d938	30fe4b8f-b141-4746-8713-cf42659af056	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2020003	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+162fbc01-5a98-4ddc-bddc-992e48a73475	c6d05bf3-c0f5-4a9d-9eb0-dcf17b8b7b44	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2021154	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+2dc55ca9-cb85-4b9e-a6d0-69203520b591	bcb19713-42e7-4231-bd43-51ce328d33f0	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2024016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+ca1be9a5-12f3-4b6e-92fd-55e056a9a014	8595609f-f8e2-4fb3-98d4-664bb501ce37	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2021044	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+38077497-16e4-4a06-88ee-713bbf265213	9fd7c5b8-42a6-4bab-a521-887c35141f7e	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2023189	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+b6cebce6-318f-43bc-9d89-b27b33172cd5	45082048-7985-426a-93f3-731104dba608	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2021110	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+553f1cdb-6ed9-4dc5-827c-4eacceec8818	462e9a7d-b197-440d-9add-7609fff7dab7	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2021166	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+8bcf655b-efbb-4e41-87d6-9d05d650c332	126bf889-38f7-4b18-8c5f-3b1858e01a53	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2021287	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+e3e47969-7f53-473b-8f31-f1403f99d272	124725f2-6e13-4c99-9c25-649c90babaec	d01c34ad-133d-424e-9f55-0d14b3268ca6	2025	2022038	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+d811628d-f4bf-417f-a5a9-c8eea1c0090a	40630012-216c-4ffb-85e6-46b133c9bcc1	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2021249	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+dcbc3fe4-df14-41f1-9a6f-8549d503787e	d0834d0d-d6b3-4389-ac1e-9c50d9bc4c01	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2023238	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+bea918a5-352c-4a72-9b18-a997066e2f7e	c2b305c1-4db4-41ef-8589-8b17740af055	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2022053	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+8ad9252f-7c01-4ccc-8518-699f699e1557	39435096-f0ab-43e2-8a38-dbf006137442	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2025195	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+d9a4edd2-f979-4407-a589-b8ee152b8179	c2f8bd4a-dd49-4560-b768-552523188360	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2022145	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+c2c4d50c-6c88-4df9-be6f-179233e94901	a5db5b36-cbee-4353-b674-de1c22d0e10b	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2021074	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+2ac2e5d9-389a-43d2-b499-26c47b7b3b38	3b28054b-363d-4f32-a660-32998aa7b517	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2023160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+82e1cee9-07f4-4a27-bbd5-9460edf9defa	8bd91080-1c3e-4ea7-81c5-929e5ad402cf	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2025143	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+941a942c-f215-46ea-8855-acc30e129049	a0fa3a92-d652-41e6-ae5f-e7a8ad19a5a6	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2024218	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+aa46f0d7-58cf-4be9-a18c-ceb8d496d667	188d9f8f-0ca6-4eae-ac9f-b284d00da9ed	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2025159	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+c12c65ce-0532-4e8c-b884-a5e9e4e8d6a2	0af63411-6b91-4d2e-a383-cdccb7631669	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2023210	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+e41ba378-a444-4e6c-95d0-c185d1066624	c911e831-b565-426e-98e7-14d2cf5aa7c3	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2023056	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+77f65e02-619b-4fec-88a9-b4d4509d464c	fd73d4f6-4a4d-458e-89dc-0b2094220fd1	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2024150	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+cdb4de4b-d387-4f78-875a-45dc44e5975f	f06ad2bb-2b6d-4ecf-b98f-b18383e96e48	99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	2025	2019176	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+07dbb19c-ecfb-4dd5-a6d4-d9137b49a185	72a06aec-4106-4019-948f-b95310832845	18849050-4647-4630-9308-50d2d6bca17a	2025	2023028	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+ba449486-e215-4def-8214-58cb3d371009	c21c082c-bfbb-4a77-9ec7-60df29f94aae	18849050-4647-4630-9308-50d2d6bca17a	2025	2024166	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+5de68556-6339-4cc5-9a95-5dd4802629dc	20813e1a-0fda-44a1-bb60-e3aa455a07cd	18849050-4647-4630-9308-50d2d6bca17a	2025	2023252	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+c6b50409-d102-44fd-96c5-8b9781d7022c	ec27626d-6c6e-455a-af98-d36727815799	18849050-4647-4630-9308-50d2d6bca17a	2025	2019068	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+5ddfad04-a075-446e-a564-38ecbaad4a21	2d687568-f1e8-4927-a63e-8f3c8419f433	18849050-4647-4630-9308-50d2d6bca17a	2025	2025199	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+a0cb3a1a-84c2-4bd5-90c5-e361bc678c9f	6668ad46-b18b-4f03-8578-e6d1dcddfe80	18849050-4647-4630-9308-50d2d6bca17a	2025	2024063	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+a6483ed0-0d2e-4f16-81d8-50ee1efd77c6	bb857b06-3777-4fe7-b332-61c4a780aa0d	18849050-4647-4630-9308-50d2d6bca17a	2025	2019016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+d50f90fc-0bd6-4ef4-9eeb-43dc4720fee1	dcfa74e6-7c7f-4c97-a35e-329df7e067d5	18849050-4647-4630-9308-50d2d6bca17a	2025	2025222	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+a6300318-a095-44b1-bd62-fa7415b2985e	14985b10-b814-4280-bc39-881a0a739645	18849050-4647-4630-9308-50d2d6bca17a	2025	2022054	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+656a37ed-a767-4e20-a014-0f18cd0fa9e5	c23b0278-0d01-49e0-883e-3b68680cf695	18849050-4647-4630-9308-50d2d6bca17a	2025	2019062	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+ac55257b-08d0-4973-9de6-4631e5ebd11f	5d0ce47a-329c-49a9-8c5b-c401e8bceac5	18849050-4647-4630-9308-50d2d6bca17a	2025	2019202	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+73015368-14d4-4b1e-b4b0-2f885dc15a2c	358aac0e-d443-474d-b796-cdd0706ce500	18849050-4647-4630-9308-50d2d6bca17a	2025	2019021	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+74b31296-7957-4cbc-bacb-66ccfd3dc098	8e2fe719-0774-4fd8-981d-a2db49c4d99e	18849050-4647-4630-9308-50d2d6bca17a	2025	2022243	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+8f87bb6d-5379-44d5-adfc-b0d715974f4f	133f25c1-0092-42f8-908e-6f48a55869d3	18849050-4647-4630-9308-50d2d6bca17a	2025	2022016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+88b3c16b-1a49-4f78-8e9e-fb97e8fbe68f	b8a58dab-2ef8-4cc0-90c9-6d515bcd354c	18849050-4647-4630-9308-50d2d6bca17a	2025	2024230	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+2a1daf1a-ab29-4adc-a012-9ad57126d5ad	08ba8b80-1650-4c2a-82fd-d802b8210c72	18849050-4647-4630-9308-50d2d6bca17a	2025	2020061	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+be5bbaee-38a1-4236-ae5a-654d2a7ef0fa	543fd228-5652-4430-aff1-42ec96c13c00	18849050-4647-4630-9308-50d2d6bca17a	2025	2020093	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+bedfc89e-e432-41bd-8500-6c5c466abf0c	c12282b6-0507-42a1-bd84-34129ecd8ff9	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2024124	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+10bb9b4f-653a-4d37-84e3-ca9b0aa654ed	93ea25d3-bb78-4ee9-b807-4734ee9330e1	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2020051	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+374deaff-8da2-44c9-bda9-0c8e3e3e2653	c9f8f747-a078-4973-9b38-a1bff0ded75c	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025014	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+fff4547d-fa6c-4fd7-8f71-41ff6a70dd8e	a3c12a1a-af62-4ee2-ba77-f3d3a199a789	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2024151	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+14e5436b-e4b4-4eca-a483-5d26e44a02bb	0c52a579-90b7-49ab-900d-b0b0c8eb5e32	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+bf450b36-7889-44f8-88f7-ad3a71d3bfc9	d1ac8e36-2318-46ec-9830-13c20e22a1a4	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025089	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+49ab0b7b-876e-48e9-9976-14e9a604938d	f8db5a33-6003-49ae-b92d-6fb7e1e7ff5e	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2023085	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+ecfe00fa-8930-4773-bc21-0fc2c960c7f2	68e9969a-e410-4b05-9e92-65699d391d35	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2024160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+87326034-ad8e-4b33-b01a-fc3927c6e153	c1778e7d-c513-4278-a242-5b1911db82d5	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025125	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+6ae51ebe-3e26-4852-b496-52dbddc16977	275b5d5d-db5f-4892-b91f-475ecc141852	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2023059	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+67a86222-4795-4ec1-8149-58bb5b4c8157	2b7f0c36-8718-4a33-9d43-d6c3d34074b5	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2021195	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+f997cc6a-cd42-4f24-ba7b-fa8b5c4d2b55	dcd7431c-ee10-4032-8abb-d96a8edab7a3	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2020078	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+136a0485-6d7a-4aa8-83f9-a228222e7381	10ef17be-db69-4f4c-9eb5-b2669f17a157	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2020046	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+27c0c133-437e-4ebc-8a6b-fcf464248adb	37093d55-0fd5-4ba6-9564-ea50dddd96a5	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025139	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+f2319c09-1b44-49e1-aa26-d86d5a19ff08	85a58851-2e90-4014-a7b9-069e3a58cb34	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2024057	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+f655bdc6-9a0a-47db-b1c5-5ac0d76fb3ec	c10b95db-740d-47a0-85f3-367b6b7de1fb	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025151	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+11de1571-9329-4762-89d9-5f7ee4041080	65b63f60-4c5a-4214-9f13-de0b07dbbd2e	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025141	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+3020d019-42bb-4738-9464-48c091c7ad49	a482f929-5141-4586-b4a0-6c65209a1b87	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2024134	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+d62109b0-760c-4e70-973e-d7a19c409f06	ac636787-ee6b-4853-8a02-cf1429e130b7	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2022011	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+ac0192ea-3fe4-4c0f-9fa7-c1991a1e9c0d	3ba432bf-d385-4f56-98ff-7237d2dc6bf6	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025177	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+d8d6d253-b9fa-42c6-a4ee-bf5cf77e29bf	1264dfc4-db9b-407f-8098-48ad50e18711	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2023171	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+55ff14c5-83dc-4c3d-ac11-b2e7b53f4d1d	4931e414-eb36-4735-a6e2-b5673e315c32	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025063	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+c914d248-3f19-400b-8554-825f5725f028	7482d278-63ce-4081-a932-cc150d776940	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2025242	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+b87d2b96-96d0-41be-899d-7b68ec829d6e	89fd40a4-9b62-4850-a230-3a3182acb1e5	61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	2025	2023026	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+50faca07-1b3b-4c79-a9d2-c86f4231d101	c2bc63f0-d8ed-42e3-8937-fbee344dee30	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018017	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+8dedcd25-1cd6-49ee-930a-2873003116c9	194ff744-48fb-4a32-92f9-ad9aa0954f62	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2024091	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+3c2d9885-e0e7-40de-b9e8-56cd7c2710a9	09cbd1be-4567-4bf3-8c51-83374c157677	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2020092	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+8e690607-fe58-4e8c-bd34-70b96c00e1bd	fccb859e-76fe-4bed-91d8-7682882c363e	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021083	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+1b43e9bb-2060-4e6d-94f9-b6717a1a090b	371d9456-e5db-4439-a834-bece74ad2470	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2022081	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+777e7f8c-c020-4971-8e91-536eb8fb1283	2c800e9a-220e-4555-a176-9e10a4851242	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018069	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+5d98b664-ae7f-4ff5-a532-93321589b620	446bd0a9-762d-4d25-ab11-29e3b1f148ea	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025135	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+10ebc52c-0ee7-4cfd-9a1b-776c3976a34d	220b380f-ceaf-428e-9698-82cf80849616	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2016359	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+9e0d3837-6459-4ae2-80c0-bc1439448f4c	7bcfa6fc-7a21-46af-87cf-b8e569ef3560	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2016161	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+842224fb-9c32-4ba5-a63b-e6380a4156dd	fae1573a-85b1-434f-94bc-112c15207b7e	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025122	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+310111a5-c1c7-4bd6-8f37-1ce6d9e9b56f	c78dd72e-2396-4550-9ae6-0bea6c36e731	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2017019	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+8abb38ec-f8b4-4830-b463-352f74d12919	8cb97669-decf-4578-a6f5-fd2e9ee681b3	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021124	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+43aa7737-e691-4095-96e3-16b6725a36ef	8cebbd04-eaba-45de-a1b4-c935d81397cd	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2024011	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+80f59b1b-017a-4396-9c89-4ff82127ba7d	91f4e07e-da5f-4aad-babc-2a49a77c0f3d	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2024190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+19736d45-a017-464c-bb85-d2a7cae9f3f5	62f77f82-d686-4ae6-94c8-7ebae2473fbd	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2016226	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+5b3d0d16-6c06-47b4-99ec-654e10a7369d	d90e882f-b6c2-4ba9-bd2c-6ce7c14b400b	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021201	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+15fc85aa-348c-46b1-81ea-6071d0f5496b	a136a36c-ef14-4ca6-8b8c-91eb56394dbd	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021091	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+2aaef7e6-7a19-4f7c-a0c3-d88e6a405880	0061dc47-cc78-4a98-abe9-f1f520869dc4	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2024010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+0da8e309-c5a0-45f2-9082-02be96945a6b	6e484066-71ab-4e3f-9fb6-0b1c39948f81	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018073	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+3fc5fc0d-c7c5-4e1a-9164-1732c24d1731	e49b5ce1-44e1-4ac8-8829-6e0d3ce0773a	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2016290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+143c677c-7375-4aa3-87c2-db5d3108bd1f	a97e213f-8ef3-464c-b530-ac027aebcea9	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2020068	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+7b49e66b-b625-4c51-8cf2-1875c3c4fcae	8c1f7037-bf45-4173-bb62-0aaac41e0f97	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2016184	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+2c8c45a5-308c-4632-8196-2cf44cc5263a	b42d946f-68b8-4f07-9c04-2fe07c31142f	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021173	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+8273ed69-c75f-4232-b377-3f32f29378f7	bbe8405c-aa8b-46bf-b4a9-54b1e8e85f51	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021073	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+d62e6c4c-3408-4ab7-8e4c-6e38dd481f3d	0657ec1b-2e70-48a9-bb03-d8a1320042e3	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025092	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+a05c429e-2fc4-470e-92e5-46e546b96375	35c3a177-8636-4b7a-ac2b-9f3932713620	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021067	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+f029aafb-c1bf-4fed-8c71-ddf2d3bb41fe	1f6e62d4-1b7b-476b-b79c-7c4ba492e617	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021079	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+f5927ff0-8a5b-40e8-9753-dc369d03cb61	b0fc1b9f-629a-4d12-a08d-977b6fb37f3c	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021102	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+fa05cb43-3da0-47c7-ab2c-90b3722283a4	794219e8-f776-4f26-9936-26acfcff3a54	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2020162	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+0d82be62-efcd-4754-9091-fbfe38bfc644	41f9e149-891e-4f72-acb7-02e5772caf2f	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025082	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+1722c89c-86ed-45f3-8079-d354f0f9101e	73fbbad6-f3d7-4c19-9a1d-19edc77896b9	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2017097	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+9de81cbf-e590-44ca-add2-444044d3d8f1	a79133f2-3b88-40a8-a048-e91e18d9e1dc	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018015	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+4b6ada19-27db-4b2d-a700-e288a89e3b1e	7c4956ab-2b46-40f9-ae21-dce3a61348b9	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018077	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+90f01eef-641f-477d-bf61-6fc843a498a8	344179a1-c75d-4abd-98ed-9fe2fdc28a09	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2020034	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+4a762ce0-b486-4c2c-b94f-b1d60b559952	da1b4f24-2059-4401-9c1d-15203457883d	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2016462	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+80f66844-def0-49ad-a41f-c452dd9af0d0	a106a187-a2ab-404e-bf08-23da3075c47f	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018019	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+bd453d77-f347-4bce-882e-5b6f892581b5	15fecf38-c0fe-4c6c-805d-44a53e63cfd1	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2020052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+9669b0f1-df5b-4c94-a467-2b750d838535	a36f3b16-6bfc-43c5-9d71-dd6d0a9b5992	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2020118	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+4d1b121d-0629-41e7-ae5e-8ed8d45a714b	b58dafc6-3ad9-47a0-bf21-d6ea7ddb8846	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2017060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+113e2798-901d-411e-98aa-51917967a522	351b7577-c4e1-4a54-967f-641ce0d551e2	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025068	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+6a677d8d-4522-4544-8d81-9358af7fb338	3d8238a6-98a9-4b18-ad9d-f1f8d824974c	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2023048	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+c4e3d93f-a6e2-4b4f-99e2-6b28c001b478	4502d509-7b58-4c9e-883a-d24e22f65344	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2024141	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+3310288b-8e1b-45d9-9099-f7f8f1ffbd99	418574cd-3022-487b-9e6f-e8ed27ab4403	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025134	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+84a0abd9-2559-4878-8487-31e9969cbe65	c1f23f20-8cd5-4d46-89e2-66c086ae61fe	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025051	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+c48ec39d-3723-4439-874f-d72aa475aaea	3b3cfacc-68d5-41ef-989e-9928d8f83bcc	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2018023	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+e89f4a41-fa8c-4612-85b8-f7b138b706e1	ea45d19a-5279-4ff8-bb6b-cbfef6611265	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021209	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+a521caed-8e4a-4d78-a51e-1949086d8f34	d958508e-9702-4e38-8dbf-cf4b7b479ea9	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2025175	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+bed976a8-05f3-458a-a4ec-77fd70d362be	fd3c322b-a478-4a05-966c-d9912a5428e9	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021279	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+a15b99e9-c103-41ed-b599-a44ce6349e71	82b909b1-9e4b-4bd4-8011-4f49df1afbcd	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+19e6f866-e658-4aaa-8cb3-e4eff1e614b2	5c5462a6-f6f3-4314-b335-7b6a5389b276	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2021156	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+ae186f6d-1fe6-4533-9a66-777a421c2419	9de1c75f-7f71-4c6c-a275-b580c455b8b5	452ffde1-12e6-4b2a-833e-d4bbaf12a43c	2025	2017024	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+9925db3b-cf36-4713-a7d8-f00b92318720	b25039a9-833e-49b6-8920-ee5692e29871	d1565890-7a07-4076-baab-463fc7b764e6	2025	2020088	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+f876d264-33e8-47bb-9f95-4d8cf19ff9bd	f5511326-2977-4db2-ba80-035650fcb6e3	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024204	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+bc108afa-0984-457f-a638-f69d77ed63bc	bb35860c-fff7-4e25-b303-4ad03a507416	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024098	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+f9777736-85d2-406c-8e4d-e26dece9e350	602b0c54-366e-4d75-a6fc-1e61f96e2869	d1565890-7a07-4076-baab-463fc7b764e6	2025	2020131	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+76a171e4-3154-4e59-8c85-2abd5f770b80	ea3b6a8e-4e6f-4e81-99af-512657f6d890	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024097	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+525531ba-f8db-4437-9bf1-87ae5ecd061c	e005b5aa-aa59-4dec-8355-35e8d22863ad	d1565890-7a07-4076-baab-463fc7b764e6	2025	2017023	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+b038e55b-945a-4740-ac2b-6f971ddd3db9	aa95c852-35c2-47a0-bb4b-ba1c55be09ad	d1565890-7a07-4076-baab-463fc7b764e6	2025	2023177	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+6623083a-15b6-4d6d-84d6-c14f428a14ae	9284ec66-0375-4baf-ae66-7e2ed259061f	d1565890-7a07-4076-baab-463fc7b764e6	2025	2025200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+ce3bbcae-9591-4e23-a09b-c33572bf4293	ecf640e1-4b0f-4574-a57d-03d08e1ae7e1	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024086	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+123de5dd-6139-4e82-b9a7-6a004baf1687	68eaf19e-969c-4b80-ba8f-20e379e0dcbe	d1565890-7a07-4076-baab-463fc7b764e6	2025	2025086	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+dd3181f2-df6f-4db4-a3ed-d959900e45cf	3ab3cde9-96bc-4b42-a8d1-2ee694d0131c	d1565890-7a07-4076-baab-463fc7b764e6	2025	2023228	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+eed93a28-6307-45e8-9504-d71a4aac0747	10fbd004-8ee1-4cb9-bef7-19f7e33e6549	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024170	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+41fb1308-9d04-443c-a954-bf39b526178b	77fd8a61-a9bf-4362-9d9d-842e7f4ffb90	d1565890-7a07-4076-baab-463fc7b764e6	2025	2016331	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+69843cdf-b2e5-4d07-ad48-49b854c8103a	35ed302e-93b8-4108-bf13-1f084efedc58	d1565890-7a07-4076-baab-463fc7b764e6	2025	2021145	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+38d875f5-56b9-452c-9f3c-2e4646bf9e0f	16d00620-097c-4bbd-85ec-7f9f428f1d56	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024084	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+526f8e7e-91c5-4435-a7df-8378cef4504c	785f9b07-ac93-43c0-a9e6-ad24398de4d2	d1565890-7a07-4076-baab-463fc7b764e6	2025	2021078	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+03348c19-595e-4b97-ac5c-a39419a103d4	0993b90d-3853-4509-a27a-470e987e344d	d1565890-7a07-4076-baab-463fc7b764e6	2025	2025054	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+82e9f06e-4627-4685-9521-bae009000ccf	95de6e90-126b-4237-bd84-f5a3c507ef1e	d1565890-7a07-4076-baab-463fc7b764e6	2025	2022067	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+27c461f6-9580-4d84-afcf-f12548d7665c	bd17a741-42ca-43ec-bdc9-d244f3b4f78a	d1565890-7a07-4076-baab-463fc7b764e6	2025	2023069	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+f2601eb6-b49f-4434-852e-13830ae6ba78	8e3f4599-c4f7-440c-94a0-a7838436db8b	d1565890-7a07-4076-baab-463fc7b764e6	2025	2016156	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+bb133375-ddea-4137-955a-aeb69655e128	62664dfe-d2f4-42e6-9457-84458b58258e	d1565890-7a07-4076-baab-463fc7b764e6	2025	2019196	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+4641e61a-695f-4b36-aa8d-23428553ff54	4f8670b7-5b80-4353-8ca0-bfdbae40917a	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024109	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+4f599b2c-6e87-4902-9fbf-819c5ee734bd	b738a082-8643-4a0a-b194-c66943542ed0	d1565890-7a07-4076-baab-463fc7b764e6	2025	2023146	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+af93c982-0d07-467f-b3f0-32afe2a2a120	68045bd4-e8db-4d78-9bb6-847ead3f6fc7	d1565890-7a07-4076-baab-463fc7b764e6	2025	2021095	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+f3dd00fa-7182-4f00-a6fc-4359513d1920	a1c6e124-b353-4131-85c1-72ec9466de79	d1565890-7a07-4076-baab-463fc7b764e6	2025	2016188	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+6df83b64-2960-4788-bd31-89bccdf3d146	e9e4c69c-89c3-47c0-9d5a-4b6b33b76187	d1565890-7a07-4076-baab-463fc7b764e6	2025	2017075	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+ccf68152-93ac-421d-a052-153204ba6f05	d9ee41a2-7bb7-405d-9435-2ba5752c836d	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024142	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+35901e7a-dca0-4f88-a506-fc2b19012a84	9e6ee976-19e7-4bd7-ac9c-97c232315a28	d1565890-7a07-4076-baab-463fc7b764e6	2025	2016448	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+3110ddf7-23ae-4ef1-8431-0591925141bc	67909e0f-290b-4000-bfe7-e0f9e42fd2d6	d1565890-7a07-4076-baab-463fc7b764e6	2025	2022127	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+4149a2ed-22f1-498d-a7c8-495ea8b9ee95	63c4c65c-be9f-4014-ab47-7b9c000b873d	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024049	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+56b48c92-4968-4bf3-af67-7539f87772ef	e94b98f7-5538-4d2c-905b-ceb2fef34b2d	d1565890-7a07-4076-baab-463fc7b764e6	2025	2019097	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+7da9532a-3477-4654-8856-a939a6f635a4	9d3dde1e-8bbd-40f9-b74a-746ec7f00820	d1565890-7a07-4076-baab-463fc7b764e6	2025	2016037	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+55fd992d-65fc-4df6-92ce-d5b08eecd46b	f9cbfc0f-2160-4c81-bd0d-f5732308f3d6	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024137	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+db442e64-babe-45c4-ac0a-c8ac929f60f1	b57f425e-2986-4fcb-89be-27c9b912cff6	d1565890-7a07-4076-baab-463fc7b764e6	2025	2016064	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+f42233c2-78b5-4705-87f8-17866f55ea55	ee9e88df-6f77-4206-92a9-9bb665d5690f	d1565890-7a07-4076-baab-463fc7b764e6	2025	2017020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+c69a2c3d-cc70-4579-84e0-0ea1d3e4dac9	139ab5a9-de9d-422c-84dc-58b037e820ca	d1565890-7a07-4076-baab-463fc7b764e6	2025	2021215	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+8b31d934-cd39-4d25-8e78-a200f1bddfaa	c8b9ec07-97d2-416f-abb6-047ea7141b9a	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024007	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+847d7d93-5d6f-468c-9675-d8621df02751	c6b50714-8591-43cd-a2a3-dd31c417121e	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024133	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+ff580eca-862b-4ddf-b500-32d78e9200e1	901a8389-63aa-49a7-aa40-16ef190f6122	d1565890-7a07-4076-baab-463fc7b764e6	2025	2024047	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+6a538bbf-00d1-4063-8231-63342015e53a	f261031a-0d3b-4328-811c-40fd0c86361a	d1565890-7a07-4076-baab-463fc7b764e6	2025	2022150	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+1aaf8d6a-27b7-41d7-9d6a-1061299c34b7	45eae564-4141-461f-ae87-8f1527174d78	d1565890-7a07-4076-baab-463fc7b764e6	2025	2017042	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+45835195-c9ef-4221-97d5-61f24081ff94	38a71958-3098-41ba-b433-15573a98f59f	d1565890-7a07-4076-baab-463fc7b764e6	2025	2023049	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+bc72b1b0-a51d-493e-af0f-f71d3a4c55cb	16446a4f-08fb-48a3-87fc-1e3970363202	d1565890-7a07-4076-baab-463fc7b764e6	2025	2019151	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+92c864ff-de98-465b-a61d-531515727a84	5377bed2-b313-4d9f-af75-cf3f4caa11d3	d1565890-7a07-4076-baab-463fc7b764e6	2025	2019177	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+22b407b9-018e-448b-8c6e-b49735486cf6	58adbf86-6154-4d13-bd4f-53f9e7bca5b1	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2021288	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+b4fe6a09-7d2c-4574-b957-31864f843aff	3841dc25-933b-4075-82dd-8ba6457a7981	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2016035	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+3b21f5be-0ed2-42c0-a214-f98c9c8c74fe	b40ce547-d06d-4c3b-8614-dd86516a2349	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2022110	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+9a438081-efcf-4efd-956d-5c8ef4d64f1f	932b2968-aaa1-4574-b50a-20b136f45ff1	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2022178	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+c954fbaf-2859-46ec-b2a6-708f55521c35	bc7b8463-f2d2-4555-8fe4-eec96c148e0f	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023087	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+1d1fd121-9c93-46a5-99cd-0ff296e1dd4d	c58098fb-90f6-40ec-9ffe-b24ae9af6652	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2021175	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+a63a5638-66ab-41f1-a148-e5f881eff795	e2d10389-e3cf-4b8c-8fb2-27a98a983e84	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2024156	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+c2c1df59-ed8b-4c5a-a410-0e52d15606a0	2c12191a-da97-41c3-be66-6061f32b1b67	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2019077	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+7df2f2af-e459-48cc-944d-0e560988c484	2b0f845e-5938-4bd9-88e1-c62fa3cda3c4	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023142	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+1575562e-7d3f-40fd-8110-155f9b490ccd	6f448932-3d11-4c90-9981-d08c72dba6d5	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2020002	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+2b358402-0ab9-48a3-b32e-0e936e1bbd9d	6ef30988-c80d-4755-b51a-6e6fc291b178	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2022165	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+b5700159-ed18-43b4-bda0-146d36be5414	d61736e8-5e05-4116-bbd8-075468bfc07a	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2017041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+f05cb54c-7fd2-4116-9609-de5ebce629a6	ea4351dd-43a7-4720-bb58-55701fe59576	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2025071	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+4a329ff2-6ca2-4d79-bb78-3c33fc188b62	86ad90f2-2713-4e4c-8c34-d25685e2d0da	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2024114	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+b80e1e3b-c8b9-42fc-97a4-87f2fabc3242	117764a7-61ff-4f91-801c-129e3956edea	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023038	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+3a57c8db-ae2f-4459-b3e0-35cc73d460a1	8ad765f5-0a66-4493-9c47-5a4bc826af1c	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2022294	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+38b385a6-c283-409f-9005-adefe3fe5178	76a7a9c5-4f6e-4e49-9b22-4339295bb1f6	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023116	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+4fb574a7-f9b8-4ad6-bdfc-fd176561c0e2	971a2ebf-28fa-47d9-9b23-71dd472b6d14	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2024236	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+247654c9-b9c5-4186-8b7a-5d4733bc0386	8a3b4f73-44e9-4a2d-a433-8c590654ec84	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2016333	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+39793eab-08f1-43b3-93e7-dc736778e734	748a31f4-d39f-4a59-bc4f-fb4859839a65	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023050	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+57984818-4d0d-4fde-ba77-a84e0738a6e3	b7c95473-ddb7-42ee-94b9-ae66b48f415c	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2022061	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+edf76651-792a-4a3f-9a13-bbc36d31465f	6cb30dec-94c3-47b1-b0b4-f0a83171dcdb	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2019101	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+81e6abf1-abdd-4eb3-86ef-e9b58c7cae01	16251224-3386-4d1c-b0b7-33cc71953a63	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023242	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+def0dda1-3b42-43d3-a914-631eab74f331	b604625a-b94c-450f-b608-549f45b28f68	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2016289	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+d518f027-67bb-4080-88de-e8ea87f771b1	b9d8a147-d606-46c2-9aa0-5be16fbb3055	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2022254	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+c087beb5-7b3d-4ec6-9b72-f53a19cd65be	ad273996-7167-4564-8d2a-2f861c266611	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2016011	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+753f6048-1259-4bf2-a9c7-710f7e45df9e	cb7f5e16-d83a-4a5a-9f45-6bf970b8e41d	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2020065	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+d094bd0a-8b46-483a-b1b6-a2333af21436	06ce5b8d-c661-4194-aa50-793f75d7b348	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023237	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+c14e2dbe-2713-426d-bf48-51e0a7581d23	60f7e48f-e641-43d0-b93a-85146014bc00	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2021259	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+05613f99-1d1e-4eb2-a32a-718cbe282304	3d0c47c5-5bec-42f3-be2c-9de4832bb30e	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023055	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+06d3fffd-b7cf-44d1-99b6-fc4445a39e75	4b685deb-b694-4aad-8af8-6c1bdcb61016	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2023215	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+eee8dab2-369d-4d28-b358-6fa915c2cbc1	e5c9d8ab-0cf0-4340-8d9c-5586dbc5fd78	b55907f6-a07b-4218-98b2-8c1389d7cd2c	2025	2018112	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+33cf537a-59b0-45dd-a181-eef43c4d75ee	28a070ba-7940-4acd-94f8-4b3a42caa7a4	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2024167	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+1a73e324-0a54-4831-ac44-810f065fa840	86cc47b4-977a-4c65-9d74-7e8c8bd415fa	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2025113	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+69b70e1d-e70b-423b-aea7-38b583b69686	4356f63d-e810-44c0-931d-d9e8107a0ea1	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2021168	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+45dc25f4-d637-42bd-bd84-311d8c8f4e20	d9a8754b-44c9-4e8e-a54f-c432f5fb7074	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2022177	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+aa258a2d-37e3-4401-b06f-a44a1842d7b5	e2bc4bc8-03a7-4e67-9e87-a95c42ff0f80	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2022111	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+33196cb8-1128-44cd-bb29-7cdaebb3c059	676ba863-33ea-4b01-80cc-1e008ccc17cd	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2016039	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+bc824b36-2a31-4c17-b69e-f78f32fab554	22dacc70-92fd-4646-8ff3-ce1088a52869	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2024223	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+72b65510-3e53-4067-af55-e70410e5c38f	f8246b77-f216-4df1-9a78-ee5c4cb87dd6	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2020070	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+2a20452d-ecc4-48ad-b2b5-c3750fd8706f	964771ec-9a38-4cab-bd36-739813f0ed10	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2016464	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+0dae741d-9f7b-46dd-b063-b21c2f3c23cd	dc57d4a5-4f86-44dd-990c-627863867abb	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2020029	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+fd387d04-c5f2-414c-a88f-91dc708f7430	f28af2e6-7ca6-4bf0-ac92-9254ca324c6c	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2024159	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+225af493-b57e-45e7-9bab-5f41dd7e3ac7	521b32f6-e7f3-47c4-bdc7-5e9cf1a345b2	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2020145	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+3cc87d66-5549-4f6c-9d5c-688dc3f1dfc6	d6ba01ca-bedf-48f3-8fb2-b2c6fa16cfd8	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2023053	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+a84b7b02-2285-4edf-9e8a-3faed3bd779c	fae289d6-a3df-4d3e-8485-cae554556268	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2025237	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+3445d957-f1c4-4304-b340-c0b23b10c3de	81de670d-1780-453e-9d99-c9eed6c2a7c8	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2018094	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+d26e28b2-94dc-4e9a-9658-6e0ab6f6c047	83b5a210-1194-4594-b446-7e7add611843	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2023058	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+2a806702-3dd7-41fb-9c32-f71828664a16	573c144a-8384-4cbb-aa9b-d59d67e0c08b	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2022120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+0b4a7d07-c5ca-4079-a66a-6d6ebe1bc1da	a0eb105c-c0e7-45b3-89c8-b7778460650d	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2021150	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+a5942ade-eb20-4c2d-b78d-dec1de260e42	c673f5a0-1fe5-46b6-b63d-6884cd4757c7	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2016322	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+8a16a598-b740-458b-bfc1-9d37c8145f8c	a995d68b-7755-415b-9c47-212dc526e051	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2020183	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+5002d1cc-1e91-43a8-b928-6b1a4cc702e3	b48faf8c-336b-49e3-943b-170f25eb90eb	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2024028	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+0ba9a5b5-0b4b-40d4-a845-8e4f25696d3d	fcb234d7-a30f-4368-99ce-1312277a0ec9	992317cb-8763-4b99-b7d7-0fa0185bde67	2025	2023125	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+ffcb0b30-586d-428b-9487-3d4fbb9df2b8	7906e541-dc63-40ed-a0e2-739187c8e9c3	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2016248	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+8707bdeb-280f-4419-b223-14cec0e37032	e3d0c4ca-36fc-4e2b-8904-4b84e71b1f27	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2016380	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+8c0fdae5-353b-4f51-b51c-5d204305d6ae	95b6bfef-5755-4480-ac8d-8876534195e2	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2021109	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+da4161aa-da0a-4cc8-8768-fa3b4b51db45	cfe48cb5-1db7-4254-978d-9544cb6e8ef4	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2025123	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+8c6d4b1c-b9aa-48ac-a201-b8295acd7612	a6df5cfb-1368-4554-9049-c157566309af	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2016405	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+206f910c-80c1-46c2-b6c9-2cdc0aeaf952	d94f703b-7c46-4b18-b279-010ef9a38f00	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2025118	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+117f0a63-f713-441d-ae1f-73ef1b99e733	c5ddf77c-5d38-4916-92cd-e01062756daf	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2024135	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+ab95212d-2887-455c-bbfa-deb4788b2da5	2a0bbef5-2ca2-48d8-867b-0e89a64c4972	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2016153	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+23e291b4-82d9-4ff8-80d4-e997c8fdc99e	0b5b4251-65d4-48b4-ae27-6eac376f498d	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2024132	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+223235d4-e974-4a83-95ff-c439072a99e5	842fde70-cf27-4fdc-8f11-31e6d48d23ca	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2016082	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+1789a86f-4985-49cf-972f-49d7e765a7e9	cc5d2270-facb-4d74-8589-6f2c668ecce1	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2023196	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+3488f958-8dc1-4079-941f-cd7b9e61c980	b21c8bdc-699b-482a-a082-6e814fb460f9	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2024227	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+4e411202-9ebf-46d0-87b6-4a48b85221b7	04a14905-d449-4098-875c-518e7bb2b216	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2021132	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+401a5ce0-aa9a-41e8-a5d6-23b48c0a80fb	820cfcd1-f48c-4a1e-a3a5-c8969da85344	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2025018	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+6d196117-2882-443b-8ad6-b756be5d98c3	da26a3bc-42ba-42dd-a1f7-40fdbf1eff87	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2025224	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+50065f62-b50d-40ba-88c4-590eaacd3f56	5c866069-4acd-428f-b6e7-9b021bc75396	99a19e24-ccb2-420e-a5f0-766e7d36d907	2025	2024174	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+\.
+
+
+--
+-- Data for Name: escolas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.escolas (id, nome, cidade, estado, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+3e33d2f5-bb20-435e-b407-a141aac14041	Escola Matriz	Fortaleza	CE	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+\.
+
+
+--
+-- Data for Name: fotos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.fotos (id, album_id, caminho_arquivo, qualidade, criado_por_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: logs_auditoria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.logs_auditoria (id, tabela, registro_id, acao, usuario_id, data_hora, origem, detalhes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: responsaveis_alunos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.responsaveis_alunos (usuario_id, aluno_usuario_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+cc4da208-8572-4c1a-99e9-39ba2f8ff8e0	29dfac1a-c088-48e8-bb96-8cd5047a5753	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+80678be2-a00c-42e0-b50a-5b1c51825409	460ad15f-eb6b-45f1-a6d3-021bd0996a5c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+93e2edcb-d2a2-4b24-988d-a347d68ffe68	930d571a-1e30-4d90-b6bc-04dae19f21c9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+8e031e84-05ee-4371-b43b-d0bbb6c04182	1fdbfd3a-4e01-4747-b3a7-5a0d0d62a8a3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+adffc0a5-5887-4516-8df8-924b46187a0f	2c849607-2b9f-49dc-bce2-c2ae439741ec	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+44183af8-57f0-4e63-8482-60ce1427f104	2453c955-d5c6-4ac7-ba51-5bfcd641a170	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+9411d040-615f-4114-ba82-28d3230a05ba	73d038f7-9202-45fd-86a6-b5e4b3e9b41b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+d2854ee3-628f-4456-924f-30879ad21317	66f47400-fd54-4bd0-957d-56a96975b69a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+e1878200-f1ac-4a76-9269-b632ae386d9b	b21f68ce-2fd7-480d-afb6-52d4273c3b4b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+f22f7d0a-6c3f-4df2-9704-6c2ed673a2b3	eb2ac56d-9736-4ba7-a26e-aad7bb617a45	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619
+65154138-abce-4346-b839-a080ab64a191	b668f6a3-6cf8-4b3c-ad1d-10c7760c8346	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+615779e5-6c3f-4663-8d7b-b8d9ad41a829	8d3a166a-c357-4a71-ba79-9dc5c97ccc24	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+728ec88d-9e06-480a-b37c-08224017ce6f	10ee762c-bc4f-405c-b3b8-aab8125f2a62	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+834f088c-e7d3-4337-b2c8-c02f1c91ca73	335f75e0-6b92-4939-af7b-f0ec317d6bc6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+822c4ef4-9f52-4993-940d-2ef61cb3fd92	b8a9e724-5d93-4e29-9f61-99f2823926b4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+f7c33d71-355e-4485-8009-a507cbdb6f17	a4ab9469-ff39-410b-86af-45c848bbef11	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+ad763f92-94c9-4517-a5f1-7ef392e2ee58	18829e19-9590-4815-a58b-0d1aa6acc08f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+1956465f-eaaa-4e26-8814-4719f825c9f0	001fa38a-bf8f-448e-9e34-752bcae64896	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+ac799cdd-8207-40da-b6b7-71274b4889d2	bd77713d-5004-4fc4-89e5-0fcacb1a3821	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+5853c158-4fbd-459f-a522-d5f6dda05855	4a2c3cf4-e103-46c6-ad3b-85e6f59189a4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685
+71a80f5d-0661-46c6-a6b0-31c47dcd700a	5d23bb88-5efc-42e6-8685-3c43fc7cfd1c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+800963c5-7170-40dc-be5b-be01ec1dda56	d8d21223-4a04-47fa-9f21-46df507da9b9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+021ba048-9103-4247-b0dc-ee00c4b0596c	b272750f-f00c-47a8-99e7-a9a65f7631b6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+1f2badb1-f938-472c-86f2-e08f35660e51	94737b5d-645f-41fc-8b67-4678ad3b8038	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+0bd1f805-777f-491f-82d7-d519b471b980	8279708a-3c9c-4144-84b5-398f8083a286	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+a596d326-0b14-4e58-942c-0b9e11f22ca8	d20cf6c5-efc7-4ca4-b988-378ac76f5935	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+48a1b066-8405-49d7-94c2-50297fce8051	a656bc04-380a-4397-934a-a59dbdbf0065	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+88a923df-b349-4ed4-a8e4-3f53934e681f	5e7d86a3-eda3-4d14-8ac1-ede1f8056374	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+6ffe4b7f-bb28-45ab-b719-26c1f04b21c2	877503b5-50bc-455e-aa32-0d60943eb925	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+c069f292-7030-4a0a-a90b-6aed7a41e927	e869ac49-c58c-4448-aa31-bce70c53eec7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789
+6d4747bc-d351-4a92-8edf-7f55261efbc0	bbf2fcf2-6f64-47ec-806e-8d57d4ab04bf	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+c9fcc105-c73b-4edd-a75b-b04652865f7d	6481e5b2-9fe3-4eaa-8be5-6733aa4c1db3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+455d8961-35c2-4727-99d3-7fda1b269a73	19d92e2b-2f85-483d-9076-d4b1c0fdbb16	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+cdc63e8a-ac71-45a6-b840-7827f356460d	bf9833e8-5b25-47fa-821b-dc73f6cd6fca	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+b8d4653f-ce06-4c60-8c0f-80e8ca91139c	e412ab71-88cc-4f6f-b70c-3b027ceee08a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+e44d3234-e7e6-4d5e-955a-7b76abc6342a	0a4e5244-7938-4489-af7e-43e75a5ba8fb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+f60b3b52-6e60-41d9-90ac-0a15303cbcf0	f0537fc5-9f4a-43a5-9285-0277d7442ea7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+9178f0ac-32c7-415c-af66-99ca08c947d4	41d48a63-a0a3-4dbd-aecd-9bb9b3601274	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+99b5c37b-7e38-44ab-b0af-b2eb7820bf71	e76bfa8c-23d2-42b6-b032-417aab2b2ada	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+567c76c1-65b9-466c-b416-b68aea14063e	d8167e52-47ee-4479-bb18-434778d6efb9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357
+ea008712-3c48-4d27-b416-47944590e970	2f467226-b1a0-41a4-ba45-2ecbd6935172	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+2a0d2d01-60e0-486e-9f2a-f21a4debfebf	be112a65-7925-4915-bf82-85a3eff9a6f5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+2828ce1c-504c-4816-ba48-5e0ae68bb29f	a8c5235c-d96e-4114-bbde-cf125e55ba83	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+a1911150-be55-4539-9465-1cf536e8c1ab	55060a14-e129-4f8f-81b1-af74f80e26b3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+e5c6ffbb-beae-473a-b0ab-8c75db1f67b0	041dcd6a-d057-494c-9ec8-28a765c25108	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+85d393af-e9ef-4d9d-866f-aba9c9495abb	be44c96b-f3f6-4c6e-9d34-6f091820d34d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+2f7b2a9d-b32d-4bef-94f9-163e43403c5b	3d166b4f-24c6-42ea-8886-ffd90cfbe66d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+bf71652d-8dae-441c-ba95-f151b807b83d	102fc50b-e8ef-450f-9d93-117b339d8504	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+4be1471e-3c71-450c-93ec-edbd0ad02053	824a1d08-9a60-46f1-8d04-1a3b441c692d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+d6c9b660-50ef-40ac-a7e4-4cb971e18015	b20d4cd8-2e3c-40bd-add0-b64ae72d2452	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406
+43c54346-7478-45f5-85f4-22b029b86e82	7733e2fa-49b6-4894-af26-fd1b68c6b5a3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+8f5c154b-d2f8-4875-9ac5-15682030dc1f	53129718-ac6a-4e22-b590-0121b8282cfb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+f22e7baf-eeff-4833-9c0e-2c6300de5aa0	59508ca8-ba2b-476e-b815-57674bd6b327	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+8d448dc8-9adb-4328-83c0-30f94b1acc21	a4039b0d-5a28-423f-86cb-e8fe4115a61e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+b8148b99-dd2b-4a06-ba1c-e16943e15674	91d07adc-9eb1-4a03-a6f8-4b01c2b0df98	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+cfb94ad3-1d38-4549-b0ff-2993fef0c455	70b2bc99-9a61-4718-9ff3-9ac2c77c8e84	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+f0fdb496-9d08-4669-8435-2760d86503a4	d2006e22-bce0-4dc4-8ce4-51f7b7ae175c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+8a5e222d-d2b2-4f42-9eab-52c3e058fb3d	9d8320cb-d7e1-48b0-9bd7-1c236588ebaf	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+90071044-4c99-4a2f-a039-a5f93afa414e	0d928583-0517-492f-bbb1-d66e03671ca6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+f4e30ed9-826f-4be5-bccb-ce6d86d2ccc0	77a55cba-e833-4502-89a1-30210979c62b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696
+a3330100-3da6-406d-8da0-0a886ed73366	f8d91315-8b8f-4002-925f-f471a071cfd7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+b32abf83-3f38-4a67-bbc7-e5fa6febec10	83a0eb0c-98d3-4480-9363-b916d52a720a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+560f5252-7ab8-4b30-b47e-b9d60060d039	b04f669c-4a58-40a0-a5c3-4b97b66fd4a9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+a9d72dc7-6aad-4feb-a1f7-2f1e1ca8a2af	185480ac-a08c-4e76-9a45-da9f6d6a71bc	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+330ab170-e89c-4f57-8804-624ffbe58990	3f9ff1bd-2821-4851-8c21-1cf625d22502	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+f92a189d-e90b-4d7a-bf06-a128c28ab860	1ce4afef-8d3b-47bb-8009-ea4890fc701e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+f3b81560-ae52-48ae-85b8-a66c9d5930fa	09b904f4-3b9e-4ccd-ab6a-fea154fd237b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+6324236a-a1d2-4d92-b02d-453a91e64178	8529c434-09ed-4254-bfff-71202a6c5b9b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+e9fcb46d-159c-44f2-a91d-7f42b189970b	6e416023-c323-4948-a496-9b9a6c5fe247	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+3bad51d6-e803-4669-b6a3-b7136854f417	bff3badf-9fd7-459d-b91d-a888c75b2423	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496
+bd4ee3ea-3782-48f9-abf0-b3b03f0dfcfd	bcaecb53-b5da-4512-80ee-fbdbe101736f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+af42aa84-9c53-4100-9dc8-bbb261d33709	2afd7bd7-12e1-4af1-b5aa-1e9b1a6faf04	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+ff4d40ab-d636-45cb-b748-7e075783cf6b	b9b22892-763e-470c-953b-08c2d2ddc38b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+691be78a-85e8-4c7f-aa6c-877d9d34ae68	9dcbcb67-a444-4161-9fb8-5570d4fe8b16	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+fe634d49-ee34-46df-81a6-5ee0e2255c5d	a59defaa-c1fe-4828-8875-eb7910339455	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+d8f2c776-4820-449e-9fe7-505ccbcca2d4	c9ae2760-6e38-429b-a136-7b0c53a188b2	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+5ab1b5b3-248e-412c-aea4-7d1a743c0ad6	a063c267-d2df-4b47-8bac-ce9a58fb443c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+b421c190-bf1d-4de0-bc9c-ff9812a465db	603d54d2-6b38-4d27-8517-2f2156b8c1f7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+48ad3c4f-92af-4856-9ccf-2802e912f409	1b87bc13-b47b-48c3-9c1c-b56604063467	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+708336d8-6baa-4c9c-a027-f1961f9735c9	38eabc19-5c6f-4b28-a30a-b030f58d873c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324
+e8b722d0-4af0-4e29-b2c2-589cf8ba05ff	d940bb5b-c3f9-418a-b243-2a78910dfbed	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+00cf291f-d3e5-4990-a9e8-edd70a5d9a4a	b94a738d-6c3c-4996-95cd-9c62877209e9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+537039df-790f-4bd9-84e3-77cfcbd53447	60be4667-adce-43e6-93c9-cd861a9e4a06	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+30bef952-50bd-4786-b5da-a748916a74c5	070822fb-b89c-45ff-808f-71daf0d742ba	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+95ade768-6c69-4102-ab90-5d487748eb3e	87024c6f-4b8c-48d0-b762-2b73ea02e574	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+7c42a59f-fca7-49c3-9f04-e8eeadae939a	cdf56de0-49f2-499b-a785-d607a1deedba	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+96796688-4ad5-420a-94f7-a0ca46c302a5	1e0e68db-1ec3-4f47-bf9b-0a62fa4d2d48	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+bd27a084-6f98-46d8-87db-e88bab83eef2	774e2d69-7182-4ba4-bfc5-630d8fe55a7d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+87cab3b3-eb7d-426a-8175-6b2cb13d8865	7779046c-8d48-4452-8793-d73992a3b13d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+ac510a3e-46a0-4b65-a5b4-b0995ef35cde	3de38d26-6f6f-4ef9-a033-158b7ac5e610	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474
+c1cf3f87-961e-4063-8b6d-671e6815cbce	dbb7b3a4-ae80-4c0c-8b0b-57d329833c7a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+f5b74ad8-1a6d-4c75-b21c-d29d697001fe	ec4500bc-34f4-47fe-90ba-1a4787dae59e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+0d999d22-4271-48b4-ba5a-98cf5bdb7e10	628d96dd-177b-4fe7-a745-9b35be890c0b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+55b91a7c-dd2e-4aa5-a25c-dab8ebed0939	c9af76c9-9a08-4681-93de-02f404534a2a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+f06a3445-46be-42c3-b2ef-f229833014f6	f8db6e77-5270-4e2b-a17b-9ceb1794eddc	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+90de103b-ef8c-43ea-8d83-b1ae1444f7ae	ce32718e-2a93-4d28-8d7c-4f08bc13cd94	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+9da91bcc-37be-4ff6-bec8-560f1150db58	8fce0e6b-2100-46fb-a7ff-7d5b3cef25fe	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+9806225c-c182-4190-902f-b11702b6e510	12c8d06c-1a21-4b65-82e8-eb790be0940c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+58c883a3-17d8-4173-88d3-c2e8113d9a4a	796e4b7e-2876-45c3-a2f9-0d2a495c663d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+4746314c-8c56-4b53-a615-0b205049ed4e	bc26f7ec-7c7a-4deb-956a-8dff26782e60	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211
+61838f2d-356c-4be9-8796-952187e6aca9	be864bfc-1b1c-4df1-99bf-c2d04fad9d36	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+8abc5cd3-ec0d-4c8d-b327-551f3e18bcb2	caf215e9-0cc0-4408-a503-1f79b0131d46	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+acbddbb7-d3ea-49cb-bc98-9f329ad6cf81	5e8ce300-1697-4659-a360-5c26dfb72371	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+059c6279-968b-4dd1-9842-80acf755af60	c7a8c4b1-bb34-4f91-822e-dceab3b49def	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+ce69eb41-8f9a-4793-9da5-384d8d9ae07f	7e024b8d-7207-4874-8982-68ebcfe96af2	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+c3dd18c8-7042-49e9-bdcb-b08414883775	da75ef35-d86c-4814-9a2a-157cc48890b9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+aae695e8-342f-4e14-86d6-73f4369b7769	97e01d1f-38f5-4166-a34d-a3b9da1c5312	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+55fea1ab-63b1-418f-8ef2-f53230da2fa4	ca3a9457-aab2-49e6-a0cc-eb9c7481fe43	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+ba676730-167f-43c0-8a97-804d960b2b3e	b0d41809-9333-483c-9315-6cc2c88a7bc5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+7efb6771-27f5-400e-b068-1758c690afca	6220514e-f179-4e0d-9ba4-b90a136456dd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032
+edb2837d-344f-4ea3-ac03-016f09715bb3	69f55746-83b8-426f-84dc-0d58b53796b9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+8dbfa42a-c4bb-472d-8f9a-252b0b344b6d	b31fc402-4e14-4c2b-9cae-0cb28f4e0d56	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+e6eb8527-fc26-4be2-b258-4ffe13da615a	f1696ebf-14ac-4be9-8d0d-176a2e1df5fb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+63ef910b-11ea-4523-b5a1-864364da4a88	f1d8b6e6-09ef-4588-a2e5-e6f97135e90d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+02fff7e3-dbbd-4562-8829-86d247343cc1	8c294ad9-e819-4681-a2ee-365a01ed05a3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+4b84787d-8ff5-411f-94cd-bd6a033c67c5	a0a9e324-f391-4e18-b805-56ae6abfdd40	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+251a6055-f3d6-4eff-906a-0a399f0df7bc	83cb2ac2-4576-45e2-af69-d39a1cbc568e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+0ca9c119-b883-4710-b305-01ea3f7b2aaf	a3206023-fb89-4e4b-9724-2ae02cecc050	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+e05ccfa6-89ea-4b94-bbab-66055bb5804c	59ce1e32-8a6f-4c5c-a6cd-0d0f069e625c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+56c9e85b-b67b-4264-a1c8-6f09d1df7cc1	2c37e928-75a3-40d6-83a2-997e66bca1d6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849
+8121784a-e4d8-4e18-a584-fdbd34b51c9c	270deb4d-deb3-4a35-8a52-b4f8fb3f45d1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+277a01f9-3e91-4bf5-b0d0-fb464493984f	18fb13f2-68cb-433e-8a4d-2fd7cf113a17	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+46447b87-9415-40ef-8460-f367a0333565	ac559e4e-eaa1-4d93-86d2-d541c0efe677	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+eaa0f3ee-8e65-40f2-94c1-609205fe05e5	9dc7b5fa-5bd9-43f4-b887-2f072b318818	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+0c682613-fe35-45c4-b6aa-afec0c375043	63a69220-ff13-4a66-b5a7-f9ae85393f57	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+7bddc8e6-c44a-489a-beb1-4ff007ab9edb	3ff87827-0074-4319-9af5-7445a8e77336	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+c3ff7b47-3132-40a7-904d-5480ae7384fa	92f0c00e-12dc-49f9-9687-1de8656cee47	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+3f47e84d-34b1-4762-b00e-6162625d94a4	b7c0eba5-85ae-4095-a18b-8989fd31b015	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+7802bb97-674c-41fd-bfdf-3f28eb694cf4	b3a4f230-1ebb-469c-85f7-21ce7f8fd96f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+9ceb6e47-b221-4d67-91d2-8663362c3c21	f8ecdb26-3125-4566-878a-ed6e37b8086f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888
+f2609f50-4f93-4eff-847c-07d66b7a4998	92070f2a-f130-423d-a302-31dfa8159d45	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+090aba1f-5c1b-4f14-9647-0b8f12dfeda8	74feaeef-63f4-4068-9c1d-616984a19369	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+8fb71296-eb8a-4ece-98d9-8cd11810eaab	55e2b6a0-e74e-4d57-b0bb-c624b03a3094	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+5275f714-67bb-4156-a1e0-78331fdc7d01	e09f0788-fdf8-4706-98f7-13c894ae99b6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+65f2f90d-a042-4715-8a2f-a5f1baea37a9	e96e3475-7c09-4ecc-a7fb-a09a394f4ab4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+0d75f56a-a877-4d85-b9e9-47bde1c7f90e	6a671081-7433-46f5-be28-82708995f788	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+7dafd11b-68a7-4ed8-97ac-e165fdadc18c	0c081099-ec29-47ca-b19c-01de9a41fd21	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+7bbefe1c-52ec-4fa4-89d3-21f11a6b4d1c	d2c6640e-8470-496d-8e62-4a0c601894bc	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+cf8914cb-849c-45cb-963b-782cf90659e0	0771648d-223e-414c-b2f2-d2827eef2f90	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+11dac73d-21f2-478a-a12a-586ccf9b8afb	afd8ef00-f6b3-423c-afc0-83b4e6f23da5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184
+b7cbaa0d-9b25-4fc3-b8b3-fefaf9d07946	670ce4b5-e5f4-419b-a42e-00f9f49cec91	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+9359d260-6e1a-4776-aa83-fe6f5c20458a	63ee4541-911d-4602-a25d-0ae17a4f41e1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+e89c2bf6-70fe-4e66-b79b-0064f0c6175e	4c4bc37a-fe10-4465-b293-c081d5ab3b0f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+e0a9ea80-52e0-4df5-b069-3464c7fcd11c	2f29d0fe-5a04-4988-a151-8fe9d5af0ab0	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+794820f6-d476-403e-a8d2-86d37a683428	d229af88-089d-4a43-8033-4738aeb12447	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+3485f5b3-86e3-4e60-83cb-093d9acbe6cd	b0972435-7a24-40b0-ab17-5fe820e80c5e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+14eb3b8b-0ea9-4d03-9fce-aa05d0c4d8db	1c5fe022-db1d-49a3-aaf1-fa28d7e8e1f5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+98d4ffb8-ecc8-494f-82af-af10a2e4e096	155c87ce-5415-448b-88c8-2b99a1a5545a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+e3517814-cbe7-4258-a2c2-fe6385898f2e	66fe4025-7f52-42a0-9cbe-0a9796582674	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+68cf117c-5dbe-46ed-a4b5-a42d82d38750	2995576d-fb65-41f7-b070-6b958c66f5ac	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039
+c0aeba79-f4e3-4f18-a2e9-8eed1d5691b2	0ad8e4f7-277c-4cdf-8a3d-b51077d6f0d1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+6dd4a831-e186-4ae0-b3c7-63cde63a44e0	34d2f57d-ff2f-43a6-8499-a4b7ace36c4a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+7d038276-f046-4824-98fe-c65516d31a45	1d5ebd96-e423-4b5a-b9d9-279a72cedde6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+9afc73a8-57cd-40bb-acb2-51e8c62e1927	c881048b-547f-41c1-b02b-f23cfb5d501f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+c14bb375-6cba-4652-b5a4-f2e885167123	bfbc6574-0c40-4e98-9301-855eef0ac12e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+807316d4-11e0-4110-af12-b94a7b132af8	db3aac63-8066-47dc-9dbe-8f941582fef8	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+6737aa25-9d36-482a-8544-36a7369ab186	f0580bcb-a020-4721-8467-c49d1cf01c62	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+73608c87-df77-4cc6-b3f3-9ec1d6dfc28a	e824e9c6-2630-4f55-8e85-5d2730f645e8	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+7433c9fe-448f-4d9a-9c37-a3143c6c7468	6cda155b-fe73-41f2-b643-0e45d83d46eb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+f454178b-172b-43f2-9e67-bc4dd2aa7083	5fe245ee-c222-4195-a445-aecfb8421aeb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469
+3bac93ce-5f1f-4b18-a02b-e792bd796fe2	d960648d-5087-4ad5-8f93-403bd5bd8bed	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+35d4c90f-af57-4ca1-9965-eee6af3164f0	ffb797b2-241e-4585-82d1-92ef755ee8ec	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+da0ead99-e685-49af-9a2e-1226c3ec1389	9cdac8e6-aee8-4efb-adfc-57d0f36d589e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+d0a1e25a-51da-45b4-aca0-8817e1336498	776f737a-74f8-4eba-9049-b18818d289d9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+c010639b-e3fc-4466-a491-36db5b49ded9	5cc00474-554a-442c-99d1-3844eae1be95	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+e4b89e10-f7aa-4db4-ab8e-514f68830a3e	eeac23ac-5b8b-4999-9cb3-59867213cc81	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+f9740024-2104-4762-9401-812ece82f123	a2a838b2-d660-4196-932b-3bfcb05a3dbe	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+b9c25bdd-6a29-4cc4-a35e-33dadef9c901	1962ef89-220b-4676-8bbd-463f918450be	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+6c624b5e-4902-484b-a28c-31f112c0a3fb	219d6064-63b5-4923-8e9d-52f92df71725	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+a54c44d0-c8a1-4ed3-8bbb-a4155805ab99	06419dfd-40a3-45c6-b5b9-8aba57cb24ea	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527
+33be105f-5cad-4eb6-9303-6235e16d28b0	78f0ed55-7920-4be6-a148-c10eaa25c53a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+0a086dfc-d1df-421d-a00a-cae5b39c917b	30fe4b8f-b141-4746-8713-cf42659af056	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+803a488c-56c0-4ada-9b33-111f8e21eb93	c6d05bf3-c0f5-4a9d-9eb0-dcf17b8b7b44	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+cdcb8065-7a92-4dea-80d0-6ec2bc98bf39	bcb19713-42e7-4231-bd43-51ce328d33f0	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+a346fc4c-b881-4d10-9bef-9bf7da27ffb2	8595609f-f8e2-4fb3-98d4-664bb501ce37	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+2b1638da-cb94-451c-8a4f-a990f307b49f	9fd7c5b8-42a6-4bab-a521-887c35141f7e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+e8b98275-5010-452c-bd70-4252eb1da79d	45082048-7985-426a-93f3-731104dba608	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+9c373c64-4383-46bb-846b-3a3f6c414c30	462e9a7d-b197-440d-9add-7609fff7dab7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+0f0d7e17-ede3-45c9-8901-5915f1cb815f	126bf889-38f7-4b18-8c5f-3b1858e01a53	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+3890b783-e3ec-43e9-904d-8658d531c0cb	124725f2-6e13-4c99-9c25-649c90babaec	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538
+9158dc2a-209a-44b2-885d-a2e3b296b142	40630012-216c-4ffb-85e6-46b133c9bcc1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+c24b2287-0dd2-4a20-b98d-22d2dad85e53	d0834d0d-d6b3-4389-ac1e-9c50d9bc4c01	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+482c2ad0-a8b9-4835-aeb5-4eb950147b76	c2b305c1-4db4-41ef-8589-8b17740af055	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+80fbf009-879b-4af1-ac5b-7fe724d1df34	39435096-f0ab-43e2-8a38-dbf006137442	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+0ed0f600-37ea-47f3-bb98-ff13c613f7c1	c2f8bd4a-dd49-4560-b768-552523188360	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+d218b76e-1348-4003-9735-415cd015fd78	a5db5b36-cbee-4353-b674-de1c22d0e10b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+ec9856a7-631b-49c2-b9dd-ce6de798b5ae	3b28054b-363d-4f32-a660-32998aa7b517	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+323c5e1f-5ade-489b-a433-09b0ac18be0d	8bd91080-1c3e-4ea7-81c5-929e5ad402cf	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+87b69c2b-cbcc-4987-b29b-798f2e9186ab	a0fa3a92-d652-41e6-ae5f-e7a8ad19a5a6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+1397246c-093b-407f-9a01-99414419333a	188d9f8f-0ca6-4eae-ac9f-b284d00da9ed	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112
+7e75266a-8aed-4c9f-af9e-f8f048a4c01d	0af63411-6b91-4d2e-a383-cdccb7631669	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+85179d29-6a73-4f9f-ae52-9742afe75660	c911e831-b565-426e-98e7-14d2cf5aa7c3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+6237f8a9-a21f-4b59-96ba-9c6e9490552e	fd73d4f6-4a4d-458e-89dc-0b2094220fd1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+96d38e27-fc41-42ac-a1bb-8e3abb099078	f06ad2bb-2b6d-4ecf-b98f-b18383e96e48	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+8c6d30f7-6521-4259-9235-d609a21e4366	72a06aec-4106-4019-948f-b95310832845	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+29e98987-8bc8-48bb-84d0-d8cb21c4230a	c21c082c-bfbb-4a77-9ec7-60df29f94aae	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+22b1ac2d-1b36-44ad-a9f5-07ca1954d6bc	20813e1a-0fda-44a1-bb60-e3aa455a07cd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+1319da79-6407-49e9-b9b6-95287f36310e	ec27626d-6c6e-455a-af98-d36727815799	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+3d161e46-2d97-4fe6-8c9d-c68869c4c804	2d687568-f1e8-4927-a63e-8f3c8419f433	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+17829820-25a4-472e-826d-d4e86e427c0f	6668ad46-b18b-4f03-8578-e6d1dcddfe80	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256
+885a6234-ead7-41e7-9f5b-7a055ba3dd05	bb857b06-3777-4fe7-b332-61c4a780aa0d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+195f84d9-19fe-4d4e-a0b0-cf76be9e5cfd	dcfa74e6-7c7f-4c97-a35e-329df7e067d5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+ff456ac1-913e-4b6e-8d0b-9d9fa79baf68	14985b10-b814-4280-bc39-881a0a739645	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+f6f8cef8-9809-48c1-bfb1-e20942c5d5b0	c23b0278-0d01-49e0-883e-3b68680cf695	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+872d77b3-a7d7-4349-b870-60da474f663f	5d0ce47a-329c-49a9-8c5b-c401e8bceac5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+25a85a18-85e2-406d-adec-e478a932954f	358aac0e-d443-474d-b796-cdd0706ce500	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+33126aca-2062-4aa8-b9b2-2d33be8d6f99	8e2fe719-0774-4fd8-981d-a2db49c4d99e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+b5f7ae12-7e4e-4846-8e19-5386eb51d38f	133f25c1-0092-42f8-908e-6f48a55869d3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+c78841b5-df9d-437a-bb2e-63249a88901e	b8a58dab-2ef8-4cc0-90c9-6d515bcd354c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+03530aca-65eb-42e3-b09e-e6a9597ef70d	08ba8b80-1650-4c2a-82fd-d802b8210c72	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129
+bc9c1422-7e50-435e-89a8-d3f9ab5323a6	543fd228-5652-4430-aff1-42ec96c13c00	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+8502332f-721f-44ad-b856-62227c09522a	c12282b6-0507-42a1-bd84-34129ecd8ff9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+deabcc1c-54dc-4b1b-a71d-56e1ee50f572	93ea25d3-bb78-4ee9-b807-4734ee9330e1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+5582318f-fd4d-44aa-b6b6-2b467780ce7a	c9f8f747-a078-4973-9b38-a1bff0ded75c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+0f6b7b52-0654-4a39-b890-be0672323b10	a3c12a1a-af62-4ee2-ba77-f3d3a199a789	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+1cbe6c10-2fb7-49ad-9caa-6e66be2bba9d	0c52a579-90b7-49ab-900d-b0b0c8eb5e32	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+1481ab9c-6a43-4f4f-8840-03ac681976f6	d1ac8e36-2318-46ec-9830-13c20e22a1a4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+f4a03aee-348e-4ac1-9a75-635fbe71f9aa	f8db5a33-6003-49ae-b92d-6fb7e1e7ff5e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+04b97bb7-916c-4515-b8f5-b18a4509a346	68e9969a-e410-4b05-9e92-65699d391d35	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+916e6425-5a40-47c9-a860-62acbb3a2a76	c1778e7d-c513-4278-a242-5b1911db82d5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216
+bf81f569-a654-4494-9626-d4a22d2ee80d	275b5d5d-db5f-4892-b91f-475ecc141852	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+25389adc-0e00-4bf6-95b5-558048ac9fd7	2b7f0c36-8718-4a33-9d43-d6c3d34074b5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+5b7dcd74-8653-439b-9f9e-9124be32473c	dcd7431c-ee10-4032-8abb-d96a8edab7a3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+350f040c-351f-4771-b4fd-3a3e8098ee0d	10ef17be-db69-4f4c-9eb5-b2669f17a157	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+8b5b95af-5085-4e25-9d9f-4727d075f4cd	37093d55-0fd5-4ba6-9564-ea50dddd96a5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+f4ac5ad9-bd24-4641-b753-ddd8b3b15b7b	85a58851-2e90-4014-a7b9-069e3a58cb34	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+1f760fa3-1011-47b3-acc0-5241f7fec91e	c10b95db-740d-47a0-85f3-367b6b7de1fb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+edf87608-29a5-4080-93a1-46ce0e8c689b	65b63f60-4c5a-4214-9f13-de0b07dbbd2e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+22a74d54-ce9c-4ec6-8d10-b45c195dffcb	a482f929-5141-4586-b4a0-6c65209a1b87	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+19f896b1-9534-49ee-838b-833a19cceb6f	ac636787-ee6b-4853-8a02-cf1429e130b7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269
+2c0bff1f-66b9-429f-a985-22356f3a4eda	3ba432bf-d385-4f56-98ff-7237d2dc6bf6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+ecd6ea2e-fe6f-4dfd-bb06-04e1fc2fb538	1264dfc4-db9b-407f-8098-48ad50e18711	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+8c7eac88-bf3b-4cc1-9c6d-b2da302279ef	4931e414-eb36-4735-a6e2-b5673e315c32	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+2b3bb8c7-afd4-45df-b86c-f803f7d52ca2	7482d278-63ce-4081-a932-cc150d776940	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+704e80a6-d3aa-42ce-b945-7d6a3cc06f82	89fd40a4-9b62-4850-a230-3a3182acb1e5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+1f4af236-73c8-465e-82fc-40cd35b8d1fb	c2bc63f0-d8ed-42e3-8937-fbee344dee30	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+8da1d98e-3232-4aa6-bba4-47d905bf330a	194ff744-48fb-4a32-92f9-ad9aa0954f62	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+eccfa592-064d-4ccb-b1ff-3202e64e2899	09cbd1be-4567-4bf3-8c51-83374c157677	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+f49402e8-f744-4178-b112-f0bc6b7516d8	fccb859e-76fe-4bed-91d8-7682882c363e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+76b8d80e-d656-46a5-b478-5a6325f50271	371d9456-e5db-4439-a834-bece74ad2470	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093
+37024474-03c7-47f0-83fe-bd08285a1555	2c800e9a-220e-4555-a176-9e10a4851242	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+012f5b08-b6a6-47bc-85ac-d5c3fce7357b	446bd0a9-762d-4d25-ab11-29e3b1f148ea	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+b42911dc-c5d4-4e3b-8c57-2c000e912260	220b380f-ceaf-428e-9698-82cf80849616	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+4ff7c400-5f4d-465a-9def-38366e254c66	7bcfa6fc-7a21-46af-87cf-b8e569ef3560	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+179f2f3a-7e1c-4611-8546-9523fb2b8995	fae1573a-85b1-434f-94bc-112c15207b7e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+9751fe09-9634-40a2-a947-962d3367af14	c78dd72e-2396-4550-9ae6-0bea6c36e731	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+fca09ba0-49c4-49c6-8837-f5e99360502a	8cb97669-decf-4578-a6f5-fd2e9ee681b3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+89c4d880-2914-456b-af3b-995831737d86	8cebbd04-eaba-45de-a1b4-c935d81397cd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+19a627b1-3c62-4808-9ff5-05a376e5ba60	91f4e07e-da5f-4aad-babc-2a49a77c0f3d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+b706d931-ed99-4fa2-ad07-94c0dd6b729e	62f77f82-d686-4ae6-94c8-7ebae2473fbd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873
+0b9c7c75-2d8a-40ec-872f-83bac52583e3	d90e882f-b6c2-4ba9-bd2c-6ce7c14b400b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+de5ac7b4-8950-4e84-8997-24d712373199	a136a36c-ef14-4ca6-8b8c-91eb56394dbd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+fab0bdbd-9ed8-4554-8413-d8229ae866e8	0061dc47-cc78-4a98-abe9-f1f520869dc4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+67e3675a-942f-465d-a806-503417180e23	6e484066-71ab-4e3f-9fb6-0b1c39948f81	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+d15ad1aa-a5db-43eb-9641-da4c117b5359	e49b5ce1-44e1-4ac8-8829-6e0d3ce0773a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+09e46962-1ef6-4a9b-88e4-52b9cf5e7f43	a97e213f-8ef3-464c-b530-ac027aebcea9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+ede33517-0470-48cd-bc05-cf4505d4a03c	8c1f7037-bf45-4173-bb62-0aaac41e0f97	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+7d31e534-dc90-4d6a-935a-2208a4b78d31	b42d946f-68b8-4f07-9c04-2fe07c31142f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+b23c7062-a8ae-4875-ab69-a384abc82365	bbe8405c-aa8b-46bf-b4a9-54b1e8e85f51	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+4e57d39d-5108-4bde-8b14-b0a494a8e545	0657ec1b-2e70-48a9-bb03-d8a1320042e3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631
+06ddc321-783f-4713-9c4c-72b9fdbe75c0	35c3a177-8636-4b7a-ac2b-9f3932713620	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+876f785f-9e9f-447c-b9c6-c15dffffb456	1f6e62d4-1b7b-476b-b79c-7c4ba492e617	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+5767cbd5-8a13-48e5-a8be-aab306510e4b	b0fc1b9f-629a-4d12-a08d-977b6fb37f3c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+9c7f9bbe-a050-41c5-be7d-4fc3bdffdff6	794219e8-f776-4f26-9936-26acfcff3a54	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+a0e8c18b-3463-45b8-9afa-30d4a4779ddb	41f9e149-891e-4f72-acb7-02e5772caf2f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+d6835547-e82b-417e-a17b-38749c7c57ca	73fbbad6-f3d7-4c19-9a1d-19edc77896b9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+b74984dd-315c-4a68-8c36-8a748583de20	a79133f2-3b88-40a8-a048-e91e18d9e1dc	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+73e10296-e31f-4378-85f0-12dc85e1b8da	7c4956ab-2b46-40f9-ae21-dce3a61348b9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+2834838a-2e64-405c-af41-1ad9cbab6607	344179a1-c75d-4abd-98ed-9fe2fdc28a09	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+fcdde000-ab19-42c7-8281-5d0f3247ae86	da1b4f24-2059-4401-9c1d-15203457883d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911
+df6fc81f-f237-42fb-ba49-e3baef139b82	a106a187-a2ab-404e-bf08-23da3075c47f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+a1f3b3d5-44dd-459d-b6f7-8b0404ef74b0	15fecf38-c0fe-4c6c-805d-44a53e63cfd1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+3d359b06-963d-410c-9340-1057d895c7bb	a36f3b16-6bfc-43c5-9d71-dd6d0a9b5992	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+448b09a4-bae8-4d5d-83e6-af110e7b2096	b58dafc6-3ad9-47a0-bf21-d6ea7ddb8846	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+8d96e7f3-1cdb-4f74-8699-273eb4ad9579	351b7577-c4e1-4a54-967f-641ce0d551e2	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+61d6981d-60c3-4c4e-b4d0-1ff24aca65bb	3d8238a6-98a9-4b18-ad9d-f1f8d824974c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+2421064e-7879-43db-9a9e-8b236ecbc268	4502d509-7b58-4c9e-883a-d24e22f65344	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+dce532c9-6582-4672-b53b-ffff5f527703	418574cd-3022-487b-9e6f-e8ed27ab4403	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+6fbd665e-b855-489f-a0a9-b394a0323756	c1f23f20-8cd5-4d46-89e2-66c086ae61fe	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+5cc85775-0be9-4f3e-ae00-7c340cf5b75b	3b3cfacc-68d5-41ef-989e-9928d8f83bcc	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364
+42b9560f-de04-46f3-9d19-4d2e4b7d51e7	ea45d19a-5279-4ff8-bb6b-cbfef6611265	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+b438c232-6209-4ee2-93ab-491ba7f3b8e4	d958508e-9702-4e38-8dbf-cf4b7b479ea9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+afbe0021-f1e5-41b4-935f-093ebedd7247	fd3c322b-a478-4a05-966c-d9912a5428e9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+42bc7066-e8e2-4067-b649-906f5ef4f252	82b909b1-9e4b-4bd4-8011-4f49df1afbcd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+09ae4ff9-6c18-4340-91bb-9c67cf3f61a0	5c5462a6-f6f3-4314-b335-7b6a5389b276	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+42f29214-9c2f-4a56-88c3-c9949f2e1c02	9de1c75f-7f71-4c6c-a275-b580c455b8b5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+8517d58d-5728-412b-b249-058a962d6ada	b25039a9-833e-49b6-8920-ee5692e29871	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+a4f6fbaa-7c34-4323-ae0a-f533aa467568	f5511326-2977-4db2-ba80-035650fcb6e3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+a1a4c13d-cdf0-4d27-99fe-af798ac7150e	bb35860c-fff7-4e25-b303-4ad03a507416	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+14facc9c-ca13-42e1-a234-6c98b57ea146	602b0c54-366e-4d75-a6fc-1e61f96e2869	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134
+5ce87e25-d548-4e9f-a750-d91471234c06	ea3b6a8e-4e6f-4e81-99af-512657f6d890	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+c1ef2d50-9627-4ee1-957d-4d945082e6ef	e005b5aa-aa59-4dec-8355-35e8d22863ad	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+29cedb09-ea6f-41fb-968c-9c97b81adfe9	aa95c852-35c2-47a0-bb4b-ba1c55be09ad	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+0a7968c9-4948-4e48-acea-e09fd00f43ad	9284ec66-0375-4baf-ae66-7e2ed259061f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+af93a067-61ee-43f7-8e72-0b12488892b6	ecf640e1-4b0f-4574-a57d-03d08e1ae7e1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+1979bab0-2825-4f01-8545-1036d1948483	68eaf19e-969c-4b80-ba8f-20e379e0dcbe	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+3208b411-ac7b-4558-a0a6-9326c4fe751b	3ab3cde9-96bc-4b42-a8d1-2ee694d0131c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+3940326a-01a2-4580-9567-25ed2c060d11	10fbd004-8ee1-4cb9-bef7-19f7e33e6549	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+4d88e1df-dd63-46ca-b689-915c93e5b48e	77fd8a61-a9bf-4362-9d9d-842e7f4ffb90	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+2705d21c-64e2-41db-aab9-237c16017ccc	35ed302e-93b8-4108-bf13-1f084efedc58	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882
+3d2b9404-9222-4e9d-94e9-52593717430d	16d00620-097c-4bbd-85ec-7f9f428f1d56	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+0906a3a6-d39d-4f45-abf1-76b4e850fc1f	785f9b07-ac93-43c0-a9e6-ad24398de4d2	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+56c8d3a8-b924-4eef-b8f2-1d3cfd2f710c	0993b90d-3853-4509-a27a-470e987e344d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+83561178-86d4-457f-9ac9-b0edd53218fb	95de6e90-126b-4237-bd84-f5a3c507ef1e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+3902f1d6-8473-4b62-b3f2-9c508f242be2	bd17a741-42ca-43ec-bdc9-d244f3b4f78a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+fff9aa2e-3b26-4b14-993a-5ae65bb41081	8e3f4599-c4f7-440c-94a0-a7838436db8b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+8b7d3a6b-e54e-48bf-aeec-887df83b3dda	62664dfe-d2f4-42e6-9457-84458b58258e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+d956d71f-8b18-4139-8133-c32169b756e3	4f8670b7-5b80-4353-8ca0-bfdbae40917a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+d9608ab1-e312-443b-aa50-98b5b07821e5	b738a082-8643-4a0a-b194-c66943542ed0	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+3d2279f9-46c1-4026-aa90-11ebc2f05cb7	68045bd4-e8db-4d78-9bb6-847ead3f6fc7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931
+912845af-b13f-408d-8b3b-7a1d6ebff3a6	a1c6e124-b353-4131-85c1-72ec9466de79	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+6946ed65-d0a5-451b-8400-a360c4f2fdf6	e9e4c69c-89c3-47c0-9d5a-4b6b33b76187	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+80e0886a-ec31-4cfe-80a1-e04de30b7e35	d9ee41a2-7bb7-405d-9435-2ba5752c836d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+1992eb54-eee4-4a45-85c9-f55449da360a	9e6ee976-19e7-4bd7-ac9c-97c232315a28	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+f2cf3a32-4fc5-43e7-aa48-4d6a7b56aca9	67909e0f-290b-4000-bfe7-e0f9e42fd2d6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+e31a4dfd-48b0-4bab-b9e9-eb88e9bf34e4	63c4c65c-be9f-4014-ab47-7b9c000b873d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+0b2b40ab-82fc-4c97-9056-309f2f838efa	e94b98f7-5538-4d2c-905b-ceb2fef34b2d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+9c6e475f-8049-4589-80ba-13fa87097969	9d3dde1e-8bbd-40f9-b74a-746ec7f00820	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+492654a8-7012-464b-b1da-f21e9f83b821	f9cbfc0f-2160-4c81-bd0d-f5732308f3d6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+bc4b452f-90f3-42fc-8aec-d1aa975e63dd	b57f425e-2986-4fcb-89be-27c9b912cff6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751
+a6716539-de7b-4688-802e-6a95ed11bea3	ee9e88df-6f77-4206-92a9-9bb665d5690f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+61e99f19-8268-4c6f-a499-af6d5d354bcd	139ab5a9-de9d-422c-84dc-58b037e820ca	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+43a8dcbb-6374-4d7f-99ac-f1db5c62f09e	c8b9ec07-97d2-416f-abb6-047ea7141b9a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+78ee297c-981a-42fc-b342-a370bc306c66	c6b50714-8591-43cd-a2a3-dd31c417121e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+c6e5cc13-99bb-40d6-a743-7bb6b07b7cc9	901a8389-63aa-49a7-aa40-16ef190f6122	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+adb03f46-20b6-40f7-9f5c-792d09203387	f261031a-0d3b-4328-811c-40fd0c86361a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+3e477834-35d4-415e-9cad-7c8f2ccecf17	45eae564-4141-461f-ae87-8f1527174d78	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+33dab948-efa2-4414-a655-2f55b9bf1222	38a71958-3098-41ba-b433-15573a98f59f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+63042e31-d61d-4f95-b690-f118266b84f1	16446a4f-08fb-48a3-87fc-1e3970363202	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+cbde4dca-2d1e-4d9c-9bb9-4f98fdd61c27	5377bed2-b313-4d9f-af75-cf3f4caa11d3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678
+66850a4f-9c31-4f3a-aa3e-39c6d6f28a5c	58adbf86-6154-4d13-bd4f-53f9e7bca5b1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+e7befd6d-81f6-4f1e-808c-0e088dc0c380	3841dc25-933b-4075-82dd-8ba6457a7981	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+0f3de152-a4c3-4a7f-a690-65abdea5417e	b40ce547-d06d-4c3b-8614-dd86516a2349	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+744fbbe3-7d0f-4f31-a327-5820c133417a	932b2968-aaa1-4574-b50a-20b136f45ff1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+18221416-57dd-49ae-857a-9772404dff36	bc7b8463-f2d2-4555-8fe4-eec96c148e0f	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+eadf034a-3fda-41a4-b80d-161ce39b0ae9	c58098fb-90f6-40ec-9ffe-b24ae9af6652	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+98f69405-5add-4403-ad4b-187ae9b59f6b	e2d10389-e3cf-4b8c-8fb2-27a98a983e84	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+ccc990ed-4720-4134-bd38-9831cc8553d6	2c12191a-da97-41c3-be66-6061f32b1b67	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+e63aa323-bb36-4ab6-bc9a-55b50e10282a	2b0f845e-5938-4bd9-88e1-c62fa3cda3c4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+68dd26e1-495c-4cf1-b39b-9aef7f7493f1	6f448932-3d11-4c90-9981-d08c72dba6d5	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174
+f8cf4d14-09a4-4d75-9399-8a594b4d84df	6ef30988-c80d-4755-b51a-6e6fc291b178	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+10f1ad5f-84d3-44cc-853a-05a1592b5874	d61736e8-5e05-4116-bbd8-075468bfc07a	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+f3f15788-b210-42d5-a6fe-57dbbd85f0f6	ea4351dd-43a7-4720-bb58-55701fe59576	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+31e90341-5057-4326-bc04-6da7535fd929	86ad90f2-2713-4e4c-8c34-d25685e2d0da	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+b6a87cab-18a1-4db2-9d4a-5ebcfd9758b4	117764a7-61ff-4f91-801c-129e3956edea	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+59f2c226-8ec2-494f-a65f-77be79e8d1b1	8ad765f5-0a66-4493-9c47-5a4bc826af1c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+13812fef-d3d9-497f-9f26-a5c19a963cc1	76a7a9c5-4f6e-4e49-9b22-4339295bb1f6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+77fb5013-6171-4ccb-a565-113ae2825157	971a2ebf-28fa-47d9-9b23-71dd472b6d14	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+eef3694d-4f77-48d6-a809-c5183eda37a0	8a3b4f73-44e9-4a2d-a433-8c590654ec84	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+3b3c5aad-4755-4bca-ac23-e7e150a14293	748a31f4-d39f-4a59-bc4f-fb4859839a65	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766
+578f45ee-58a5-45ce-918f-60c3d0cc36aa	b7c95473-ddb7-42ee-94b9-ae66b48f415c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+510db9ea-d94a-4c40-828b-f285484bdf05	6cb30dec-94c3-47b1-b0b4-f0a83171dcdb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+cc6c966c-eafc-4fd6-a7ae-03f601a6de57	16251224-3386-4d1c-b0b7-33cc71953a63	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+f4af3747-e071-4ed6-911f-17d2244cb179	b604625a-b94c-450f-b608-549f45b28f68	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+e76e1f29-470e-4e8b-81c1-d97fb66a1cb6	b9d8a147-d606-46c2-9aa0-5be16fbb3055	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+92bbf6cf-c2f5-4ea7-a8aa-ad7a8239802b	ad273996-7167-4564-8d2a-2f861c266611	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+719307c4-f895-463d-80c8-5fd3b0afc163	cb7f5e16-d83a-4a5a-9f45-6bf970b8e41d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+6468aa08-2d1e-431d-8928-888685c6ddd1	06ce5b8d-c661-4194-aa50-793f75d7b348	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+041a34a7-6263-4135-9978-9e53a4da1711	60f7e48f-e641-43d0-b93a-85146014bc00	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+3bcc9304-488a-4181-ab46-a0bb1d5a9ffd	3d0c47c5-5bec-42f3-be2c-9de4832bb30e	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651
+51ed2b27-9b22-4c75-90d2-b687a5f0eb71	4b685deb-b694-4aad-8af8-6c1bdcb61016	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+1f5f1874-f888-4fd6-8122-5e64fbb13a30	e5c9d8ab-0cf0-4340-8d9c-5586dbc5fd78	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+fedce204-c770-4704-833e-16e775188f23	28a070ba-7940-4acd-94f8-4b3a42caa7a4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+951e131f-db0d-49cb-a6d2-2d6c6c75b062	86cc47b4-977a-4c65-9d74-7e8c8bd415fa	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+a975bf52-897f-4b01-bf66-36032cf9f009	4356f63d-e810-44c0-931d-d9e8107a0ea1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+f916e4fb-cc86-4f0c-8fc3-c0059cf91eeb	d9a8754b-44c9-4e8e-a54f-c432f5fb7074	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+120b0cd6-9413-4d1e-b076-9f981dd46393	e2bc4bc8-03a7-4e67-9e87-a95c42ff0f80	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+41ed7f84-858e-45bf-877a-14f4d4d04991	676ba863-33ea-4b01-80cc-1e008ccc17cd	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+3fb8201c-04d6-48d1-a8a0-c414f5eb4e50	22dacc70-92fd-4646-8ff3-ce1088a52869	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+991ff8d9-9203-4360-a8c0-96fe713fa576	f8246b77-f216-4df1-9a78-ee5c4cb87dd6	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572
+354f5052-6582-4380-a82f-9aa8bd2d97da	964771ec-9a38-4cab-bd36-739813f0ed10	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+368d2503-7820-4ce0-af70-27d1cb4c0f8b	dc57d4a5-4f86-44dd-990c-627863867abb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+2e6c6e8c-c8a7-46f1-bc3b-3fb2cc394600	f28af2e6-7ca6-4bf0-ac92-9254ca324c6c	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+a0260190-0b0a-4288-a23c-fafbdb7861f6	521b32f6-e7f3-47c4-bdc7-5e9cf1a345b2	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+edab4190-3534-4d7f-a193-8feba572b2c6	d6ba01ca-bedf-48f3-8fb2-b2c6fa16cfd8	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+459ebb0d-5bf4-45e8-824f-151477699ea9	fae289d6-a3df-4d3e-8485-cae554556268	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+a31eb702-e1ed-428f-97da-bdc734a43a97	81de670d-1780-453e-9d99-c9eed6c2a7c8	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+2ad41b24-b3e6-4ae8-8324-c66dd29637df	83b5a210-1194-4594-b446-7e7add611843	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+7b068fd8-8098-4df1-8dba-3ce7a9ad563d	573c144a-8384-4cbb-aa9b-d59d67e0c08b	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+134ef403-65c6-44fb-bff3-ad9d256f7b6d	a0eb105c-c0e7-45b3-89c8-b7778460650d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632
+f5d642da-e542-4180-bb77-6be9d39daa58	c673f5a0-1fe5-46b6-b63d-6884cd4757c7	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+a0b3e5dc-3f5a-4383-be1d-48171ac7f54a	a995d68b-7755-415b-9c47-212dc526e051	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+67eea712-d975-4b5e-a12f-f55726220889	b48faf8c-336b-49e3-943b-170f25eb90eb	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+9912ef9b-d107-496b-bf29-666632f7d697	fcb234d7-a30f-4368-99ce-1312277a0ec9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+c09108f8-b5f7-413b-934f-83471f347b62	7906e541-dc63-40ed-a0e2-739187c8e9c3	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+d10d1cc7-6257-4f7f-8fbb-a3fde2101b3f	e3d0c4ca-36fc-4e2b-8904-4b84e71b1f27	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+a07aca32-1e3a-4617-9035-e5540e50a8e8	95b6bfef-5755-4480-ac8d-8876534195e2	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+5751ac45-86ee-4ee2-85aa-b1d207191cfb	cfe48cb5-1db7-4254-978d-9544cb6e8ef4	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+96e3a51a-0603-4832-9b78-fd6e4084e2a4	a6df5cfb-1368-4554-9049-c157566309af	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+025062b3-202f-4e79-8a3a-8bf7266ef060	d94f703b-7c46-4b18-b279-010ef9a38f00	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014
+16457016-5b26-4207-92fd-a15ff6f0f77c	c5ddf77c-5d38-4916-92cd-e01062756daf	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+92f7fc7c-6b00-4365-992d-3797831a4447	2a0bbef5-2ca2-48d8-867b-0e89a64c4972	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+0a32aaeb-c453-4295-a7a1-bb72b2d07558	0b5b4251-65d4-48b4-ae27-6eac376f498d	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+beb8f886-e229-4a30-a73d-de12f6819f51	842fde70-cf27-4fdc-8f11-31e6d48d23ca	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+eb3e1a15-f613-437d-90ec-567415f0e6b3	cc5d2270-facb-4d74-8589-6f2c668ecce1	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+36aa74fd-9dec-4a3e-9127-d81776b06df9	b21c8bdc-699b-482a-a082-6e814fb460f9	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+522a2f20-bfb4-41d1-9b66-343c2343d528	04a14905-d449-4098-875c-518e7bb2b216	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+28a89670-59e7-4765-ad7d-e45cd089c8d8	820cfcd1-f48c-4a1e-a3a5-c8969da85344	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+aef22211-d083-4268-ade5-d1f365aa7018	da26a3bc-42ba-42dd-a1f7-40fdbf1eff87	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+797a7be9-4aa4-4d25-ac42-882b9f249c61	5c866069-4acd-428f-b6e7-9b021bc75396	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315
+\.
+
+
+--
+-- Data for Name: segmentos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.segmentos (id, nome, is_extra_curricular, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+3647d351-dc7c-4c34-a541-c1a727903097	Educação Infantil	f	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+df4c54c2-bde0-48bf-a27e-2ce132b8f14b	Ensino Fundamental I	f	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+b667b6de-1c08-4bb7-aa80-15715e98c6f7	Ensino Fundamental II	f	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+5ac730d7-ccc8-4e63-99f3-1b9125c87d97	Ensino Médio	f	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+\.
+
+
+--
+-- Data for Name: series; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.series (id, nome, segmento_id, turno_id, escola_id, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+ad95f036-9093-4e52-b719-b9cc658a78b7	Infantil I	3647d351-dc7c-4c34-a541-c1a727903097	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+7e750b98-8990-48bc-9b9e-633af998d769	Infantil II	3647d351-dc7c-4c34-a541-c1a727903097	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+c228c066-5ddb-4b2f-87ac-4fe7fe5541ac	Infantil III	3647d351-dc7c-4c34-a541-c1a727903097	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+37cddacc-c5e3-4346-beeb-715b735c6242	Infantil IV	3647d351-dc7c-4c34-a541-c1a727903097	6ece954f-1920-48dc-858c-796285e7b21c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+954b8c17-d08f-426a-bc33-9b152adf5b1c	Infantil V	3647d351-dc7c-4c34-a541-c1a727903097	6ece954f-1920-48dc-858c-796285e7b21c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+33e967c9-f5d0-4d80-858f-6086120fed63	1º Ano	df4c54c2-bde0-48bf-a27e-2ce132b8f14b	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+4b1e67f9-73a7-4404-9cf8-2e0cda0ae7e1	2º Ano	df4c54c2-bde0-48bf-a27e-2ce132b8f14b	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+71303732-81ff-4ecc-a72f-777f8ab96bf6	3º Ano	df4c54c2-bde0-48bf-a27e-2ce132b8f14b	6ece954f-1920-48dc-858c-796285e7b21c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+a56bd756-d5ac-4dbc-a795-9055457f4cf3	4º Ano	df4c54c2-bde0-48bf-a27e-2ce132b8f14b	6ece954f-1920-48dc-858c-796285e7b21c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d49bc61e-fd70-4cf0-8bae-96653dddec13	5º Ano	df4c54c2-bde0-48bf-a27e-2ce132b8f14b	391c0867-9ad3-457c-9db9-ceb41c9fa0af	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+14d912f4-7643-4441-b49d-1c57eaaeec5b	6º Ano	b667b6de-1c08-4bb7-aa80-15715e98c6f7	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+daa6b235-d806-47d2-8379-0c990bba5931	7º Ano	b667b6de-1c08-4bb7-aa80-15715e98c6f7	6ece954f-1920-48dc-858c-796285e7b21c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+898c5360-a63e-4b54-8627-bde5b2739fac	8º Ano	b667b6de-1c08-4bb7-aa80-15715e98c6f7	391c0867-9ad3-457c-9db9-ceb41c9fa0af	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+01b6a5c3-bef8-4b1e-9a6c-92c489998c5d	9º Ano	b667b6de-1c08-4bb7-aa80-15715e98c6f7	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+0e49f607-1e09-47f4-86c3-69f8d6e859ae	1ª Série	5ac730d7-ccc8-4e63-99f3-1b9125c87d97	300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+9c817217-6e85-4c43-b1b8-31d23fc0b0c9	2ª Série	5ac730d7-ccc8-4e63-99f3-1b9125c87d97	6ece954f-1920-48dc-858c-796285e7b21c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+ade731fe-93aa-404d-89ec-a8c02343ccf4	3ª Série	5ac730d7-ccc8-4e63-99f3-1b9125c87d97	391c0867-9ad3-457c-9db9-ceb41c9fa0af	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+\.
+
+
+--
+-- Data for Name: turmas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.turmas (id, nome, serie_id, escola_id, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+61fbe2ef-2b0d-492b-a2f6-29e09c57a932	A	ad95f036-9093-4e52-b719-b9cc658a78b7	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+9fa5424b-4da1-491f-a964-c0b425a68152	B	ad95f036-9093-4e52-b719-b9cc658a78b7	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+2aa48863-7eb5-465a-885b-53e4795ded82	C	ad95f036-9093-4e52-b719-b9cc658a78b7	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+dd4e0bba-34f5-4010-b6a1-bd2eb403909e	D	ad95f036-9093-4e52-b719-b9cc658a78b7	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+1502f5bd-b2ef-41ad-8be0-7a9ccb0ac643	E	ad95f036-9093-4e52-b719-b9cc658a78b7	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+ee6b62e8-125c-4c7a-95f7-d8cb925213cc	A	7e750b98-8990-48bc-9b9e-633af998d769	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+b10e77ac-df25-4ff6-b9e3-b3157ad57608	B	7e750b98-8990-48bc-9b9e-633af998d769	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+cbc20acd-b9b0-410d-b9b6-e7beacfa6c47	C	7e750b98-8990-48bc-9b9e-633af998d769	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+36a5a0f9-0bde-4ce8-a595-1b8d433cf0ea	D	7e750b98-8990-48bc-9b9e-633af998d769	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d422b92a-7dd7-4c11-a9f8-495a80db7afd	E	7e750b98-8990-48bc-9b9e-633af998d769	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+34045582-b3d1-437a-b6ee-974dbfd79d9b	A	c228c066-5ddb-4b2f-87ac-4fe7fe5541ac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+353b375d-8f07-4ec5-879d-878340d4d286	B	c228c066-5ddb-4b2f-87ac-4fe7fe5541ac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+f3a89149-1ef5-454a-abfe-cd4f577e96b4	C	c228c066-5ddb-4b2f-87ac-4fe7fe5541ac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+7f8b0303-a06b-47e0-a09e-98c40b21e53e	D	c228c066-5ddb-4b2f-87ac-4fe7fe5541ac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+4c3834f4-35c1-4e57-ac64-6a23268c2961	E	c228c066-5ddb-4b2f-87ac-4fe7fe5541ac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+0564795e-761c-43fc-a937-4b19a07c9765	A	37cddacc-c5e3-4346-beeb-715b735c6242	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+804d3bdc-72fd-4cc0-8228-291b17968a5e	B	37cddacc-c5e3-4346-beeb-715b735c6242	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+582770b8-ec0f-4db6-b342-c397c22a8906	C	37cddacc-c5e3-4346-beeb-715b735c6242	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+85933adc-9e20-4ca7-b6dd-1fd53ae9d9e5	D	37cddacc-c5e3-4346-beeb-715b735c6242	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+c8e86570-d23c-4d6e-b8c2-019c7d95d80b	E	37cddacc-c5e3-4346-beeb-715b735c6242	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+4be78645-53bd-4b9a-8b74-67eef031c463	A	954b8c17-d08f-426a-bc33-9b152adf5b1c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+323b15c1-6f8e-48c9-bb2b-faec308bc868	B	954b8c17-d08f-426a-bc33-9b152adf5b1c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+4516314c-bc9e-4bea-9189-42f3bf13828e	C	954b8c17-d08f-426a-bc33-9b152adf5b1c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+a1608727-21e0-444b-9ad0-2dff92c88489	D	954b8c17-d08f-426a-bc33-9b152adf5b1c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+12ec8700-0d09-4ca0-9fb5-24ef1e8f9c52	E	954b8c17-d08f-426a-bc33-9b152adf5b1c	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+a01e7d8a-74a9-441a-bc9b-49eefad1a549	A	33e967c9-f5d0-4d80-858f-6086120fed63	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d0fc5cdc-3ab9-46d9-ad5f-7147a1a24915	B	33e967c9-f5d0-4d80-858f-6086120fed63	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+bd46d640-a7ac-4e60-b193-b02001691dae	C	33e967c9-f5d0-4d80-858f-6086120fed63	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+5e4e7d90-7628-49db-9799-a8f4f2bdc291	D	33e967c9-f5d0-4d80-858f-6086120fed63	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+7c5673a0-fc2a-4fc5-aff1-be169bf4b8b2	E	33e967c9-f5d0-4d80-858f-6086120fed63	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d01c34ad-133d-424e-9f55-0d14b3268ca6	A	4b1e67f9-73a7-4404-9cf8-2e0cda0ae7e1	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+99af9f8d-cf2d-49ad-95bb-7fcb9b54591d	B	4b1e67f9-73a7-4404-9cf8-2e0cda0ae7e1	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+bfe9c035-87e8-4306-ab6e-bac0f682a0ff	C	4b1e67f9-73a7-4404-9cf8-2e0cda0ae7e1	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d6ccceb8-995a-45ab-9399-a35cb1dcc189	D	4b1e67f9-73a7-4404-9cf8-2e0cda0ae7e1	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+83d716c7-122c-46eb-a1d7-36fac0852e92	E	4b1e67f9-73a7-4404-9cf8-2e0cda0ae7e1	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+18849050-4647-4630-9308-50d2d6bca17a	A	71303732-81ff-4ecc-a72f-777f8ab96bf6	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+61e2e3a9-a361-42d0-bc9c-f2d9ff376e8e	B	71303732-81ff-4ecc-a72f-777f8ab96bf6	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d1d9e4d0-9dd3-403b-8c61-d16a4425e58f	C	71303732-81ff-4ecc-a72f-777f8ab96bf6	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+f4d1f981-9431-4ebb-8fd3-1676c82c7c1e	D	71303732-81ff-4ecc-a72f-777f8ab96bf6	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+f55bef2d-d241-48e9-9c04-2cd306e2348b	E	71303732-81ff-4ecc-a72f-777f8ab96bf6	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+43ea82c2-1dda-4bcc-9083-4fdcd2f08522	A	a56bd756-d5ac-4dbc-a795-9055457f4cf3	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+03c8257d-06a7-4c8b-810f-9510d55aaa5f	B	a56bd756-d5ac-4dbc-a795-9055457f4cf3	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+bfec5e4c-9ad5-48fd-8c09-958203985b2a	C	a56bd756-d5ac-4dbc-a795-9055457f4cf3	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+913a339c-20f7-43c7-903a-002d9cea8e69	D	a56bd756-d5ac-4dbc-a795-9055457f4cf3	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+1406a9de-65a6-47b3-a1a5-b83c68fcaecc	E	a56bd756-d5ac-4dbc-a795-9055457f4cf3	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+c06c9a18-b43e-426e-85b0-709f34c59c92	A	d49bc61e-fd70-4cf0-8bae-96653dddec13	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+94d8ad81-193e-4868-a78e-2a5a3ffc7e34	B	d49bc61e-fd70-4cf0-8bae-96653dddec13	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+baa0572f-1f23-4945-abcf-b1b935dcea5d	C	d49bc61e-fd70-4cf0-8bae-96653dddec13	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+b3940267-9a4a-4339-8986-aa9614c81e70	D	d49bc61e-fd70-4cf0-8bae-96653dddec13	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+e65fb2a6-d742-444b-a0f6-b4ce73763f2e	E	d49bc61e-fd70-4cf0-8bae-96653dddec13	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+452ffde1-12e6-4b2a-833e-d4bbaf12a43c	A	14d912f4-7643-4441-b49d-1c57eaaeec5b	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+804af812-5ba7-4101-a97d-3ee17b3caa7a	B	14d912f4-7643-4441-b49d-1c57eaaeec5b	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+9a2ac913-e110-4596-bb21-2aea6021b7a2	C	14d912f4-7643-4441-b49d-1c57eaaeec5b	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+85316659-77d9-4cdc-b23f-dc8868c80a86	D	14d912f4-7643-4441-b49d-1c57eaaeec5b	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+0f59de86-2abf-45d7-8c94-f9583d4979ec	E	14d912f4-7643-4441-b49d-1c57eaaeec5b	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+d1565890-7a07-4076-baab-463fc7b764e6	A	daa6b235-d806-47d2-8379-0c990bba5931	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+5b68a4b0-c35b-4aa5-91c5-73779d7a92ae	B	daa6b235-d806-47d2-8379-0c990bba5931	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+bafda14c-0261-451d-8f4a-7921c58d13cd	C	daa6b235-d806-47d2-8379-0c990bba5931	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+334eb43a-13c2-4f65-ae9f-2cf998ca70c7	D	daa6b235-d806-47d2-8379-0c990bba5931	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+e5c0996d-c880-4f25-9735-556d31c472ac	E	daa6b235-d806-47d2-8379-0c990bba5931	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+b55907f6-a07b-4218-98b2-8c1389d7cd2c	A	898c5360-a63e-4b54-8627-bde5b2739fac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+97960822-9e10-42d6-8cfc-7fb0288b6eae	B	898c5360-a63e-4b54-8627-bde5b2739fac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+51054c5c-3541-408f-9f58-25f1dec12b00	C	898c5360-a63e-4b54-8627-bde5b2739fac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+4f1a39d9-8038-4683-a7ed-edace5152848	D	898c5360-a63e-4b54-8627-bde5b2739fac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+00a0f68f-41b0-4d97-9a7c-694d807e025e	E	898c5360-a63e-4b54-8627-bde5b2739fac	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+992317cb-8763-4b99-b7d7-0fa0185bde67	A	01b6a5c3-bef8-4b1e-9a6c-92c489998c5d	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+550384cd-9fee-45d4-ac99-a4787d69ca4e	B	01b6a5c3-bef8-4b1e-9a6c-92c489998c5d	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+c912be23-dec3-489e-8316-c5ad04f25d8d	C	01b6a5c3-bef8-4b1e-9a6c-92c489998c5d	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+9bc5d369-e925-4b30-8739-52a1d7d531a1	D	01b6a5c3-bef8-4b1e-9a6c-92c489998c5d	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+91310500-33e3-4ea1-8fe4-8a0665278e71	E	01b6a5c3-bef8-4b1e-9a6c-92c489998c5d	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+99a19e24-ccb2-420e-a5f0-766e7d36d907	A	0e49f607-1e09-47f4-86c3-69f8d6e859ae	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+bad80e10-f569-4d7f-917f-6f432806b8f2	B	0e49f607-1e09-47f4-86c3-69f8d6e859ae	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+24bca31c-802b-4799-98e7-a4464b9aa7ac	C	0e49f607-1e09-47f4-86c3-69f8d6e859ae	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+3764fcf6-2cf6-4a1a-aaba-33397c948d0f	D	0e49f607-1e09-47f4-86c3-69f8d6e859ae	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+036d84a9-db23-4819-a155-79934d9ae16b	E	0e49f607-1e09-47f4-86c3-69f8d6e859ae	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+0fca0ae8-fdf9-4679-9480-7a299ea4bee5	A	9c817217-6e85-4c43-b1b8-31d23fc0b0c9	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+58bbb653-a6e8-4e7a-b571-1c5592950464	B	9c817217-6e85-4c43-b1b8-31d23fc0b0c9	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+53339c6a-cd9e-4f0f-b26e-96c33ee8425a	C	9c817217-6e85-4c43-b1b8-31d23fc0b0c9	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+e36b98fe-2afc-4380-a3ff-68d68b6dd5ab	D	9c817217-6e85-4c43-b1b8-31d23fc0b0c9	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+3a4bf176-7b6d-47c4-bdeb-037ed4f61b17	E	9c817217-6e85-4c43-b1b8-31d23fc0b0c9	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+0bbe78b1-0157-4d7b-83e0-4d9b2201cc39	A	ade731fe-93aa-404d-89ec-a8c02343ccf4	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+7c2aeb28-d9db-4ca7-a2f9-8dd076021d6a	B	ade731fe-93aa-404d-89ec-a8c02343ccf4	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+086fcb39-ffa0-4bac-9779-8583f056d01e	C	ade731fe-93aa-404d-89ec-a8c02343ccf4	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+40e2d4f4-be68-4c84-868c-b297de0a3224	D	ade731fe-93aa-404d-89ec-a8c02343ccf4	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+2988625e-862d-4f65-b93f-456368cd08fc	E	ade731fe-93aa-404d-89ec-a8c02343ccf4	3e33d2f5-bb20-435e-b407-a141aac14041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+\.
+
+
+--
+-- Data for Name: turnos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.turnos (id, nome, ativo, created_by, updated_by, created_at, updated_at) FROM stdin;
+300f857e-bd42-46fe-9fa9-cf6f1b2f91ca	Manhã	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+6ece954f-1920-48dc-858c-796285e7b21c	Tarde	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+391c0867-9ad3-457c-9db9-ceb41c9fa0af	Integral	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189
+\.
+
+
+--
+-- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuarios (id, nome, email, senha, tipo, cpf, rg, celular, logradouro, complemento, bairro, cidade, uf, cep, ativo, created_by, updated_by, created_at, updated_at, telefone, tel_outro) FROM stdin;
+f6f27f20-d1a4-4030-b7ad-0559781a1795	Israel Hudson	admin@escola.com	senha_admin	admin	\N	\N	\N	\N	\N	\N	\N	\N	\N	t	00000000-0000-0000-0000-000000000000	00000000-0000-0000-0000-000000000000	2025-06-24 15:07:26.919189	2025-06-24 15:07:26.919189	\N	\N
+29dfac1a-c088-48e8-bb96-8cd5047a5753	ÁGATHA BRASIL DE CASTRO PINHEIRO	agatha@escola.com.br	123	aluno	\N	\N	85 99681-5987	Rua Peri, 1441	CS A	Barra do Ceará	FORTALEZA	CE	60331270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+cc4da208-8572-4c1a-99e9-39ba2f8ff8e0	MAXSUELTON DA SILVA PINHEIRO	maxsuelton@escola.com.br	123	responsavel	010.242.743-73	\N	85 99681-5987	Rua Peri, 1441	CS A	Barra do Ceará	FORTALEZA	CE	60331270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+460ad15f-eb6b-45f1-a6d3-021bd0996a5c	ALLEF GREGORIO DE MOURA TABOSA	allef@escola.com.br	123	aluno	\N	\N	85 98953-1965	RUA JOAQUIM GUIMARÃES, 211	de 1210/1211 a 2529/2530	Centro	Caucaia	CE	61600-004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+80678be2-a00c-42e0-b50a-5b1c51825409	ELIEUDA RODRIGUES DE MOURA	elieuda@escola.com.br	123	responsavel	034.807.163-93	\N	85 98953-1965	RUA JOAQUIM GUIMARÃES, 211	de 1210/1211 a 2529/2530	Centro	Caucaia	CE	61600-004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+930d571a-1e30-4d90-b6bc-04dae19f21c9	ANA CATRINA CRUZ ROCHA	ana@escola.com.br	123	aluno	\N	\N	85994197498	Rua São Raimundo, 464		Pirambu	Fortaleza	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+93e2edcb-d2a2-4b24-988d-a347d68ffe68	SAMARA NASCIMENTO CRUZ	samara@escola.com.br	123	responsavel	7152737363	\N	85994197498	Rua São Raimundo, 464		Pirambu	Fortaleza	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+1fdbfd3a-4e01-4747-b3a7-5a0d0d62a8a3	ANA HELENA DE SOUSA LIMA	ana@escola.com.br	123	aluno	\N	\N	85 98566-1064	Rua Com Luis Ribeiro, 123	CS 263	Monte Castelo	FORTALEZA	CE	60326330	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+8e031e84-05ee-4371-b43b-d0bbb6c04182	KAUAN ARAÚJO DE LIMA	kauan@escola.com.br	123	responsavel	038.194.723-80	\N	85 98566-1064	Rua Com Luis Ribeiro, 123	CS 263	Monte Castelo	FORTALEZA	CE	60326330	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+2c849607-2b9f-49dc-bce2-c2ae439741ec	ANA LIA RODRIGUES RIBEIRO	ana@escola.com.br	123	aluno	\N	\N	85999554050	Rua Marcílio Dias, 789	até 1365/1366	Pirambu	Fortaleza	CE	60310-750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+adffc0a5-5887-4516-8df8-924b46187a0f	KELLY KAROLLINE RODRIGUES DA SILVA RIBEIRO	kelly@escola.com.br	123	responsavel	4886474365	\N	85999554050	Rua Marcílio Dias, 789	até 1365/1366	Pirambu	Fortaleza	CE	60310-750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+2453c955-d5c6-4ac7-ba51-5bfcd641a170	CLARA MARIA ALVES SALES	clara@escola.com.br	123	aluno	\N	\N	85994264683	RUA NOSSA SENHORA DAS GRAÇAS, 615	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+44183af8-57f0-4e63-8482-60ce1427f104	DEBORA ALVES MORAIS	debora@escola.com.br	123	responsavel	5492423339	\N	85994264683	RUA NOSSA SENHORA DAS GRAÇAS, 615	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+73d038f7-9202-45fd-86a6-b5e4b3e9b41b	ELOÁ OLIVEIRA MACEDO	eloa@escola.com.br	123	aluno	\N	\N	85 98722-6025	Rua Eng. Joao Nogueira, 482		Carlito Pamplona	FORTALEZA	CE	60335140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+9411d040-615f-4114-ba82-28d3230a05ba	ARTHUR BRUNO ALVES MACEDO	arthur@escola.com.br	123	responsavel	046.169.643-60	\N	85 98722-6025	Rua Eng. Joao Nogueira, 482		Carlito Pamplona	FORTALEZA	CE	60335140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	85 99107-7636	\N
+66f47400-fd54-4bd0-957d-56a96975b69a	HEITOR FREITAS TIBURCIO	heitor@escola.com.br	123	aluno	\N	\N	85 98519-7331	Rua São Luiz, 249		Centro de Caucaia	CAUCAIA	CE	61602-690	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+d2854ee3-628f-4456-924f-30879ad21317	DIANA DEYSE FREITAS DA SILVA	diana@escola.com.br	123	responsavel	668.410.113-68	\N	85 98519-7331	Rua São Luiz, 249		Centro de Caucaia	CAUCAIA	CE	61602-690	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	85988426500	\N
+b21f68ce-2fd7-480d-afb6-52d4273c3b4b	ISABELA LEMOS MONTEIRO	isabela@escola.com.br	123	aluno	\N	\N	85 98598-5769	Rua Dor Almeida Filho, 155	Ap 302 BL B	Vila Ellery	FORTALEZA	CE	60320510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+e1878200-f1ac-4a76-9269-b632ae386d9b	EDSON MATHEUS MONTEIRO RABELO	edson@escola.com.br	123	responsavel	076.598.243-92	\N	85 98598-5769	Rua Dor Almeida Filho, 155	Ap 302 BL B	Vila Ellery	FORTALEZA	CE	60320510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	85996561468	\N
+eb2ac56d-9736-4ba7-a26e-aad7bb617a45	JOSÉ MIGUEL SOARES VITORIANO	jose@escola.com.br	123	aluno	\N	\N	85 99604-1838	Rua Peri, 1442		Barra do Ceará	FORTALEZA	CE	60331270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619	\N	\N
+f22f7d0a-6c3f-4df2-9704-6c2ed673a2b3	SUELY NASCIMENTO SOARES VITORIANO	suely@escola.com.br	123	responsavel	053.599.363-39	\N	85 99604-1838	Rua Peri, 1442		Barra do Ceará	FORTALEZA	CE	60331270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.95619	2025-07-02 23:55:15.95619		\N
+b668f6a3-6cf8-4b3c-ad1d-10c7760c8346	PEDRO NOAN GERMANO BARBOSA	pedro@escola.com.br	123	aluno	\N	\N	85 98942-6880	Rua Coelho Fonseca, 443		Alvaro Weyne	FORTALEZA	CE	60335050	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+65154138-abce-4346-b839-a080ab64a191	LEANDRO GERMANO CARVALHO	leandro@escola.com.br	123	responsavel	045.482.653-25	\N	85 98942-6880	Rua Coelho Fonseca, 443		Alvaro Weyne	FORTALEZA	CE	60335050	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	85987059378	\N
+8d3a166a-c357-4a71-ba79-9dc5c97ccc24	ZYON DE OLIVEIRA TEIXEIRA	zyon@escola.com.br	123	aluno	\N	\N	85 98901-9263							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+615779e5-6c3f-4663-8d7b-b8d9ad41a829	MARINA DE OLIVEIRA ROCHA	marina@escola.com.br	123	responsavel	606.016.343-22	\N	85 98901-9263							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+10ee762c-bc4f-405c-b3b8-aab8125f2a62	ÁGATHA MANUELLY FERNANDES CAVALCANTE	agatha@escola.com.br	123	aluno	\N	\N	85 99636-3180	Rua Dom Hélio Campos, 80	Bl 2 Qd A Apto 401	Carlito Pamplona	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+728ec88d-9e06-480a-b37c-08224017ce6f	ALINE KLYZYA BARROSO	aline@escola.com.br	123	responsavel	026.214.223-65	\N	85 99636-3180	Rua Dom Hélio Campos, 80	Bl 2 Qd A Apto 401	Carlito Pamplona	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+335f75e0-6b92-4939-af7b-f0ec317d6bc6	ANA LAIZA ALVES DE SOUZA	ana@escola.com.br	123	aluno	\N	\N	85996803630	Rua Jacinto Matos, 5		Jacarecanga	Fortaleza	CE	60310-210	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+834f088c-e7d3-4337-b2c8-c02f1c91ca73	CELENE ALVES DA SILVA	celene@escola.com.br	123	responsavel	60693446340	\N	85996803630	Rua Jacinto Matos, 5		Jacarecanga	Fortaleza	CE	60310-210	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+b8a9e724-5d93-4e29-9f61-99f2823926b4	AYANA DA SILVA RODRIGUES DE OLIVEIRA	ayana@escola.com.br	123	aluno	\N	\N	85994305436	Rua Santa Inês, 963		Pirambu	Fortaleza	CE	60311-310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+822c4ef4-9f52-4993-940d-2ef61cb3fd92	AMANDA DA SILVA BEZERRA	amanda@escola.com.br	123	responsavel	620.421.213-39	\N	85994305436	Rua Santa Inês, 963		Pirambu	Fortaleza	CE	60311-310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+a4ab9469-ff39-410b-86af-45c848bbef11	CARLOS HEITOR ALVES DE LIMA	carlos@escola.com.br	123	aluno	\N	\N	85 98855-1530	85 98928-4637		Nossa Senhora das Graças	FORTALEZA	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+f7c33d71-355e-4485-8009-a507cbdb6f17	CARLOS HIARLEN DE LIMA GONÇALVES	carlos@escola.com.br	123	responsavel	606.529.633-31	\N	85 98855-1530	85 98928-4637		Nossa Senhora das Graças	FORTALEZA	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	85 98928-4637	\N
+18829e19-9590-4815-a58b-0d1aa6acc08f	CHRISTIAN GAEL SOUTO HONÓRIO	christian@escola.com.br	123	aluno	\N	\N	85 99711-8646	Rua Cura Dars, 04	Cs B	Nossa Senhora da Graças	FORTALEZA	CE	60311010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+ad763f92-94c9-4517-a5f1-7ef392e2ee58	IVANA SOUTO DO AMARANTE	ivana@escola.com.br	123	responsavel	600.377.263-82	\N	85 99711-8646	Rua Cura Dars, 04	Cs B	Nossa Senhora da Graças	FORTALEZA	CE	60311010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+001fa38a-bf8f-448e-9e34-752bcae64896	ELOAN GABRIEL MOURA DA COSTA	eloan@escola.com.br	123	aluno	\N	\N	85 98849-2480	Rua Santa Inês, 590		Nossa Senhora das Graças	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+1956465f-eaaa-4e26-8814-4719f825c9f0	LARISSA EVELYN OLIVEIRA MOURA	larissa@escola.com.br	123	responsavel	627.600.073-67	\N	85 98849-2480	Rua Santa Inês, 590		Nossa Senhora das Graças	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+bd77713d-5004-4fc4-89e5-0fcacb1a3821	HEITOR RIBEIRO MOURA	heitor@escola.com.br	123	aluno	\N	\N	85 99763-0994	Rua Dom Quintino, 1002	Cs Fundos	Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+ac799cdd-8207-40da-b6b7-71274b4889d2	BRUNO FELIPE MOURA DO NASCIMENTO	bruno@escola.com.br	123	responsavel	613.472.823-35	\N	85 99763-0994	Rua Dom Quintino, 1002	Cs Fundos	Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	85 998478509 (Mãe)	\N
+877503b5-50bc-455e-aa32-0d60943eb925	MARIA LUIZA ALVES SÁ	maria@escola.com.br	123	aluno	\N	\N	85 98159-3881	Rua Peri, 1442		Barra do Ceará	FORTALEZA	CE	60331270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+4a2c3cf4-e103-46c6-ad3b-85e6f59189a4	JOAO DANIEL ALVES CARDOSO BATISTA	joao@escola.com.br	123	aluno	\N	\N	85 98873-1144	Rua Dom Quintino, 1337		Cristo Redentor	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685	\N	\N
+5853c158-4fbd-459f-a522-d5f6dda05855	BRENA ALVES CARDOSO BATISTA	brena@escola.com.br	123	responsavel	036.291.533-48	\N	85 98873-1144	Rua Dom Quintino, 1337		Cristo Redentor	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.979685	2025-07-02 23:55:15.979685		\N
+5d23bb88-5efc-42e6-8685-3c43fc7cfd1c	HALLEYANNE JULIA SOUSA DE MIRANDA	halleyanne@escola.com.br	123	aluno	\N	\N	85 99798-7737	Rua Henrique Dias, 126	121	Jacarecanga	FORTALEZA	CE	60311570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+71a80f5d-0661-46c6-a6b0-31c47dcd700a	GECINA LIMA DE MIRANDA DA SILVA	gecina@escola.com.br	123	responsavel	008.177.933-05	\N	85 99798-7737	Rua Henrique Dias, 126	121	Jacarecanga	FORTALEZA	CE	60311570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	85 98792-5053	\N
+d8d21223-4a04-47fa-9f21-46df507da9b9	HEITOR AVELINO PAIVA DOS SANTOS	heitor@escola.com.br	123	aluno	\N	\N	85 98994-6117	Rua Dona Mendinha, 305		Cristo Redentor	FORTALEZA	CE	60337-385	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+800963c5-7170-40dc-be5b-be01ec1dda56	AIANE DE SOUSA AVELINO	aiane@escola.com.br	123	responsavel	051.585.453-08	\N	85 98994-6117	Rua Dona Mendinha, 305		Cristo Redentor	FORTALEZA	CE	60337-385	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	85988413327	\N
+b272750f-f00c-47a8-99e7-a9a65f7631b6	ISAAC EMANUEL SOUSA VASCONCELOS	isaac@escola.com.br	123	aluno	\N	\N	85 98705-2326	Rua Osmani, 44	CS 63	Barra do Ceará	FORTALEZA	CE	60331572	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+021ba048-9103-4247-b0dc-ee00c4b0596c	ANTONIA IRINEUDA DIAS DE SOUSA	antonia@escola.com.br	123	responsavel	631.828.743-49	\N	85 98705-2326	Rua Osmani, 44	CS 63	Barra do Ceará	FORTALEZA	CE	60331572	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789		\N
+94737b5d-645f-41fc-8b67-4678ad3b8038	JOÃO LEVY AMARANTE ARAÚJO	joao@escola.com.br	123	aluno	\N	\N	85 98557-7802	Rua Santa Eliza, 431	Cs Altos B	Nossa Senhora das Graças	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+1f2badb1-f938-472c-86f2-e08f35660e51	EVELYN FERREIRA DO AMARANTE ARAÚJO	evelyn@escola.com.br	123	responsavel	050.093.503-35	\N	85 98557-7802	Rua Santa Eliza, 431	Cs Altos B	Nossa Senhora das Graças	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	85 99712-1065	\N
+8279708a-3c9c-4144-84b5-398f8083a286	JOSÉ ALEXSSANDER MOURA DA COSTA	jose@escola.com.br	123	aluno	\N	\N	85 99684-4595	Rua Tulipa, 1001	BL 12 APTO 206	Jardim Iracema	FORTALEZA	CE	60330520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+0bd1f805-777f-491f-82d7-d519b471b980	FRANCISCO ALEXANDRE VERAS DA COSTA	francisco@escola.com.br	123	responsavel	613.475.183-98	\N	85 99684-4595	Rua Tulipa, 1001	BL 12 APTO 206	Jardim Iracema	FORTALEZA	CE	60330520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789		\N
+d20cf6c5-efc7-4ca4-b988-378ac76f5935	KALEBE BARROS REIS DE SOUSA	kalebe@escola.com.br	123	aluno	\N	\N	85987960945	RUA HELENICE DE PAIVA MENESES, 175		Antônio Bezerra	Fortaleza	CE	60356-845	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+a596d326-0b14-4e58-942c-0b9e11f22ca8	JEFERSON REIS DE SOUSA	jeferson@escola.com.br	123	responsavel	60419793330	\N	85987960945	RUA HELENICE DE PAIVA MENESES, 175		Antônio Bezerra	Fortaleza	CE	60356-845	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789		\N
+a656bc04-380a-4397-934a-a59dbdbf0065	LAURA XIMENES LIMA	laura@escola.com.br	123	aluno	\N	\N	85 98554-1881	Rua Esc Antonio Abuchain, 950	Casa 13	Pacheco	CAUCAIA	CE	61626-290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+48a1b066-8405-49d7-94c2-50297fce8051	LILLIAN XIMENES LEITE	lillian@escola.com.br	123	responsavel	608.875.073-10	\N	85 98554-1881	Rua Esc Antonio Abuchain, 950	Casa 13	Pacheco	CAUCAIA	CE	61626-290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789		\N
+5e7d86a3-eda3-4d14-8ac1-ede1f8056374	MARIA LIZ SILVA TELEMACO	maria@escola.com.br	123	aluno	\N	\N	85 99961-4236	Rua Cura Dars, 356		Nossa Senhora das Graças	FORTALEZA	CE	60311010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+88a923df-b349-4ed4-a8e4-3f53934e681f	EMANUEL TELEMACO DE OLIVEIRA	emanuel@escola.com.br	123	responsavel	003.381.123-75	\N	85 99961-4236	Rua Cura Dars, 356		Nossa Senhora das Graças	FORTALEZA	CE	60311010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789		\N
+7733e2fa-49b6-4894-af26-fd1b68c6b5a3	LUCAS SANTIAGO COSTA	lucas@escola.com.br	123	aluno	\N	\N	85 99989-3911							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+6ffe4b7f-bb28-45ab-b719-26c1f04b21c2	SERDNEY VITORIANO SÁ	serdney@escola.com.br	123	responsavel	001.325.573-80	\N	85 98159-3881	Rua Peri, 1442		Barra do Ceará	FORTALEZA	CE	60331270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	85 99277-4949	\N
+e869ac49-c58c-4448-aa31-bce70c53eec7	PIETRO MIGUEL LIMA MOURA	pietro@escola.com.br	123	aluno	\N	\N	85 98952-9778	Rua Olavo de Andrade, 113		Jacarecanga	Fortaleza	CE	60310-680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789	\N	\N
+c069f292-7030-4a0a-a90b-6aed7a41e927	TACIANO MOURA DE SOUSA LIMA	taciano@escola.com.br	123	responsavel	081.038.543-01	\N	85 98952-9778	Rua Olavo de Andrade, 113		Jacarecanga	Fortaleza	CE	60310-680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:15.998789	2025-07-02 23:55:15.998789		\N
+bbf2fcf2-6f64-47ec-806e-8d57d4ab04bf	MARIA LUIZA MOURA DE ABREU	maria@escola.com.br	123	aluno	\N	\N	85984173028	Rua Doutor Vitor Juliano Ribeiro, 111		Cristo Redentor	Fortaleza	CE	60337-305	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+6d4747bc-d351-4a92-8edf-7f55261efbc0	SAMIRES CAVALCANTE MOURA	samires@escola.com.br	123	responsavel	7126227302	\N	85984173028	Rua Doutor Vitor Juliano Ribeiro, 111		Cristo Redentor	Fortaleza	CE	60337-305	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+6481e5b2-9fe3-4eaa-8be5-6733aa4c1db3	MATHIAS GREGÓRIO PACÍFICO MOTA	mathias@escola.com.br	123	aluno	\N	\N	85988634568	Rua Padre Constantino, 1108		Jacarecanga	Fortaleza	CE	60310-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+c9fcc105-c73b-4edd-a75b-b04652865f7d	FLÁVIA PACÍFICO MEDEIROS	flavia@escola.com.br	123	responsavel	60797183329	\N	85988634568	Rua Padre Constantino, 1108		Jacarecanga	Fortaleza	CE	60310-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+19d92e2b-2f85-483d-9076-d4b1c0fdbb16	MAXIMILIANO GUEVARA DA SILVA	maximiliano@escola.com.br	123	aluno	\N	\N	85991050473	Rua Dom Hélio Campos, 80		Carlito Pamplona	Fortaleza	CE	60311-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+455d8961-35c2-4727-99d3-7fda1b269a73	BRYAN DAVID GUEVARA AGUDELO	bryan@escola.com.br	123	responsavel	63211457348	\N	85991050473	Rua Dom Hélio Campos, 80		Carlito Pamplona	Fortaleza	CE	60311-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+bf9833e8-5b25-47fa-821b-dc73f6cd6fca	MAYA ELOÁ DE SOUSA PONTES	maya@escola.com.br	123	aluno	\N	\N	85 99267-5905	Rua Santa Inês, 749		Canindezinho	Fortaleza	CE	60733-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+cdc63e8a-ac71-45a6-b840-7827f356460d	IANNA DE SOUSA OLIVEIRA	ianna@escola.com.br	123	responsavel	623.975.373-46	\N	85 99267-5905	Rua Santa Inês, 749		Canindezinho	Fortaleza	CE	60733-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+e412ab71-88cc-4f6f-b70c-3b027ceee08a	ROMULO LOURENÇO ARAGÃO DE CASTRO	romulo@escola.com.br	123	aluno	\N	\N	85 99669-7698	Rua Da Fé, 106		Carlito Pamplona	FORTALEZA	CE	60311730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+b8d4653f-ce06-4c60-8c0f-80e8ca91139c	CARLA YASMIM ARAGAO DE CASTRO	carla@escola.com.br	123	responsavel	053.614.113-45	\N	85 99669-7698	Rua Da Fé, 106		Carlito Pamplona	FORTALEZA	CE	60311730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+0a4e5244-7938-4489-af7e-43e75a5ba8fb	ABNER RODRIGUES DO NASCIMENTO	abner@escola.com.br	123	aluno	\N	\N	85 99821-4210	RUA SÃO RAIMUNDO 515		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+e44d3234-e7e6-4d5e-955a-7b76abc6342a	ARIANE RODRIGUES ROCHA DO NASCIMENTO	ariane@escola.com.br	123	responsavel	605.071.553-00	\N	85 99821-4210	RUA SÃO RAIMUNDO 515		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+f0537fc5-9f4a-43a5-9285-0277d7442ea7	ANA LUÍZA RODRIGUES REIS	ana@escola.com.br	123	aluno	\N	\N	85997461436	Avenida Francisco Sá, 3572	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+f60b3b52-6e60-41d9-90ac-0a15303cbcf0	CLAUDIO DIÊGO SILVA REIS	claudio@escola.com.br	123	responsavel	048.947.303-24	\N	85997461436	Avenida Francisco Sá, 3572	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+41d48a63-a0a3-4dbd-aecd-9bb9b3601274	ANTHONY DANTAS RIBEIRO	anthony@escola.com.br	123	aluno	\N	\N	85 99609-5906	RUA FELIPE CAMARÃO, 484		PIRAMBU	FORTALEZA	CE	60310790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+9178f0ac-32c7-415c-af66-99ca08c947d4	LEILIANE DANTAS BONFIM	leiliane@escola.com.br	123	responsavel	010.143.173-20	\N	85 99609-5906	RUA FELIPE CAMARÃO, 484		PIRAMBU	FORTALEZA	CE	60310790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+e76bfa8c-23d2-42b6-b032-417aab2b2ada	ELISSA HELLEN DA SILVA ROSENO	elissa@escola.com.br	123	aluno	\N	\N	85987764619	Rua Poeta José Sotério de Morais, 1300		Pacheco	Caucaia	CE	61626-490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+99b5c37b-7e38-44ab-b0af-b2eb7820bf71	FRANCISCO WANDREISON ROSENO CAPISTRANO	francisco@escola.com.br	123	responsavel	4831490393	\N	85987764619	Rua Poeta José Sotério de Morais, 1300		Pacheco	Caucaia	CE	61626-490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+d8167e52-47ee-4479-bb18-434778d6efb9	FRANCISCO BENJAMIN DOS SANTOS MEDEIROS	francisco@escola.com.br	123	aluno	\N	\N	85 98709-1380	Tv. Aurelio Lavor, 141	Apt 23	Cristo Redentor	FORTALEZA	CE	60312180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357	\N	\N
+567c76c1-65b9-466c-b416-b68aea14063e	LEIDIANA FERREIRA DOS SANTOS	leidiana@escola.com.br	123	responsavel		\N	85 98709-1380	Tv. Aurelio Lavor, 141	Apt 23	Cristo Redentor	FORTALEZA	CE	60312180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.033357	2025-07-02 23:55:16.033357		\N
+2f467226-b1a0-41a4-ba45-2ecbd6935172	AURORA RODRIGUES SAMPAIO	aurora@escola.com.br	123	aluno	\N	\N	85992050233	RUA VICENTE SABOIA 159	de 600 ao fim - lado par	Álvaro Weyne	Fortaleza	CE	60335-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+ea008712-3c48-4d27-b416-47944590e970	ANDRESSA GLENDA RODRIGUES CARNEIRO	andressa@escola.com.br	123	responsavel	61362886300	\N	85992050233	RUA VICENTE SABOIA 159	de 600 ao fim - lado par	Álvaro Weyne	Fortaleza	CE	60335-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+be112a65-7925-4915-bf82-85a3eff9a6f5	BENJAMIN MESQUITA BRASIL	benjamin@escola.com.br	123	aluno	\N	\N	85 98705-2536	RUA VI CONJ JAPÃO, 85	AT	Cristo Redentor	FORTALEZA	CE	60337-710	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+2a0d2d01-60e0-486e-9f2a-f21a4debfebf	FRANCISCO JONATHAN BRASIL DA SILVA	francisco@escola.com.br	123	responsavel	663.413.023-04	\N	85 98705-2536	RUA VI CONJ JAPÃO, 85	AT	Cristo Redentor	FORTALEZA	CE	60337-710	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+a8c5235c-d96e-4114-bbde-cf125e55ba83	BRYAN LUCCA SILVA DO NASCIMENTO	bryan@escola.com.br	123	aluno	\N	\N	85 98681-8802	Rua Santa Ines 1061 Altos	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+2828ce1c-504c-4816-ba48-5e0ae68bb29f	MARIA YASMIM DA SILVA PEREIRA	maria@escola.com.br	123	responsavel	7132974335	\N	85 98681-8802	Rua Santa Ines 1061 Altos	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+55060a14-e129-4f8f-81b1-af74f80e26b3	FRANCISCA HELOISA PINHEIRO BATISTA	francisca@escola.com.br	123	aluno	\N	\N	85 98949-3411	Rua Alvaro de Alencar, 210		Carlito Pamplona	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+a1911150-be55-4539-9465-1cf536e8c1ab	RAFAEL DE ARAUJO BATISTA	rafael@escola.com.br	123	responsavel	074.388.023-45	\N	85 98949-3411	Rua Alvaro de Alencar, 210		Carlito Pamplona	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+041dcd6a-d057-494c-9ec8-28a765c25108	JOAO MIGUEL PINHEIRO CABRAL CAMARA	joao@escola.com.br	123	aluno	\N	\N	85996891930	Rua Irineu de Sousa, 47, CS ALTOS B		Álvaro Weyne	Fortaleza	CE	60337-180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+e5c6ffbb-beae-473a-b0ab-8c75db1f67b0	EDUARDO CABRAL CAMARA	eduardo@escola.com.br	123	responsavel	2267575361	\N	85996891930	Rua Irineu de Sousa, 47, CS ALTOS B		Álvaro Weyne	Fortaleza	CE	60337-180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+be44c96b-f3f6-4c6e-9d34-6f091820d34d	JULIE GABRIELLY SOUZA DUTRA	julie@escola.com.br	123	aluno	\N	\N	85 98844-6760	Avenida Presidente Castelo Branco, 3197	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+85d393af-e9ef-4d9d-866f-aba9c9495abb	GABRIEL VINICIUS DUTRA DE OLIVEIRA	gabriel@escola.com.br	123	responsavel	074.806.023-59	\N	85 98844-6760	Avenida Presidente Castelo Branco, 3197	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+3d166b4f-24c6-42ea-8886-ffd90cfbe66d	KAYO PONTES DE SOUZA	kayo@escola.com.br	123	aluno	\N	\N	85 98205-4772	Rua Santa Inês, 636	Altos	Pirambu	FORTALEZA	CE	60733400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+2f7b2a9d-b32d-4bef-94f9-163e43403c5b	EUGENIA MARIA PONTES SANTIAGO	eugenia@escola.com.br	123	responsavel	621.458.193-04	\N	85 98205-4772	Rua Santa Inês, 636	Altos	Pirambu	FORTALEZA	CE	60733400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+102fc50b-e8ef-450f-9d93-117b339d8504	LARA BARBOSA ROCHA	lara@escola.com.br	123	aluno	\N	\N	85986351992	Rua Felipe Camarão 876	até 699/700	Pirambu	Fortaleza	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+bf71652d-8dae-441c-ba95-f151b807b83d	FRANCISCA LARISSA BARBOSA DA COSTA	francisca@escola.com.br	123	responsavel	5259288394	\N	85986351992	Rua Felipe Camarão 876	até 699/700	Pirambu	Fortaleza	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+824a1d08-9a60-46f1-8d04-1a3b441c692d	LAYLA MARIA BATISTA SOARES	layla@escola.com.br	123	aluno	\N	\N	85 99265-1941	Avenida Pasteur, 81	até 599 - lado ímpar	Pirambu	Fortaleza	CE	60311-175	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+4be1471e-3c71-450c-93ec-edbd0ad02053	LEANDRO DA SILVA SOARES	leandro@escola.com.br	123	responsavel	062.580.643-37	\N	85 99265-1941	Avenida Pasteur, 81	até 599 - lado ímpar	Pirambu	Fortaleza	CE	60311-175	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+b20d4cd8-2e3c-40bd-add0-b64ae72d2452	LIZ MARIA COSTA QUEIROZ	liz@escola.com.br	123	aluno	\N	\N	85 99426-5244	Rua Felipe Camarão, 209		Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406	\N	\N
+d6c9b660-50ef-40ac-a7e4-4cb971e18015	LUCIELMA QUEIROZ DA SILVA	lucielma@escola.com.br	123	responsavel	012.750.193-23	\N	85 99426-5244	Rua Felipe Camarão, 209		Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.056406	2025-07-02 23:55:16.056406		\N
+43c54346-7478-45f5-85f4-22b029b86e82	TAYANE PONTES SANTIAGO COSTA	tayane@escola.com.br	123	responsavel	027.672.273-62	\N	85 99989-3911							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+53129718-ac6a-4e22-b590-0121b8282cfb	LUNA EVELYN SOARES DE LIMA	luna@escola.com.br	123	aluno	\N	\N	85 98660-5875	Rua Santa Inês, 763		Pirambu	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+8f5c154b-d2f8-4875-9ac5-15682030dc1f	THAIS MARIA DE LIMA MOREIRA	thais@escola.com.br	123	responsavel	604.677.223-07	\N	85 98660-5875	Rua Santa Inês, 763		Pirambu	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	85994278223	\N
+59508ca8-ba2b-476e-b815-57674bd6b327	MARIA ALICE DE OLIVEIRA ARAÚJO FERNANDES	maria@escola.com.br	123	aluno	\N	\N	85991053530	Rua Lucas Pinto, 292		Cristo Redentor	Fortaleza	CE	60312-280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+f22e7baf-eeff-4833-9c0e-2c6300de5aa0	FRANCISCO CESAR DE ARAÚJO FILHO	francisco@escola.com.br	123	responsavel	2526833310	\N	85991053530	Rua Lucas Pinto, 292		Cristo Redentor	Fortaleza	CE	60312-280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+a4039b0d-5a28-423f-86cb-e8fe4115a61e	MARIA ELOA DOS SANTOS SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98584-9748	Rua Felipe Fernandes Neto, 551		Parque Leblon	FORTALEZA	CE	61631016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+8d448dc8-9adb-4328-83c0-30f94b1acc21	FRANCISCA INGRID GOMES DOS SANTOS	francisca@escola.com.br	123	responsavel	605.915.053-55	\N	85 98584-9748	Rua Felipe Fernandes Neto, 551		Parque Leblon	FORTALEZA	CE	61631016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	85991190444	\N
+91d07adc-9eb1-4a03-a6f8-4b01c2b0df98	MARIA JÚLIA SOUZA DUTRA	maria@escola.com.br	123	aluno	\N	\N	85 98844-6760	Avenida Presidente Castelo Branco, 3197	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+b8148b99-dd2b-4a06-ba1c-e16943e15674	GABRIEL VINICIUS DUTRA DE OLIVEIRA	gabriel@escola.com.br	123	responsavel	074.806.023-59	\N	85 98844-6760	Avenida Presidente Castelo Branco, 3197	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+70b2bc99-9a61-4718-9ff3-9ac2c77c8e84	MARIA LUARA OLIVEIRA MACIEL	maria@escola.com.br	123	aluno	\N	\N	85 98861-3498	Rua Fenelon Bomilcar 509	(Cj Hermes Pereira/Barra Mar)	Barra do Ceará	Fortaleza	CE	60330-075	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+cfb94ad3-1d38-4549-b0ff-2993fef0c455	LUANA OLIVEIRA GERMANO	luana@escola.com.br	123	responsavel	3706599376	\N	85 98861-3498	Rua Fenelon Bomilcar 509	(Cj Hermes Pereira/Barra Mar)	Barra do Ceará	Fortaleza	CE	60330-075	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+d2006e22-bce0-4dc4-8ce4-51f7b7ae175c	PEDRO CAUÃ AGOSTINHO FERREIRA DE SOUZA	pedro@escola.com.br	123	aluno	\N	\N	85987922704	RUA JUACI SAMPAIO PONTES,570	de 1210/1211 a 2529/2530	PARQUE LEBLON	Caucaia	CE	61600-004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+f0fdb496-9d08-4669-8435-2760d86503a4	GRACIANY DOS SANTOS FERREIRA	graciany@escola.com.br	123	responsavel	4571483309	\N	85987922704	RUA JUACI SAMPAIO PONTES,570	de 1210/1211 a 2529/2530	PARQUE LEBLON	Caucaia	CE	61600-004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+9d8320cb-d7e1-48b0-9bd7-1c236588ebaf	RAPHAEL BENÍCIO FERNANDES ARAÚJO	raphael@escola.com.br	123	aluno	\N	\N	85 99293-3610	RUA ERICO MOTA,1276	CASA 301	AMADEU FURTADO	FORTALEZA	CE	60455495	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+8a5e222d-d2b2-4f42-9eab-52c3e058fb3d	RAFAEL ARAUJO GOMES	rafael@escola.com.br	123	responsavel	041.480.713-88	\N	85 99293-3610	RUA ERICO MOTA,1276	CASA 301	AMADEU FURTADO	FORTALEZA	CE	60455495	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+0d928583-0517-492f-bbb1-d66e03671ca6	VINICIUS MENDES LIMA	vinicius@escola.com.br	123	aluno	\N	\N	85 98610-7306	Avenida Tenente Lisboa, 492	até 998/999	Jacarecanga	Fortaleza	CE	60010-340	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+90071044-4c99-4a2f-a039-a5f93afa414e	ELIZIANE MENDES VIEIRA	eliziane@escola.com.br	123	responsavel	2956297384	\N	85 98610-7306	Avenida Tenente Lisboa, 492	até 998/999	Jacarecanga	Fortaleza	CE	60010-340	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+77a55cba-e833-4502-89a1-30210979c62b	WARLLEY DIO BARCELOS	warlley@escola.com.br	123	aluno	\N	\N	85 9 8158-3022	Rua Leão Marinho, 856		Parque Leblon	Caucaia	CE	61631-295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696	\N	\N
+f4e30ed9-826f-4be5-bccb-ce6d86d2ccc0	WARLLEY BARCELOS PIMENTA	warlley@escola.com.br	123	responsavel	5700389797	\N	85 9 8158-3022	Rua Leão Marinho, 856		Parque Leblon	Caucaia	CE	61631-295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.064696	2025-07-02 23:55:16.064696		\N
+f8d91315-8b8f-4002-925f-f471a071cfd7	ANA MANUELA NASCIMENTO DE FREITAS	ana@escola.com.br	123	aluno	\N	\N	85 99127-8772	Rua Rosinha, 66		Nossa Senhora das Graças	FORTALEZA	CE	60311440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+a3330100-3da6-406d-8da0-0a886ed73366	LETICIA DO NASCIMENTO LIMA	leticia@escola.com.br	123	responsavel	070.892.053-55	\N	85 99127-8772	Rua Rosinha, 66		Nossa Senhora das Graças	FORTALEZA	CE	60311440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+83a0eb0c-98d3-4480-9363-b916d52a720a	APOLLO CASTRO ALMEIDA	apollo@escola.com.br	123	aluno	\N	\N	85 99709-9285	Rua Alves de Lima, 231		Cristo Redentor	FORTALEZA	CE	60337350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+b32abf83-3f38-4a67-bbc7-e5fa6febec10	CARLOS AUGUSTO COSTA ALMEIDA	carlos@escola.com.br	123	responsavel	051.381.523-60	\N	85 99709-9285	Rua Alves de Lima, 231		Cristo Redentor	FORTALEZA	CE	60337350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+b04f669c-4a58-40a0-a5c3-4b97b66fd4a9	BERNARDO MOREIRA RODRIGUES	bernardo@escola.com.br	123	aluno	\N	\N	85 98551-4815	Al Balanço das Ondas, 11	Ap 102 BL C	Colonia	FORTALEZA	CE	60334172	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+560f5252-7ab8-4b30-b47e-b9d60060d039	RAQUEL MOREIRA DA SILVA	raquel@escola.com.br	123	responsavel	067.964.893-30	\N	85 98551-4815	Al Balanço das Ondas, 11	Ap 102 BL C	Colonia	FORTALEZA	CE	60334172	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+185480ac-a08c-4e76-9a45-da9f6d6a71bc	DIOGO RAVY SILVA DOS ANJOS	diogo@escola.com.br	123	aluno	\N	\N	37 99809-0633	RUA ESTEVAO DE CAMPOS, 840		BARRA DO CEARA	FORTALEZA	CE	60331240	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+a9d72dc7-6aad-4feb-a1f7-2f1e1ca8a2af	JOSE REINALDO SILVA DOS ANJOS	jose@escola.com.br	123	responsavel	621.133.033-29	\N	37 99809-0633	RUA ESTEVAO DE CAMPOS, 840		BARRA DO CEARA	FORTALEZA	CE	60331240	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+3f9ff1bd-2821-4851-8c21-1cf625d22502	EMANUEL RODRIGUES DE FREITAS	emanuel@escola.com.br	123	aluno	\N	\N	85 98565-5993	Rua Dom Quintino, 716		Pirambu	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+330ab170-e89c-4f57-8804-624ffbe58990	MARIA ELIENE RODRIGUES FLORÊNCIO	maria@escola.com.br	123	responsavel	627.757.823-53	\N	85 98565-5993	Rua Dom Quintino, 716		Pirambu	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+1ce4afef-8d3b-47bb-8009-ea4890fc701e	HENRY XAVIER NUNES	henry@escola.com.br	123	aluno	\N	\N	85 98879-0444	Rua Pedro Artur 437		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+f92a189d-e90b-4d7a-bf06-a128c28ab860	RAIZER EMANUELE XAVIER FEITOSA NUNES	raizer@escola.com.br	123	responsavel	047.991.383-83	\N	85 98879-0444	Rua Pedro Artur 437		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+09b904f4-3b9e-4ccd-ab6a-fea154fd237b	ÍSIS AURORA TELES MARTINS	isis@escola.com.br	123	aluno	\N	\N	85 99604-8405	Rua Henrique Dias, 042		Nossa Senhora das Graças	FORTALEZA	CE	60311-570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+f3b81560-ae52-48ae-85b8-a66c9d5930fa	FERNANDA PÂMELLA BENTO TELES	fernanda@escola.com.br	123	responsavel	076.874.643-46	\N	85 99604-8405	Rua Henrique Dias, 042		Nossa Senhora das Graças	FORTALEZA	CE	60311-570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	85 99720-3074	\N
+8529c434-09ed-4254-bfff-71202a6c5b9b	JOÃO BERNARDO SOUZA DE OLIVEIRA	joao@escola.com.br	123	aluno	\N	\N	85 99858-7921	Rua Dom Quintino, 1372		Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+6324236a-a1d2-4d92-b02d-453a91e64178	TATIANA MARIA LEITE DE OLIVEIRA	tatiana@escola.com.br	123	responsavel	025.481.813-75	\N	85 99858-7921	Rua Dom Quintino, 1372		Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+6e416023-c323-4948-a496-9b9a6c5fe247	JOAO GUILHERME FERREIRA DE SOUZA	joao@escola.com.br	123	aluno	\N	\N	85992786968	Rua Nossa Senhora das Graças, 382		Pirambu	Fortaleza	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+e9fcb46d-159c-44f2-a91d-7f42b189970b	ADRIANA DOS SANTOS FERREIRA DE SOUZA	adriana@escola.com.br	123	responsavel	62899554387	\N	85992786968	Rua Nossa Senhora das Graças, 382		Pirambu	Fortaleza	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+bff3badf-9fd7-459d-b91d-a888c75b2423	LARA IZADORA RODRIGUES LIMA	lara@escola.com.br	123	aluno	\N	\N	85 99929-9778	Rua São Serafim, 187		Jacarecanga	Fortaleza	CE		t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496	\N	\N
+3bad51d6-e803-4669-b6a3-b7136854f417	ANTONIO DE SOUSA LIMA NETO	antonio@escola.com.br	123	responsavel	378.488.283-87	\N	85 99929-9778	Rua São Serafim, 187		Jacarecanga	Fortaleza	CE		t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.089496	2025-07-02 23:55:16.089496		\N
+bcaecb53-b5da-4512-80ee-fbdbe101736f	LARISSA SILVA VASCONCELOS DA ROCHA	larissa@escola.com.br	123	aluno	\N	\N	85989588368	Rua Raul Pompéia, 134		Álvaro Weyne	Fortaleza	CE	60335-420	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+bd4ee3ea-3782-48f9-abf0-b3b03f0dfcfd	MARTA MARIA DA SILVA	marta@escola.com.br	123	responsavel	016.736.253-47	\N	85989588368	Rua Raul Pompéia, 134		Álvaro Weyne	Fortaleza	CE	60335-420	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+2afd7bd7-12e1-4af1-b5aa-1e9b1a6faf04	LEVY NADAB QUEIROZ QUINTINO	levy@escola.com.br	123	aluno	\N	\N	85986214297	Avenida Francisco Sá, 2834, AP 02	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+af42aa84-9c53-4100-9dc8-bbb261d33709	JOSE EDMILSON QUINTINO NETO	jose@escola.com.br	123	responsavel	85670693353	\N	85986214297	Avenida Francisco Sá, 2834, AP 02	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+b9b22892-763e-470c-953b-08c2d2ddc38b	LUNA SOPHIA COSTA MACIEL	luna@escola.com.br	123	aluno	\N	\N	85 98723-0836	Vila Alamo, 41		Colonia	FORTALEZA	CE	60336620	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+ff4d40ab-d636-45cb-b748-7e075783cf6b	PRESLLEY PEREIRA MACIEL	preslley@escola.com.br	123	responsavel	034.871.473-43	\N	85 98723-0836	Vila Alamo, 41		Colonia	FORTALEZA	CE	60336620	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+9dcbcb67-a444-4161-9fb8-5570d4fe8b16	MARIA LUIZA COSTA CORRÊA	maria@escola.com.br	123	aluno	\N	\N	85 98179-4577	Tv Onze de Julho, 437		Carlito Pamplona	FORTALEZA	CE	60311720	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+691be78a-85e8-4c7f-aa6c-877d9d34ae68	KEVYA MARIA COSTA SILVA	kevya@escola.com.br	123	responsavel	051.798.053-33	\N	85 98179-4577	Tv Onze de Julho, 437		Carlito Pamplona	FORTALEZA	CE	60311720	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+a59defaa-c1fe-4828-8875-eb7910339455	MARIA LUIZA GRIFFITH ALVES	maria@escola.com.br	123	aluno	\N	\N	85988148867	Rua Pedro Artur, 688		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+fe634d49-ee34-46df-81a6-5ee0e2255c5d	FLAVIANY GRIFFITH DA SILVA	flaviany@escola.com.br	123	responsavel	6922598300	\N	85988148867	Rua Pedro Artur, 688		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+c9ae2760-6e38-429b-a136-7b0c53a188b2	MELISSA JAILY DE PAIVA PAIXÃO	melissa@escola.com.br	123	aluno	\N	\N	85 98965-9437	Dom Quintino, 720		Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+d8f2c776-4820-449e-9fe7-505ccbcca2d4	JOYCE KELLY PAIXÃO RODRIGUES DE PAIVA	joyce@escola.com.br	123	responsavel	075.294.923-30	\N	85 98965-9437	Dom Quintino, 720		Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+a063c267-d2df-4b47-8bac-ce9a58fb443c	MIGUEL LUCAS RIBEIRO DOS SANTOS	miguel@escola.com.br	123	aluno	\N	\N	85997759030	Avenida Presidente Castelo Branco, 3485 Ap 03	de 2001 a 3149 - lado ímpar	Carlito Pamplona	Fortaleza	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+5ab1b5b3-248e-412c-aea4-7d1a743c0ad6	AMANDA MAYARA RIBEIRO DA SILVA	amanda@escola.com.br	123	responsavel	1888156279	\N	85997759030	Avenida Presidente Castelo Branco, 3485 Ap 03	de 2001 a 3149 - lado ímpar	Carlito Pamplona	Fortaleza	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+603d54d2-6b38-4d27-8517-2f2156b8c1f7	PEDRO MIGUEL SILVA GUEDES	pedro@escola.com.br	123	aluno	\N	\N	85997181887	Rua Professor Joaquim Antônio, 155		Ellery	Fortaleza	CE	60320-295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+b421c190-bf1d-4de0-bc9c-ff9812a465db	REJANE SILVA GUEDES	rejane@escola.com.br	123	responsavel	79687520353	\N	85997181887	Rua Professor Joaquim Antônio, 155		Ellery	Fortaleza	CE	60320-295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+1b87bc13-b47b-48c3-9c1c-b56604063467	PÉROLA RODRIGUES LIMA	perola@escola.com.br	123	aluno	\N	\N	85991501966	Avenida Pasteur, 1116, Ap 307 Bloco B 3 Andar		Álvaro Weyne	Fortaleza	CE	60335-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+48ad3c4f-92af-4856-9ccf-2802e912f409	WESLEY ALVES LIMA	wesley@escola.com.br	123	responsavel	22586728807	\N	85991501966	Avenida Pasteur, 1116, Ap 307 Bloco B 3 Andar		Álvaro Weyne	Fortaleza	CE	60335-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+38eabc19-5c6f-4b28-a30a-b030f58d873c	RAIELLEY KETLEY BARROS ALMEIDA	raielley@escola.com.br	123	aluno	\N	\N	85 98796-8240	Av. Francisco Sá, 3572	Q 0204	Carlito Pamplona	FORTALEZA	CE	60310001	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324	\N	\N
+708336d8-6baa-4c9c-a027-f1961f9735c9	FRANCISCA REGILANIA SILVA BARROS	francisca@escola.com.br	123	responsavel	052.045.603-35	\N	85 98796-8240	Av. Francisco Sá, 3572	Q 0204	Carlito Pamplona	FORTALEZA	CE	60310001	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.099324	2025-07-02 23:55:16.099324		\N
+d940bb5b-c3f9-418a-b243-2a78910dfbed	MARIA HELENA ROCHA DE PAULA	maria@escola.com.br	123	aluno	\N	\N	85996541725	Rua Odorico de Morais, 250	BLOCO 11/ AP. 504	Jacarecanga	Fortaleza	CE	60310-350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+e8b722d0-4af0-4e29-b2c2-589cf8ba05ff	LUAN FELIPE BARROSO DE PAULA	luan@escola.com.br	123	responsavel	4363919370	\N	85996541725	Rua Odorico de Morais, 250	BLOCO 11/ AP. 504	Jacarecanga	Fortaleza	CE	60310-350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+b94a738d-6c3c-4996-95cd-9c62877209e9	MARIA LAURA MENDES SOARES	maria@escola.com.br	123	aluno	\N	\N	85 98816-4572	RUA BRISA DO MAR 150 CASA 10	LOTEAMENTO BRISA DO MAR	IPARANA	FORTALEZA	CE	61631420	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+00cf291f-d3e5-4990-a9e8-edd70a5d9a4a	ALISSON SOARES DIAS	alisson@escola.com.br	123	responsavel	603.331.513-80	\N	85 98816-4572	RUA BRISA DO MAR 150 CASA 10	LOTEAMENTO BRISA DO MAR	IPARANA	FORTALEZA	CE	61631420	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+60be4667-adce-43e6-93c9-cd861a9e4a06	MARIA LIZ DE OLIVEIRA SAMPAIO GOUVEIA	maria@escola.com.br	123	aluno	\N	\N	85 98886-3546	RUA ESC ANTONIO ABUCHAIM, 29		CENTRO DE CAUCAIA	FORTALEZA	CE	61626290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+537039df-790f-4bd9-84e3-77cfcbd53447	ANTONIA JACQUELINE DE OLIVEIRA SAMPAIO	antonia@escola.com.br	123	responsavel	019.481.443-28	\N	85 98886-3546	RUA ESC ANTONIO ABUCHAIM, 29		CENTRO DE CAUCAIA	FORTALEZA	CE	61626290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+070822fb-b89c-45ff-808f-71daf0d742ba	NICOLAS NASCIMENTO	nicolas@escola.com.br	123	aluno	\N	\N	85 98910-0255	RUA SEIS COMPANHEIROS, 420		BARRA DO CEARÁ	FORTALEZA	CE	60331790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+30bef952-50bd-4786-b5da-a748916a74c5	FABIANA FALCAO GOMES NASCIMENTO	fabiana@escola.com.br	123	responsavel	014.676.953-86	\N	85 98910-0255	RUA SEIS COMPANHEIROS, 420		BARRA DO CEARÁ	FORTALEZA	CE	60331790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+87024c6f-4b8c-48d0-b762-2b73ea02e574	NOEMI SALES CRUZ	noemi@escola.com.br	123	aluno	\N	\N	85 99901-1229	AVENIDA FRANCISCO SÁ, 3572	AP 403 BL U	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+95ade768-6c69-4102-ab90-5d487748eb3e	KEITH STEFANY ALVES CRUZ	keith@escola.com.br	123	responsavel	611.542.343-04	\N	85 99901-1229	AVENIDA FRANCISCO SÁ, 3572	AP 403 BL U	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+cdf56de0-49f2-499b-a785-d607a1deedba	POLYANA SANTOS DA SILVA	polyana@escola.com.br	123	aluno	\N	\N	85988542967	Rua Dom Hélio Campos, 80		Carlito Pamplona	Fortaleza	CE	60311-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+7c42a59f-fca7-49c3-9f04-e8eeadae939a	RENATA MERCIA SANTOS RIBEIRO DA SILVA	renata@escola.com.br	123	responsavel	60843011343	\N	85988542967	Rua Dom Hélio Campos, 80		Carlito Pamplona	Fortaleza	CE	60311-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+1e0e68db-1ec3-4f47-bf9b-0a62fa4d2d48	WALLACE KALEB DE SOUSA CARVALHO	wallace@escola.com.br	123	aluno	\N	\N	85986850024	Avenida Presidente Castelo Branco, 2431 AP 102	de 2001 a 3149 - lado ímpar	Carlito Pamplona	Fortaleza	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+96796688-4ad5-420a-94f7-a0ca46c302a5	MAURICÉLIA DE SOUSA NASCIMENTO CARVALHO	mauricelia@escola.com.br	123	responsavel	2402008377	\N	85986850024	Avenida Presidente Castelo Branco, 2431 AP 102	de 2001 a 3149 - lado ímpar	Carlito Pamplona	Fortaleza	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+774e2d69-7182-4ba4-bfc5-630d8fe55a7d	ADRIEL JORGE SOARES	adriel@escola.com.br	123	aluno	\N	\N	85 99423-0233	Avenida Pasteur. 285	até 599 - lado ímpar	Pirambu	Fortaleza	CE	60311-175	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+bd27a084-6f98-46d8-87db-e88bab83eef2	AMANDA CLAUDIA DA SILVA JORGE	amanda@escola.com.br	123	responsavel	060.364.553-48	\N	85 99423-0233	Avenida Pasteur. 285	até 599 - lado ímpar	Pirambu	Fortaleza	CE	60311-175	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+7779046c-8d48-4452-8793-d73992a3b13d	ANTHONY GAEL RODRIGUES	anthony@escola.com.br	123	aluno	\N	\N	85 98822-3865	RUA LUCAS PINTO, 10		CRISTO REDENTOR	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+87cab3b3-eb7d-426a-8175-6b2cb13d8865	PAULO HENRIQUE SOARES RAULINO JUNIOR	paulo@escola.com.br	123	responsavel	512.089.463-15	\N	85 98822-3865	RUA LUCAS PINTO, 10		CRISTO REDENTOR	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+3de38d26-6f6f-4ef9-a033-158b7ac5e610	ASAFE LORENZO DA FROTA DA SILVEIRA	asafe@escola.com.br	123	aluno	\N	\N	85 99743-7370	RUA SANTA ELIZA, 334		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474	\N	\N
+ac510a3e-46a0-4b65-a5b4-b0995ef35cde	LARISSA DA FROTA NASCIMENTO DA SILVEIRA	larissa@escola.com.br	123	responsavel	081.018.703-50	\N	85 99743-7370	RUA SANTA ELIZA, 334		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.138474	2025-07-02 23:55:16.138474		\N
+dbb7b3a4-ae80-4c0c-8b0b-57d329833c7a	AYLLA GABRIELLY DA SILVA LIMA	aylla@escola.com.br	123	aluno	\N	\N	85 98404-0025	RUA DOM QUINTINO, 542		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+c1cf3f87-961e-4063-8b6d-671e6815cbce	IZAMARA GADELHA DE LIMA	izamara@escola.com.br	123	responsavel	064.506.273-10	\N	85 98404-0025	RUA DOM QUINTINO, 542		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+ec4500bc-34f4-47fe-90ba-1a4787dae59e	BRENDON GAEL GOMES DA SILVA	brendon@escola.com.br	123	aluno	\N	\N	85 98147-1807	Rua Monsenhor Rosa, 746		Carlito Pamplona	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+f5b74ad8-1a6d-4c75-b21c-d29d697001fe	BARBARA YNARA GOMES DA SILVA	barbara@escola.com.br	123	responsavel	620.409.543-92	\N	85 98147-1807	Rua Monsenhor Rosa, 746		Carlito Pamplona	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+628d96dd-177b-4fe7-a745-9b35be890c0b	CHLOE FERREIRA LUSTOSA	chloe@escola.com.br	123	aluno	\N	\N	85 98622-1859	Rua Grito de Alerta, 295	Altos	Barra do Ceará	FORTALEZA	CE	60332070	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+0d999d22-4271-48b4-ba5a-98cf5bdb7e10	DANNA CHARLA DA COSTA LUSTOSA	danna@escola.com.br	123	responsavel	040.957.813-43	\N	85 98622-1859	Rua Grito de Alerta, 295	Altos	Barra do Ceará	FORTALEZA	CE	60332070	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+c9af76c9-9a08-4681-93de-02f404534a2a	ENZO DIOGO LOURENÇO DA SILVA	enzo@escola.com.br	123	aluno	\N	\N	85999527961	Vila Cirandinha, 146, Altos		Jardim Iracema	Fortaleza	CE	60341-450	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+55b91a7c-dd2e-4aa5-a25c-dab8ebed0939	LAUENNY FREITAS DA SILVA	lauenny@escola.com.br	123	responsavel	60603880355	\N	85999527961	Vila Cirandinha, 146, Altos		Jardim Iracema	Fortaleza	CE	60341-450	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+f8db6e77-5270-4e2b-a17b-9ceb1794eddc	GUILHERME VITORIANO VIDAL	guilherme@escola.com.br	123	aluno	\N	\N	85 98825-0737	Rua Alfeu Aboim, 700		Papicu	FORTALEZA	CE	60175375	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+f06a3445-46be-42c3-b2ef-f229833014f6	FABRICIA FERNANDES VITORIANO	fabricia@escola.com.br	123	responsavel	035.139.703-58	\N	85 98825-0737	Rua Alfeu Aboim, 700		Papicu	FORTALEZA	CE	60175375	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+ce32718e-2a93-4d28-8d7c-4f08bc13cd94	LORENZO PERYZ COSTA NOGUEIRA	lorenzo@escola.com.br	123	aluno	\N	\N	85 99165-0360	Rua Dona Mendinha 790 CS A	até 1107/1108	Cristo Redentor	Fortaleza	CE	60337-385	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+90de103b-ef8c-43ea-8d83-b1ae1444f7ae	FELIPE DE SOUSA NOGUEIRA	felipe@escola.com.br	123	responsavel	600.244.953-10	\N	85 99165-0360	Rua Dona Mendinha 790 CS A	até 1107/1108	Cristo Redentor	Fortaleza	CE	60337-385	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+8fce0e6b-2100-46fb-a7ff-7d5b3cef25fe	LUISA ELOÁH SOUSA XAVIER	luisa@escola.com.br	123	aluno	\N	\N	85987661247	Avenida Hildebrando Melo, 363	até 598/599	Barra do Ceará	Fortaleza	CE	60330-375	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+9da91bcc-37be-4ff6-bec8-560f1150db58	MARCELO ALVES XAVIER SILVA	marcelo@escola.com.br	123	responsavel	50611682320	\N	85987661247	Avenida Hildebrando Melo, 363	até 598/599	Barra do Ceará	Fortaleza	CE	60330-375	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+12c8d06c-1a21-4b65-82e8-eb790be0940c	LUIZ OTAVIO DA SILVA SANTOS	luiz@escola.com.br	123	aluno	\N	\N	85 98668-0947	Rua São Raimundo, 495		Pirambu	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+9806225c-c182-4190-902f-b11702b6e510	FRANCISCO THIAGO DOS SANTOS	francisco@escola.com.br	123	responsavel	066.897.413-38	\N	85 98668-0947	Rua São Raimundo, 495		Pirambu	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+796e4b7e-2876-45c3-a2f9-0d2a495c663d	LUNA COIMBRA DOS SANTOS CASTRO	luna@escola.com.br	123	aluno	\N	\N	85 99210-3929	AV. PRESIDENTE CASTELO BRANCO, 2996		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+58c883a3-17d8-4173-88d3-c2e8113d9a4a	INGRID COIMBRA DOS SANTOS	ingrid@escola.com.br	123	responsavel	044.497.813-50	\N	85 99210-3929	AV. PRESIDENTE CASTELO BRANCO, 2996		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+bc26f7ec-7c7a-4deb-956a-8dff26782e60	MARIA ALICIA FORTE LIMA	maria@escola.com.br	123	aluno	\N	\N	85 98844-2037	RUA ASSIS BEZERRA, 432		CRISTO REDENTOR	FORTALEZA	CE	60335360	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211	\N	\N
+4746314c-8c56-4b53-a615-0b205049ed4e	DAYANE MAYARA DA SILVA FORTE LIMA	dayane@escola.com.br	123	responsavel	604.958.743-45	\N	85 98844-2037	RUA ASSIS BEZERRA, 432		CRISTO REDENTOR	FORTALEZA	CE	60335360	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.147211	2025-07-02 23:55:16.147211		\N
+a0a9e324-f391-4e18-b805-56ae6abfdd40	RUAN OLIVEIRA SOEIRO	ruan@escola.com.br	123	aluno	\N	\N	85 98845-8914	RUA 14 DE MAIO, 82		BARRA DO CEARA	FORTALEZA	CE	60334150	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+be864bfc-1b1c-4df1-99bf-c2d04fad9d36	FRANCISCO ARTHUR MACEDO DE OLIVEIRA	francisco@escola.com.br	123	aluno	\N	\N	85 98719-9894	RUA ALVARO DE ALENCAR, 360	CS 11	CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+61838f2d-356c-4be9-8796-952187e6aca9	EURINADIA FERREIRA MACEDO DE OLIVEIRA	eurinadia@escola.com.br	123	responsavel	622.318.203-15	\N	85 98719-9894	RUA ALVARO DE ALENCAR, 360	CS 11	CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+caf215e9-0cc0-4408-a503-1f79b0131d46	HEITOR BARROS BARROSO	heitor@escola.com.br	123	aluno	\N	\N	85999098547	Rua Walter Pompeu, 608	até 720/721	Álvaro Weyne	Fortaleza	CE	60337-120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+8abc5cd3-ec0d-4c8d-b327-551f3e18bcb2	CAMILA BARROS SILVA	camila@escola.com.br	123	responsavel	605.182.803-65	\N	85999098547	Rua Walter Pompeu, 608	até 720/721	Álvaro Weyne	Fortaleza	CE	60337-120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+5e8ce300-1697-4659-a360-5c26dfb72371	HEITOR DA SILVA MARQUES	heitor@escola.com.br	123	aluno	\N	\N	85 98423-9111	RUA SANTA INES, 555	CS 10	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+acbddbb7-d3ea-49cb-bc98-9f329ad6cf81	EMANUELE RODRIGUES DA SILVA MARQUES	emanuele@escola.com.br	123	responsavel	045.714.723-74	\N	85 98423-9111	RUA SANTA INES, 555	CS 10	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+c7a8c4b1-bb34-4f91-822e-dceab3b49def	JHENNIFER VITÓRIA SILVA LOPES	jhennifer@escola.com.br	123	aluno	\N	\N	85 98954-9001	Rua Santa Eliza, 924		Cristo Redentor	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+059c6279-968b-4dd1-9842-80acf755af60	MARA SUENY SILVA DE SOUSA	mara@escola.com.br	123	responsavel	015.272.533-41	\N	85 98954-9001	Rua Santa Eliza, 924		Cristo Redentor	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+7e024b8d-7207-4874-8982-68ebcfe96af2	JOAO ARTHUR LIMA DA SILVA	joao@escola.com.br	123	aluno	\N	\N	85 98621-0095	RUA VICENTE SABOISA, 635		CARLITO PAMPLONA	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+ce69eb41-8f9a-4793-9da5-384d8d9ae07f	MARIA MICIA LIMA GONÇALVES	maria@escola.com.br	123	responsavel	056.817.503-45	\N	85 98621-0095	RUA VICENTE SABOISA, 635		CARLITO PAMPLONA	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+da75ef35-d86c-4814-9a2a-157cc48890b9	JOÃO CALEBE CARLOS SILVA	joao@escola.com.br	123	aluno	\N	\N	85989157694	Rua Zambaia 67 CASA ALTOS		Barra do Ceará	Fortaleza	CE	60332-570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+c3dd18c8-7042-49e9-bdcb-b08414883775	CLARISSE CARLOS TERTO	clarisse@escola.com.br	123	responsavel	8170471311	\N	85989157694	Rua Zambaia 67 CASA ALTOS		Barra do Ceará	Fortaleza	CE	60332-570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+97e01d1f-38f5-4166-a34d-a3b9da1c5312	LIS OLIVEIRA NASCIMENTO	lis@escola.com.br	123	aluno	\N	\N	85987993389	Rua Dom Quintino, 385		Pirambu	Fortaleza	CE	60310-520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+aae695e8-342f-4e14-86d6-73f4369b7769	GUILHERME OLIVEIRA DA SILVA	guilherme@escola.com.br	123	responsavel	2299978305	\N	85987993389	Rua Dom Quintino, 385		Pirambu	Fortaleza	CE	60310-520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+ca3a9457-aab2-49e6-a0cc-eb9c7481fe43	LUIZ GUSTAVO ALBUQUERQUE TEIXEIRA	luiz@escola.com.br	123	aluno	\N	\N	85 99259-8617	RUA ENG JOAO NOGUEIRA, 673	CS A ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60335140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+55fea1ab-63b1-418f-8ef2-f53230da2fa4	THALYA PEREIRA ALBUQUERQUE	thalya@escola.com.br	123	responsavel	609.755.913-55	\N	85 99259-8617	RUA ENG JOAO NOGUEIRA, 673	CS A ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60335140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+b0d41809-9333-483c-9315-6cc2c88a7bc5	LUNA VICTORIA FRANÇA GONÇALVES	luna@escola.com.br	123	aluno	\N	\N	85 98882-4719	Avenida Presidente Castelo Branco 2431	de 2001 a 3149 - lado ímpar	Carlito Pamplona	Fortaleza	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+ba676730-167f-43c0-8a97-804d960b2b3e	LEONARDO DE MESQUITA GONÇALVES	leonardo@escola.com.br	123	responsavel	822.119.733-53	\N	85 98882-4719	Avenida Presidente Castelo Branco 2431	de 2001 a 3149 - lado ímpar	Carlito Pamplona	Fortaleza	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+6220514e-f179-4e0d-9ba4-b90a136456dd	MARCOS RAVI DA SILVA ROCHA	marcos@escola.com.br	123	aluno	\N	\N	85 99830-3874	RUA ENG JOAO NOGUEIRA, 492		CRISTO REDENTOR	FORTALEZA	CE	60335140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032	\N	\N
+7efb6771-27f5-400e-b068-1758c690afca	MARCOS RONIELE DE LIMA ROCHA	marcos@escola.com.br	123	responsavel	930.336.563-15	\N	85 99830-3874	RUA ENG JOAO NOGUEIRA, 492		CRISTO REDENTOR	FORTALEZA	CE	60335140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.168032	2025-07-02 23:55:16.168032		\N
+69f55746-83b8-426f-84dc-0d58b53796b9	MARIA ESTHER LEÔNCIO JACAÚNA	maria@escola.com.br	123	aluno	\N	\N	85 99963-0126	RUA DOM HELIO CAMPOS, 374		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+edb2837d-344f-4ea3-ac03-016f09715bb3	ANA CAROLINE VERAS LEONCIO	ana@escola.com.br	123	responsavel	053.415.383-66	\N	85 99963-0126	RUA DOM HELIO CAMPOS, 374		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+b31fc402-4e14-4c2b-9cae-0cb28f4e0d56	MARIA GIOVANA PESSOA DA COSTA	maria@escola.com.br	123	aluno	\N	\N	85 98612-7863	Rua Pft Isaias, 127	Altos	Barra do Ceará	FORTALEZA	CE	60333765	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+8dbfa42a-c4bb-472d-8f9a-252b0b344b6d	GIRLANDIA PESSOA PEREIRA DA COSTA	girlandia@escola.com.br	123	responsavel	003.536.443-23	\N	85 98612-7863	Rua Pft Isaias, 127	Altos	Barra do Ceará	FORTALEZA	CE	60333765	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+f1696ebf-14ac-4be9-8d0d-176a2e1df5fb	MARIA HELENA MONTEIRO OLIVEIRA	maria@escola.com.br	123	aluno	\N	\N	85 99115-7454	RUA LUCAS PINTO, 449	CS ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+e6eb8527-fc26-4be2-b258-4ffe13da615a	ANTONIO LEONARDO BATISTA DE OLIVEIRA	antonio@escola.com.br	123	responsavel	044.603.233-62	\N	85 99115-7454	RUA LUCAS PINTO, 449	CS ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+f1d8b6e6-09ef-4588-a2e5-e6f97135e90d	MARIA LUIZA RIBEIRO ALVES	maria@escola.com.br	123	aluno	\N	\N	85 98809-4353	RUA VALTER POMPEU, 668	AP 105	ALVARO WEYNE	FORTALEZA	CE	60337120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+63ef910b-11ea-4523-b5a1-864364da4a88	FRANCISCO RAMILLER MACIEL ALVES	francisco@escola.com.br	123	responsavel	041.987.093-86	\N	85 98809-4353	RUA VALTER POMPEU, 668	AP 105	ALVARO WEYNE	FORTALEZA	CE	60337120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+8c294ad9-e819-4681-a2ee-365a01ed05a3	PEDRO LUCAS GOIANA BENIGNO	pedro@escola.com.br	123	aluno	\N	\N	85999153924	Rua Pedro Artur, 987		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+02fff7e3-dbbd-4562-8829-86d247343cc1	GELMA GOIANA DE SOUSA	gelma@escola.com.br	123	responsavel	1736605330	\N	85999153924	Rua Pedro Artur, 987		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+4b84787d-8ff5-411f-94cd-bd6a033c67c5	PRISCILA DE SOUZA OLIVEIRA	priscila@escola.com.br	123	responsavel	979.495.743-72	\N	85 98845-8914	RUA 14 DE MAIO, 82		BARRA DO CEARA	FORTALEZA	CE	60334150	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+83cb2ac2-4576-45e2-af69-d39a1cbc568e	RYAN LUCCA FERREIRA DOS SANTOS	ryan@escola.com.br	123	aluno	\N	\N	85 98887-8403	Rua Marcilio Dias, 1113		Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+251a6055-f3d6-4eff-906a-0a399f0df7bc	AMANDA SOUSA DOS SANTOS	amanda@escola.com.br	123	responsavel	623.194.673-86	\N	85 98887-8403	Rua Marcilio Dias, 1113		Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	85 99761-1811	\N
+a3206023-fb89-4e4b-9724-2ae02cecc050	VICENTE MATTEO GALDINO DE SOUSA ALVES	vicente@escola.com.br	123	aluno	\N	\N	85 98831-4334	RUA MARCILIO DIAS, 1239		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+0ca9c119-b883-4710-b305-01ea3f7b2aaf	MARYANA HELEN BARROS DE SOUSA	maryana@escola.com.br	123	responsavel	057.326.353-19	\N	85 98831-4334	RUA MARCILIO DIAS, 1239		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	85 98760-9919	\N
+59ce1e32-8a6f-4c5c-a6cd-0d0f069e625c	ZION RAVY MANUEL MOURA MONTEIRO	zion@escola.com.br	123	aluno	\N	\N	85 99965-6516	Rua Leao Marinho, 907	CS 01	Parque Leblon	CAUCAIA	CE	61631295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+e05ccfa6-89ea-4b94-bbab-66055bb5804c	RAFAEL DE MATOS COSTA MONTEIRO	rafael@escola.com.br	123	responsavel	042.100.493-28	\N	85 99965-6516	Rua Leao Marinho, 907	CS 01	Parque Leblon	CAUCAIA	CE	61631295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+2c37e928-75a3-40d6-83a2-997e66bca1d6	ALAILSON BENJAMIM DA CRUZ BENIGNO	alailson@escola.com.br	123	aluno	\N	\N	85 98846-6066	Travessa São Jose, 1557		Parque Leblon	CAUCAIA	CE	61600004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849	\N	\N
+56c9e85b-b67b-4264-a1c8-6f09d1df7cc1	ALAIS DA CRUZ LIMA	alais@escola.com.br	123	responsavel	017.430.853-11	\N	85 98846-6066	Travessa São Jose, 1557		Parque Leblon	CAUCAIA	CE	61600004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.175849	2025-07-02 23:55:16.175849		\N
+270deb4d-deb3-4a35-8a52-b4f8fb3f45d1	ISAC OLIVEIRA SILVA GOMES	isac@escola.com.br	123	aluno	\N	\N	85 98960-0804	RUA SANTA INES, 1260	CS ALTOS	PIRAMBU	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+8121784a-e4d8-4e18-a584-fdbd34b51c9c	JULIANA OLIVEIRA DA SILVA GOMES	juliana@escola.com.br	123	responsavel	601.061.883-56	\N	85 98960-0804	RUA SANTA INES, 1260	CS ALTOS	PIRAMBU	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+18fb13f2-68cb-433e-8a4d-2fd7cf113a17	ISADORA RODRIGUES VASCONCELOS	isadora@escola.com.br	123	aluno	\N	\N	85 98668-8571	RUA PRAIA GRANDE, 561		COLÔNIA	FORTALEZA	CE	60337-020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+277a01f9-3e91-4bf5-b0d0-fb464493984f	MARIA INÊS RODRIGUES BARROS VASCONCELOS	maria@escola.com.br	123	responsavel	656.223.243-00	\N	85 98668-8571	RUA PRAIA GRANDE, 561		COLÔNIA	FORTALEZA	CE	60337-020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+ac559e4e-eaa1-4d93-86d2-d541c0efe677	ISIS DUARTE BENEVIDES CASTELO BRANCO	isis@escola.com.br	123	aluno	\N	\N	85 99631-6709	Rua 3 Conj Japao, 44		Nossa Senhora das Graças	FORTALEZA	CE	60337680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+46447b87-9415-40ef-8460-f367a0333565	TAYRANE RODRIGUES DUARTE GUEDES	tayrane@escola.com.br	123	responsavel	600.152.853-59	\N	85 99631-6709	Rua 3 Conj Japao, 44		Nossa Senhora das Graças	FORTALEZA	CE	60337680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+9dc7b5fa-5bd9-43f4-b887-2f072b318818	JOÃO BENTO DE OLIVEIRA VASCONCELOS	joao@escola.com.br	123	aluno	\N	\N	85 98673-6302	Rua Alto da Esperança, 1048		Colonia	FORTALEZA	CE	60332060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+eaa0f3ee-8e65-40f2-94c1-609205fe05e5	BRENNA ROCHELE DE OLIVEIRA ALVES VASCONCELOS	brenna@escola.com.br	123	responsavel	054.496.843-39	\N	85 98673-6302	Rua Alto da Esperança, 1048		Colonia	FORTALEZA	CE	60332060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+63a69220-ff13-4a66-b5a7-f9ae85393f57	JOÃO YAN MOREIRA NONATO	joao@escola.com.br	123	aluno	\N	\N	85 98638-9575	AV FRANCISCO SÁ 1572	AP 301 BL B	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+0c682613-fe35-45c4-b6aa-afec0c375043	CICERA MOREIRA ALEXANDRE PERES	cicera@escola.com.br	123	responsavel	485.900.533-34	\N	85 98638-9575	AV FRANCISCO SÁ 1572	AP 301 BL B	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+3ff87827-0074-4319-9af5-7445a8e77336	LAIS DE MOURA TABOSA	lais@escola.com.br	123	aluno	\N	\N	85 98560-3558	Rua Joaquim Guimaraes, 211		Parque Leblon	CAUCAIA	CE	61600004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+7bddc8e6-c44a-489a-beb1-4ff007ab9edb	ROBSON DA SILVA TABOSA	robson@escola.com.br	123	responsavel	033.101.413-06	\N	85 98560-3558	Rua Joaquim Guimaraes, 211		Parque Leblon	CAUCAIA	CE	61600004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+92f0c00e-12dc-49f9-9687-1de8656cee47	LUIS BENÍCIO FONTENELE FREITAS	luis@escola.com.br	123	aluno	\N	\N	85 98633-9016	RUA 4 DE JANEIRO, 208		CRISTO REDENTOR	FORTALEZA	CE	60337470	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+c3ff7b47-3132-40a7-904d-5480ae7384fa	VALDEMIRO PEREIRA DE FREITAS NETO	valdemiro@escola.com.br	123	responsavel	042.457.243-58	\N	85 98633-9016	RUA 4 DE JANEIRO, 208		CRISTO REDENTOR	FORTALEZA	CE	60337470	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	85 98633-9016	\N
+b7c0eba5-85ae-4095-a18b-8989fd31b015	LUNA MARIA TEIXEIRA HOLANDA	luna@escola.com.br	123	aluno	\N	\N	85992504641	Rua da República, 89	AP 02	Pirambu	Fortaleza	CE	60310-730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+3f47e84d-34b1-4762-b00e-6162625d94a4	SÂMELLA SABRINA HOLANDA DA SILVA	samella@escola.com.br	123	responsavel	9186232355	\N	85992504641	Rua da República, 89	AP 02	Pirambu	Fortaleza	CE	60310-730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+b3a4f230-1ebb-469c-85f7-21ce7f8fd96f	MARCELLO MAXWELL SOUSA CARVALHO	marcello@escola.com.br	123	aluno	\N	\N	85 99278-9372	Rua Padre Bernardo, 56	Altos	Barra do Ceará	FORTALEZA	CE	60332140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+7802bb97-674c-41fd-bfdf-3f28eb694cf4	JOSÉ MARCELO DE CARVALHO	jose@escola.com.br	123	responsavel	755.674.403-59	\N	85 99278-9372	Rua Padre Bernardo, 56	Altos	Barra do Ceará	FORTALEZA	CE	60332140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+f8ecdb26-3125-4566-878a-ed6e37b8086f	MARIA ESTHER CIRINO ANDRADE	maria@escola.com.br	123	aluno	\N	\N	85 99750-6995	RUA LIRIO, 31		ALVARO WEYNE	FORTALEZA	CE	60337160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888	\N	\N
+9ceb6e47-b221-4d67-91d2-8663362c3c21	FRANCILENE DA SILVA CIRINO	francilene@escola.com.br	123	responsavel	878.024.733-49	\N	85 99750-6995	RUA LIRIO, 31		ALVARO WEYNE	FORTALEZA	CE	60337160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.1888	2025-07-02 23:55:16.1888		\N
+92070f2a-f130-423d-a302-31dfa8159d45	MARIA LUIZA AZEVEDO LIMA	maria@escola.com.br	123	aluno	\N	\N	85 99658-4687	Rua São José, 1004		Parque Leblon	FORTALEZA	CE	61631040	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+f2609f50-4f93-4eff-847c-07d66b7a4998	NEILLYANA AZEVEDO RODRIGUES	neillyana@escola.com.br	123	responsavel	639.669.303-82	\N	85 99658-4687	Rua São José, 1004		Parque Leblon	FORTALEZA	CE	61631040	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+74feaeef-63f4-4068-9c1d-616984a19369	YSIS PONTES DE OLIVEIRA	ysis@escola.com.br	123	aluno	\N	\N	85 99140-0994	Rua Vicente Saboia, 50	Cs Altos	Carlito Pamplona	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+090aba1f-5c1b-4f14-9647-0b8f12dfeda8	AIRTON CASTRO DE OLIVEIRA	airton@escola.com.br	123	responsavel	018.300.703-47	\N	85 99140-0994	Rua Vicente Saboia, 50	Cs Altos	Carlito Pamplona	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	85 99140-0994	\N
+55e2b6a0-e74e-4d57-b0bb-c624b03a3094	ADRIANO MARCELINO FILHO	adriano@escola.com.br	123	aluno	\N	\N	85 98963-8616	Travessa José Marques de Mesquita, 34		Jacarecanga	Fortaleza	CE	60310-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+8fb71296-eb8a-4ece-98d9-8cd11810eaab	SUELY DE SOUSA MENEZES	suely@escola.com.br	123	responsavel	580.803.253-91	\N	85 98963-8616	Travessa José Marques de Mesquita, 34		Jacarecanga	Fortaleza	CE	60310-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+e09f0788-fdf8-4706-98f7-13c894ae99b6	ANA SOPHIA NASCIMENTO BEZERRA	ana@escola.com.br	123	aluno	\N	\N	85 8750-2868	Rua Gomes Parente, 377		Carlito Pamplona	Fortaleza	CE	60310-450	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+5275f714-67bb-4156-a1e0-78331fdc7d01	FRANCISCA HELANIA NASCIMENTO DA COSTA BEZERRA	francisca@escola.com.br	123	responsavel	008.468.763-02	\N	85 8750-2868	Rua Gomes Parente, 377		Carlito Pamplona	Fortaleza	CE	60310-450	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+e96e3475-7c09-4ecc-a7fb-a09a394f4ab4	ANNA LIS DA SILVA LIMA	anna@escola.com.br	123	aluno	\N	\N	85 98811-2965	TRAVESSA DAS ORQUIDEAS, 29		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+65f2f90d-a042-4715-8a2f-a5f1baea37a9	JESSIKA DA SILVA ANTERO	jessika@escola.com.br	123	responsavel	622.369.873-90	\N	85 98811-2965	TRAVESSA DAS ORQUIDEAS, 29		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+6a671081-7433-46f5-be28-82708995f788	ICARO BERNARDO MOURA GONÇALVES	icaro@escola.com.br	123	aluno	\N	\N	85988879156	Rua Felipe Camarão, 381	até 699/700	Pirambu	Fortaleza	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+0d75f56a-a877-4d85-b9e9-47bde1c7f90e	VITORIA MATOS MOURA	vitoria@escola.com.br	123	responsavel	7057513330	\N	85988879156	Rua Felipe Camarão, 381	até 699/700	Pirambu	Fortaleza	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+0c081099-ec29-47ca-b19c-01de9a41fd21	ISIS MELYSSA GADELHA LIMA	isis@escola.com.br	123	aluno	\N	\N	85992834144	Rua São Raimundo, 331		Pirambu	Fortaleza	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+7dafd11b-68a7-4ed8-97ac-e165fdadc18c	ANTONIO XAVIER LIMA JUNIOR	antonio@escola.com.br	123	responsavel	2458755305	\N	85992834144	Rua São Raimundo, 331		Pirambu	Fortaleza	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+d2c6640e-8470-496d-8e62-4a0c601894bc	KEVEN VIEIRA RODRIGUES	keven@escola.com.br	123	aluno	\N	\N	85 98179-7570	Rua Lucas Pinto, 450		Carlito Pamplona	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+7bbefe1c-52ec-4fa4-89d3-21f11a6b4d1c	SANTIAGO LESSA MARREIROS	santiago@escola.com.br	123	responsavel	968.512.953-34	\N	85 98179-7570	Rua Lucas Pinto, 450		Carlito Pamplona	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+0771648d-223e-414c-b2f2-d2827eef2f90	LIZ XAVIER NUNES	liz@escola.com.br	123	aluno	\N	\N	85 98879-0444	RUA PEDRO ARTUR, 437	ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+cf8914cb-849c-45cb-963b-782cf90659e0	RAIZER EMANUELE XAVIER FEITOSA NUNES	raizer@escola.com.br	123	responsavel	047.991.383-83	\N	85 98879-0444	RUA PEDRO ARTUR, 437	ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184		\N
+afd8ef00-f6b3-423c-afc0-83b4e6f23da5	LORENZO DE SOUZA RODRIGUES	lorenzo@escola.com.br	123	aluno	\N	\N	85 99806-7348	RUA DOM HELIO CAMPOS, 415		CARITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	\N	\N
+11dac73d-21f2-478a-a12a-586ccf9b8afb	FRANCISCO RODRIGUES JUNIOR	francisco@escola.com.br	123	responsavel	842.500.033-53	\N	85 99806-7348	RUA DOM HELIO CAMPOS, 415		CARITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.198184	2025-07-02 23:55:16.198184	85991904013	\N
+670ce4b5-e5f4-419b-a42e-00f9f49cec91	LORENZO SILVA VASCONCELOS	lorenzo@escola.com.br	123	aluno	\N	\N	85 99753-0725	RUA DOM HELIO CAMPOS, 80	AP 203 BL 04 QD A	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+b7cbaa0d-9b25-4fc3-b8b3-fefaf9d07946	ANTONIA TALYA SILVA DE OLIVEIRA	antonia@escola.com.br	123	responsavel	607.211.773-28	\N	85 99753-0725	RUA DOM HELIO CAMPOS, 80	AP 203 BL 04 QD A	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+63ee4541-911d-4602-a25d-0ae17a4f41e1	MARIA ALICE DANTAS DOS SANTOS	maria@escola.com.br	123	aluno	\N	\N	85 99704-6381	RUA SÃO RAIMUNDO, 529		PIRAMBU	FORTALEZA	CE	60822185	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+9359d260-6e1a-4776-aa83-fe6f5c20458a	LEILA DANTAS BONFIM SANTOS	leila@escola.com.br	123	responsavel	013.631.343-45	\N	85 99704-6381	RUA SÃO RAIMUNDO, 529		PIRAMBU	FORTALEZA	CE	60822185	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+4c4bc37a-fe10-4465-b293-c081d5ab3b0f	MIGUEL MAGNO OLIVEIRA CARNEIRO	miguel@escola.com.br	123	aluno	\N	\N	85 99114-7840	Rua Marcilio Dias, 392		Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+e89c2bf6-70fe-4e66-b79b-0064f0c6175e	NERLÂNIA DE OLIVEIRA DA SILVA CARNEIRO	nerlania@escola.com.br	123	responsavel	439.947.118-27	\N	85 99114-7840	Rua Marcilio Dias, 392		Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+2f29d0fe-5a04-4988-a151-8fe9d5af0ab0	MURILO DE SOUSA MAURICIO	murilo@escola.com.br	123	aluno	\N	\N	85987546636	Avenida Francisco Sá, 3572 - BL M APT 301	de 2401 a 2677 - lado ímpar	Jacarecanga	Fortaleza	CE	60310-001	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+e0a9ea80-52e0-4df5-b069-3464c7fcd11c	BARBARA DE SOUSA ALEXANDRE DA SILVA	barbara@escola.com.br	123	responsavel	3310778339	\N	85987546636	Avenida Francisco Sá, 3572 - BL M APT 301	de 2401 a 2677 - lado ímpar	Jacarecanga	Fortaleza	CE	60310-001	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+d229af88-089d-4a43-8033-4738aeb12447	MURILO GADELHA VIRGÍNIO	murilo@escola.com.br	123	aluno	\N	\N	85 99237-1844	Rua Cruzeiro do Sul, 04		Carlito Pamplona	FORTALEZA	CE	60335190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+794820f6-d476-403e-a8d2-86d37a683428	MARILIA GADELHA AZEVEDO	marilia@escola.com.br	123	responsavel	605.897.853-03	\N	85 99237-1844	Rua Cruzeiro do Sul, 04		Carlito Pamplona	FORTALEZA	CE	60335190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+b0972435-7a24-40b0-ab17-5fe820e80c5e	NÁGILA EMANUELLY E SILVA COSTA	nagila@escola.com.br	123	aluno	\N	\N	85 99855-0821	Avenida Francisco Sá, 3572	Ap 301 Bl X	Carlito Pamplona	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+3485f5b3-86e3-4e60-83cb-093d9acbe6cd	JESSICA MOURA SILVA	jessica@escola.com.br	123	responsavel	054.342.803-69	\N	85 99855-0821	Avenida Francisco Sá, 3572	Ap 301 Bl X	Carlito Pamplona	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+1c5fe022-db1d-49a3-aaf1-fa28d7e8e1f5	SAMUEL LUIZ LIMA DE CARVALHO	samuel@escola.com.br	123	aluno	\N	\N	85 98884-7959	Rua Dom Helio Campos, 80	Ap 302 Rl 01 Qd A	Carlito Pamplona	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+14eb3b8b-0ea9-4d03-9fce-aa05d0c4d8db	ANDREA MARIA NASCIMENTO LIMA	andrea@escola.com.br	123	responsavel	618.948.003-97	\N	85 98884-7959	Rua Dom Helio Campos, 80	Ap 302 Rl 01 Qd A	Carlito Pamplona	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+155c87ce-5415-448b-88c8-2b99a1a5545a	TONY NÍCOLAS DA SILVA MENEZES	tony@escola.com.br	123	aluno	\N	\N	85 9201-8860	AV. PRESIDENTE CASTELO BRANCO, 2674		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+98d4ffb8-ecc8-494f-82af-af10a2e4e096	RIVANIA PEREIRA DA SILVA	rivania@escola.com.br	123	responsavel	058.976.113-78	\N	85 9201-8860	AV. PRESIDENTE CASTELO BRANCO, 2674		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+66fe4025-7f52-42a0-9cbe-0a9796582674	ABDIELLY ELOA DE MELO COLARES	abdielly@escola.com.br	123	aluno	\N	\N	85985892510	Rua do Tirol, 215		Carlito Pamplona	Fortaleza	CE	60311-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+e3517814-cbe7-4258-a2c2-fe6385898f2e	ABATA KELY ALMEIDA DE MELO COLARES	abata@escola.com.br	123	responsavel	078.032.263-02	\N	85985892510	Rua do Tirol, 215		Carlito Pamplona	Fortaleza	CE	60311-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+2995576d-fb65-41f7-b070-6b958c66f5ac	ALVARO VICENTE JUSTINO RIBEIRO	alvaro@escola.com.br	123	aluno	\N	\N	85985627603	Avenida Sargento Hermínio Sampaio, 744	BLOCO C / APARTAMENTO 01	Monte Castelo	Fortaleza	CE	60326-515	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039	\N	\N
+68cf117c-5dbe-46ed-a4b5-a42d82d38750	PEDRO RIBEIRO DA SILVA JUNIOR	pedro@escola.com.br	123	responsavel	61825077304	\N	85985627603	Avenida Sargento Hermínio Sampaio, 744	BLOCO C / APARTAMENTO 01	Monte Castelo	Fortaleza	CE	60326-515	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.205039	2025-07-02 23:55:16.205039		\N
+0ad8e4f7-277c-4cdf-8a3d-b51077d6f0d1	ANA GABRIELY RIBEIRO DE FREITAS	ana@escola.com.br	123	aluno	\N	\N	85 99956-8848	Rua Olavo de Andrade, 548		Jacarecanga	Fortaleza	CE	60310-680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+c0aeba79-f4e3-4f18-a2e9-8eed1d5691b2	NAJLA RIBEIRO DO NASCIMENTO	najla@escola.com.br	123	responsavel	3489607350	\N	85 99956-8848	Rua Olavo de Andrade, 548		Jacarecanga	Fortaleza	CE	60310-680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+34d2f57d-ff2f-43a6-8499-a4b7ace36c4a	ANTHONY ISACK FREITAS SILVA DIAS	anthony@escola.com.br	123	aluno	\N	\N	85 99149-9092	AV TENENTE LISBOA, 80	QUADRA B BLOCO 21 APT 102	CARLITO PAMPLONA	FORTALEZA	CE	60010340	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+6dd4a831-e186-4ae0-b3c7-63cde63a44e0	INGRID FREITAS SILVA DIAS	ingrid@escola.com.br	123	responsavel	618.305.623-55	\N	85 99149-9092	AV TENENTE LISBOA, 80	QUADRA B BLOCO 21 APT 102	CARLITO PAMPLONA	FORTALEZA	CE	60010340	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+1d5ebd96-e423-4b5a-b9d9-279a72cedde6	BENÍCIO PINHEIRO BASTOS FERREIRA	benicio@escola.com.br	123	aluno	\N	\N	85 98813-6213	Rua Mangue, 151		Centro de Caucaia	CAUCAIA	CE	61631430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+7d038276-f046-4824-98fe-c65516d31a45	VIVIANE TEIXEIRA FERREIRA	viviane@escola.com.br	123	responsavel	062.777.473-39	\N	85 98813-6213	Rua Mangue, 151		Centro de Caucaia	CAUCAIA	CE	61631430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+c881048b-547f-41c1-b02b-f23cfb5d501f	BRYAN LUCAS SILVA DOS ANJOS	bryan@escola.com.br	123	aluno	\N	\N	85 99189-9362	RUA ESTEVAO DE CAMPOS, 840		BARRA DO CEARA	FORTALEZA	CE	60331240	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+9afc73a8-57cd-40bb-acb2-51e8c62e1927	MARIA ESTEFANY DA SILVA LIMA	maria@escola.com.br	123	responsavel	627.470.893-63	\N	85 99189-9362	RUA ESTEVAO DE CAMPOS, 840		BARRA DO CEARA	FORTALEZA	CE	60331240	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+bfbc6574-0c40-4e98-9301-855eef0ac12e	ISABELLE DA SILVA BEZERRA	isabelle@escola.com.br	123	aluno	\N	\N	85 98849-3255	RUA ROSINHA, 88	ALTOS	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+c14bb375-6cba-4652-b5a4-f2e885167123	MIGUEL BEZERRA DE SOUZA	miguel@escola.com.br	123	responsavel	301.524.703-44	\N	85 98849-3255	RUA ROSINHA, 88	ALTOS	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+db3aac63-8066-47dc-9dbe-8f941582fef8	JOAO HEITOR ARRUDA GOMES	joao@escola.com.br	123	aluno	\N	\N	85 99871-6958	Rua Daniel Miranda, 188	CS A	Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+807316d4-11e0-4110-af12-b94a7b132af8	HERIKA ARRUDA LOPES	herika@escola.com.br	123	responsavel	044.341.413-09	\N	85 99871-6958	Rua Daniel Miranda, 188	CS A	Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+f0580bcb-a020-4721-8467-c49d1cf01c62	JOÃO MIGUEL REIS ARAGÃO	joao@escola.com.br	123	aluno	\N	\N	85 99697-9114	RUA PADRE CONSTANTINO, 19		JACARECANGA	FORTALEZA	CE	60310-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+6737aa25-9d36-482a-8544-36a7369ab186	NAYRA REIS DA SILVA	nayra@escola.com.br	123	responsavel	084.731.923-70	\N	85 99697-9114	RUA PADRE CONSTANTINO, 19		JACARECANGA	FORTALEZA	CE	60310-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	986152078 (AVÓ)	\N
+e824e9c6-2630-4f55-8e85-5d2730f645e8	JOSÉ NATHANAEL BATISTA MONTEIRO	jose@escola.com.br	123	aluno	\N	\N	85 99438-9137	Rua Monsenhor Rosa, 854		Nossa Senhora das Graças	FORTALEZA	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+73608c87-df77-4cc6-b3f3-9ec1d6dfc28a	JULIANA DE ARAUJO BATISTA	juliana@escola.com.br	123	responsavel	032.942.983-31	\N	85 99438-9137	Rua Monsenhor Rosa, 854		Nossa Senhora das Graças	FORTALEZA	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+6cda155b-fe73-41f2-b643-0e45d83d46eb	LAURA MESQUITA PAIVA	laura@escola.com.br	123	aluno	\N	\N	85 99161-8252	RUA MONSENHOR ROSA, 1144		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+7433c9fe-448f-4d9a-9c37-a3143c6c7468	TIAGO FARIAS DE PAIVA	tiago@escola.com.br	123	responsavel	055.103.803-90	\N	85 99161-8252	RUA MONSENHOR ROSA, 1144		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+5fe245ee-c222-4195-a445-aecfb8421aeb	MAISA COSTA ALVES	maisa@escola.com.br	123	aluno	\N	\N	85988413897	Rua Ametista, 350, AP 301 A	de 321/322 ao fim	Carlito Pamplona	Fortaleza	CE	60310-053	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469	\N	\N
+f454178b-172b-43f2-9e67-bc4dd2aa7083	GABRIELA COSTA PEREIRA	gabriela@escola.com.br	123	responsavel	60819512354	\N	85988413897	Rua Ametista, 350, AP 301 A	de 321/322 ao fim	Carlito Pamplona	Fortaleza	CE	60310-053	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.213469	2025-07-02 23:55:16.213469		\N
+d960648d-5087-4ad5-8f93-403bd5bd8bed	MARIA LYS MORAIS LELIS FERNANDES	maria@escola.com.br	123	aluno	\N	\N	85 98759-3426	Tr Jacinto de Matos, 43		Nossa Senhora das Graças	FORTALEZA	CE	60310410	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+3bac93ce-5f1f-4b18-a02b-e792bd796fe2	MARYANA MORAIS LELIS	maryana@escola.com.br	123	responsavel	948.834.593-49	\N	85 98759-3426	Tr Jacinto de Matos, 43		Nossa Senhora das Graças	FORTALEZA	CE	60310410	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+ffb797b2-241e-4585-82d1-92ef755ee8ec	MARIA VITORIA BORGES MARTINS SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98961-6687	RUA MARCILIO DIAS, 1124		PIRAMBU	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+35d4c90f-af57-4ca1-9965-eee6af3164f0	MIRIAN GADELHA BORGES SILVA	mirian@escola.com.br	123	responsavel	018.987.383-35	\N	85 98961-6687	RUA MARCILIO DIAS, 1124		PIRAMBU	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+9cdac8e6-aee8-4efb-adfc-57d0f36d589e	PEDRO HENRIQUE NASCIMENTO DA SILVA MESQUITA SOBREIRA	pedro@escola.com.br	123	aluno	\N	\N	85 99857-7985	AVENIDA ULISSES GUIMARAES ST 15	ALTO A	CENTRO DE CAUCAIA	CAUCAIA	CE	61627510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+da0ead99-e685-49af-9a2e-1226c3ec1389	INDRYD NASCIMENTO DA SILVA F DE M SOBREIRA	indryd@escola.com.br	123	responsavel	049.322.033-06	\N	85 99857-7985	AVENIDA ULISSES GUIMARAES ST 15	ALTO A	CENTRO DE CAUCAIA	CAUCAIA	CE	61627510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+776f737a-74f8-4eba-9049-b18818d289d9	PEDRO ICARO MORAIS DA SILVA	pedro@escola.com.br	123	aluno	\N	\N	85 99234-6739	AVENIDA FRACISCO SA, 5951	AP 105 BL 01	BARRA DO CEARA	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+d0a1e25a-51da-45b4-aca0-8817e1336498	TOMAS ROBSON MATEUS DA SILVA	tomas@escola.com.br	123	responsavel	028.884.393-28	\N	85 99234-6739	AVENIDA FRACISCO SA, 5951	AP 105 BL 01	BARRA DO CEARA	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+5cc00474-554a-442c-99d1-3844eae1be95	ALICE BIANCA DOS SANTOS OLIVEIRA	alice@escola.com.br	123	aluno	\N	\N	85 98753-6691	RUA MON ROSA, 648		CARLITO PAMPLONA	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+c010639b-e3fc-4466-a491-36db5b49ded9	BEATRIZ ESTEFANIA VIEIRA DOS SANTOS	beatriz@escola.com.br	123	responsavel	610.941.563-45	\N	85 98753-6691	RUA MON ROSA, 648		CARLITO PAMPLONA	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+eeac23ac-5b8b-4999-9cb3-59867213cc81	ANA ALICE RODRIGUES BRAGA DE OLIVEIRA	ana@escola.com.br	123	aluno	\N	\N	85 98892-0424	RUA DOM QUINTINO, 1176		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+e4b89e10-f7aa-4db4-ab8e-514f68830a3e	LARYSSA RODRIGUES BATISTA BRAGA	laryssa@escola.com.br	123	responsavel	062.499.613-13	\N	85 98892-0424	RUA DOM QUINTINO, 1176		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	34812190 - 32365844	\N
+a2a838b2-d660-4196-932b-3bfcb05a3dbe	ANA CECILIA PINHEIRO DE CARVALHO	ana@escola.com.br	123	aluno	\N	\N	85 98911-4586	Rua Lucas Pinto, 158		CArlito Pamplona	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+f9740024-2104-4762-9401-812ece82f123	GERACY PINHEIRO DA SILVA NETA	geracy@escola.com.br	123	responsavel	053.125.093-88	\N	85 98911-4586	Rua Lucas Pinto, 158		CArlito Pamplona	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+1962ef89-220b-4676-8bbd-463f918450be	ANA LUIZA DE OLIVEIRA CAVALCANTE	ana@escola.com.br	123	aluno	\N	\N	85 98713-5981	RUA DOM HELIO CAMPOS, 413		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+b9c25bdd-6a29-4cc4-a35e-33dadef9c901	NAILTON DE SOUZA CAVALCANTE	nailton@escola.com.br	123	responsavel	929.201.283-53	\N	85 98713-5981	RUA DOM HELIO CAMPOS, 413		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+219d6064-63b5-4923-8e9d-52f92df71725	ANTHONY RODRIGUES DA SILVA SARAIVA	anthony@escola.com.br	123	aluno	\N	\N	85 9262-2944	RUA DOM QUINTINO, 591		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+6c624b5e-4902-484b-a28c-31f112c0a3fb	JOSILANA DA SILVA EUZEBIO	josilana@escola.com.br	123	responsavel	032.826.403-23	\N	85 9262-2944	RUA DOM QUINTINO, 591		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+06419dfd-40a3-45c6-b5b9-8aba57cb24ea	ERMESON MIGUEL MARTINS GOMES	ermeson@escola.com.br	123	aluno	\N	\N	85 99279-6057	AVENDA PRESIDENTE CASTELO BRANCO, 2983	FUNDOS-ALTOS	CARLTO PAMPLONA	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527	\N	\N
+a54c44d0-c8a1-4ed3-8bbb-a4155805ab99	MARIA CRISTINA MARTINS GOMES	maria@escola.com.br	123	responsavel	817.754.073-49	\N	85 99279-6057	AVENDA PRESIDENTE CASTELO BRANCO, 2983	FUNDOS-ALTOS	CARLTO PAMPLONA	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.220527	2025-07-02 23:55:16.220527		\N
+78f0ed55-7920-4be6-a148-c10eaa25c53a	MARIA CLARA FERREIRA RODRIGUES	maria@escola.com.br	123	aluno	\N	\N	85 98537-6364	Rua Praia Grande, 560		Colonia	FORTALEZA	CE	60337020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+33be105f-5cad-4eb6-9303-6235e16d28b0	MARDONIO RODRIGUES BARROS	mardonio@escola.com.br	123	responsavel	028.910.793-88	\N	85 98537-6364	Rua Praia Grande, 560		Colonia	FORTALEZA	CE	60337020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538		\N
+30fe4b8f-b141-4746-8713-cf42659af056	MARIA ISABEL VALENÇA MATOS DE SOUZA	maria@escola.com.br	123	aluno	\N	\N	85 98875-7828	RUA PEDRO ARTUR, 427	ALTOS	N. SRA DAS GRAÇAS	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+0a086dfc-d1df-421d-a00a-cae5b39c917b	JOSE VANDEGLEISON SILVA SOUZA	jose@escola.com.br	123	responsavel	014.187.673-52	\N	85 98875-7828	RUA PEDRO ARTUR, 427	ALTOS	N. SRA DAS GRAÇAS	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538		\N
+c6d05bf3-c0f5-4a9d-9eb0-dcf17b8b7b44	MARIA LUISA ALVES BARBOSA	maria@escola.com.br	123	aluno	\N	\N	85 99783-5358	RUA MARCILIO DIAS, 1328		PIRAMBU	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+803a488c-56c0-4ada-9b33-111f8e21eb93	MARCIO DANTAS BARBOSA	marcio@escola.com.br	123	responsavel	049.615.703-54	\N	85 99783-5358	RUA MARCILIO DIAS, 1328		PIRAMBU	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	85 99617-0492	\N
+bcb19713-42e7-4231-bd43-51ce328d33f0	MARIA YASMIN ALVES MOREIRA SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98802-6017	Rua Jeronimo Albuquerque, 510		Barra do Ceará	FORTALEZA	CE	60331750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+cdcb8065-7a92-4dea-80d0-6ec2bc98bf39	ANGELA MARIA ALVES SOARES	angela@escola.com.br	123	responsavel	988.943.073-87	\N	85 98802-6017	Rua Jeronimo Albuquerque, 510		Barra do Ceará	FORTALEZA	CE	60331750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	85987360627	\N
+8595609f-f8e2-4fb3-98d4-664bb501ce37	MIGUEL NOAH MARTINS MOREIRA	miguel@escola.com.br	123	aluno	\N	\N	85 98566-2939	RUA RIO NEGRO, 211		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311560	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+a346fc4c-b881-4d10-9bef-9bf7da27ffb2	JOSIELE DO NASCIMENTO MARTINS MOREIRA	josiele@escola.com.br	123	responsavel	616.397.973-78	\N	85 98566-2939	RUA RIO NEGRO, 211		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311560	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	8,59879E+11	\N
+9fd7c5b8-42a6-4bab-a521-887c35141f7e	NOAH TEIXEIRA DOS SANTOS	noah@escola.com.br	123	aluno	\N	\N	85 99131-7926	Avenida Pasteur, 1116	AP 105 BL A 1	Carlito Pamplona	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+2b1638da-cb94-451c-8a4f-a990f307b49f	DALETE ALMEIDA TEIXEIRA	dalete@escola.com.br	123	responsavel	669.944.383-68	\N	85 99131-7926	Avenida Pasteur, 1116	AP 105 BL A 1	Carlito Pamplona	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538		\N
+45082048-7985-426a-93f3-731104dba608	PEDRO EMANOEL DOS REIS LIMA	pedro@escola.com.br	123	aluno	\N	\N	85 99723-6688	Rua Francisco Cordeiro		Carlito Pamplona	Fortaleza	CE	60310-490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+e8b98275-5010-452c-bd70-4252eb1da79d	FRANCISCA TATIANA DOS REIS SILVA	francisca@escola.com.br	123	responsavel	025.518.943-52	\N	85 99723-6688	Rua Francisco Cordeiro		Carlito Pamplona	Fortaleza	CE	60310-490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	85 98665-2595	\N
+462e9a7d-b197-440d-9add-7609fff7dab7	PEDRO GUSTAVO MENDES BARROS	pedro@escola.com.br	123	aluno	\N	\N	85 98759-8059	RUA STO CURA DARS, 98	ALTOS	PIRAMBU	FORTALEZA	CE	60311010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+9c373c64-4383-46bb-846b-3a3f6c414c30	RAKEL MENDES DE SOUZA	rakel@escola.com.br	123	responsavel	023.159.243-40	\N	85 98759-8059	RUA STO CURA DARS, 98	ALTOS	PIRAMBU	FORTALEZA	CE	60311010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538		\N
+126bf889-38f7-4b18-8c5f-3b1858e01a53	PEDRO TIAGO LIMA AMORIM	pedro@escola.com.br	123	aluno	\N	\N	85 98835-3172	RUA DOM QUINTINO, 82		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+0f0d7e17-ede3-45c9-8901-5915f1cb815f	MARIA JOSE DA SILVA AMORIM	maria@escola.com.br	123	responsavel	644.909.983-68	\N	85 98835-3172	RUA DOM QUINTINO, 82		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538		\N
+124725f2-6e13-4c99-9c25-649c90babaec	THIAGO GARCIA MARTINS LOURENÇO	thiago@escola.com.br	123	aluno	\N	\N	85 98920-9919	RUA SANTA ROSA, 706	ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60311490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538	\N	\N
+3890b783-e3ec-43e9-904d-8658d531c0cb	ADRIANA ALENCAR MARTINS LOURENÇO	adriana@escola.com.br	123	responsavel	000.720.403-51	\N	85 98920-9919	RUA SANTA ROSA, 706	ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60311490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.23538	2025-07-02 23:55:16.23538		\N
+40630012-216c-4ffb-85e6-46b133c9bcc1	JOSE MATEUS LOPES DOS ANJOS	jose@escola.com.br	123	aluno	\N	\N	85 98131-2038	AVENIDA PRESIDENTE CASTELO BRANCO, 3100		PIRAMBU	FORTALEZA	CE	60311056	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+9158dc2a-209a-44b2-885d-a2e3b296b142	EMANUELA MEIRE BEZERRA LOPES SANTOS ALMEIDA	emanuela@escola.com.br	123	responsavel	027.303.873-74	\N	85 98131-2038	AVENIDA PRESIDENTE CASTELO BRANCO, 3100		PIRAMBU	FORTALEZA	CE	60311056	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+d0834d0d-d6b3-4389-ac1e-9c50d9bc4c01	KALEBE SOUZA DE OLIVEIRA	kalebe@escola.com.br	123	aluno	\N	\N	85 98926-4455	Rua 5 de Maio, 129		Barra do Ceará	FORTALEZA	CE	60331670	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+c24b2287-0dd2-4a20-b98d-22d2dad85e53	JOSUE PEREIRA DE OLIVEIRA	josue@escola.com.br	123	responsavel	443.083.703-10	\N	85 98926-4455	Rua 5 de Maio, 129		Barra do Ceará	FORTALEZA	CE	60331670	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+c2b305c1-4db4-41ef-8589-8b17740af055	LAURA DA SILVA SANTOS	laura@escola.com.br	123	aluno	\N	\N	85 99905-6662	RUA MARCILIO DIAS, 1425		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+482c2ad0-a8b9-4835-aeb5-4eb950147b76	ELIOENE ANANIAS DA SILVA SANTOS	elioene@escola.com.br	123	responsavel	969.497.593-04	\N	85 99905-6662	RUA MARCILIO DIAS, 1425		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+39435096-f0ab-43e2-8a38-dbf006137442	MARIA ADRIELLE OLIVEIRA MARTINS	maria@escola.com.br	123	aluno	\N	\N	85999136853	Rua Monsenhor Rosa, 311		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+80fbf009-879b-4af1-ac5b-7fe724d1df34	JOSÉ ADRIANO AMORIM MARTINS	jose@escola.com.br	123	responsavel	041.337.183-21	\N	85999136853	Rua Monsenhor Rosa, 311		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+c2f8bd4a-dd49-4560-b768-552523188360	MARIA ESTER DE OLIVEIRA SAMPAIO GOUVEIA	maria@escola.com.br	123	aluno	\N	\N	85 98886-3546	RUA ESC ANTONIO ABUCHAIM, 29		CENTRO DE CAUCAIA	CAUCAIA	CE	61626290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+0ed0f600-37ea-47f3-bb98-ff13c613f7c1	ANTONIA JACQUELINE DE OLIVEIRA SAMPAIO	antonia@escola.com.br	123	responsavel	019.481.443-28	\N	85 98886-3546	RUA ESC ANTONIO ABUCHAIM, 29		CENTRO DE CAUCAIA	CAUCAIA	CE	61626290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+a5db5b36-cbee-4353-b674-de1c22d0e10b	MARIA ISIS ROCHA DOS SANTOS	maria@escola.com.br	123	aluno	\N	\N	85 98787-1505	RUA ALVARO DE ALENCAR, 716	268	CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+d218b76e-1348-4003-9735-415cd015fd78	ANTONIO AIRTON ARRUDA DOS SANTOS	antonio@escola.com.br	123	responsavel	992.928.403-63	\N	85 98787-1505	RUA ALVARO DE ALENCAR, 716	268	CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	85 98787-1505	\N
+3b28054b-363d-4f32-a660-32998aa7b517	MARIA LARA TELES MODESTO	maria@escola.com.br	123	aluno	\N	\N	85 99758-6194	Rua Lucas Pinto, 292		Cristo Redentor	Fortaleza	CE	60312-280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+ec9856a7-631b-49c2-b9dd-ce6de798b5ae	ANTONIETA DE OLIVEIRA MODESTO	antonieta@escola.com.br	123	responsavel	219.745.863-91	\N	85 99758-6194	Rua Lucas Pinto, 292		Cristo Redentor	Fortaleza	CE	60312-280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+8bd91080-1c3e-4ea7-81c5-929e5ad402cf	MARIA LUIZA MARTINS NUNES	maria@escola.com.br	123	aluno	\N	\N	85999583877	Rua Monsenhor Rosa, 309		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+323c5e1f-5ade-489b-a433-09b0ac18be0d	HELOISA MARTINS DIAS	heloisa@escola.com.br	123	responsavel	65441192372	\N	85999583877	Rua Monsenhor Rosa, 309		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+a0fa3a92-d652-41e6-ae5f-e7a8ad19a5a6	MARIA YASMIN LIMA DA SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98678-3429	Rua Jackson do Pandeiro, 353		Barra do Ceará	FORTALEZA	CE	60332510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+87b69c2b-cbcc-4987-b29b-798f2e9186ab	FRANCISCO AUDIZIO ALVES SILVA FILHO	francisco@escola.com.br	123	responsavel	908.949.873-72	\N	85 98678-3429	Rua Jackson do Pandeiro, 353		Barra do Ceará	FORTALEZA	CE	60332510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	85 98678-3429	\N
+188d9f8f-0ca6-4eae-ac9f-b284d00da9ed	MARIANA PINTO OLIVEIRA	mariana@escola.com.br	123	aluno	\N	\N	85992097575	Rua Santa Inês, 624		Pirambu	Fortaleza	CE	60311-310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112	\N	\N
+1397246c-093b-407f-9a01-99414419333a	ANA PAULA SILVA PINTO	ana@escola.com.br	123	responsavel	80658830368	\N	85992097575	Rua Santa Inês, 624		Pirambu	Fortaleza	CE	60311-310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.253112	2025-07-02 23:55:16.253112		\N
+0af63411-6b91-4d2e-a383-cdccb7631669	RAFAELLY MARIA MENEZES AMORIM ALVES	rafaelly@escola.com.br	123	aluno	\N	\N	85 99712-0649	Rua III Conj Japão, 69		Nossa Senhora das Graças	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+7e75266a-8aed-4c9f-af9e-f8f048a4c01d	FRANCISCA JULIANA MENEZES AMORIM ALVES	francisca@escola.com.br	123	responsavel	627.678.443-53	\N	85 99712-0649	Rua III Conj Japão, 69		Nossa Senhora das Graças	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+c911e831-b565-426e-98e7-14d2cf5aa7c3	TEODORO ROMERO PINHEIRO	teodoro@escola.com.br	123	aluno	\N	\N	85997396431	Rua Nossa Senhora das Graças		Pirambu	Fortaleza	CE	60310-760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+85179d29-6a73-4f9f-ae52-9742afe75660	DAYANE NUNES PORTELA ROMERO	dayane@escola.com.br	123	responsavel	025.471.973-24	\N	85997396431	Rua Nossa Senhora das Graças		Pirambu	Fortaleza	CE	60310-760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+fd73d4f6-4a4d-458e-89dc-0b2094220fd1	THEO ALCOERES DA COSTA	theo@escola.com.br	123	aluno	\N	\N	85 98845-7733	Rua Marcilia Dias, 749		Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+6237f8a9-a21f-4b59-96ba-9c6e9490552e	ALINE MARTINS ALCOERES	aline@escola.com.br	123	responsavel	996.513.193-72	\N	85 98845-7733	Rua Marcilia Dias, 749		Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	85 98718-0064	\N
+f06ad2bb-2b6d-4ecf-b98f-b18383e96e48	VITORIA DA SILVA SOARES	vitoria@escola.com.br	123	aluno	\N	\N	85 99438-1911	RUA FELIPE CAMARAO, 189		NOSSA SRA DAS GRACAS	FORTALEZA	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+96d38e27-fc41-42ac-a1bb-8e3abb099078	FRANCISCA RONIELE PASSOS SOARES	francisca@escola.com.br	123	responsavel	606.144.333-12	\N	85 99438-1911	RUA FELIPE CAMARAO, 189		NOSSA SRA DAS GRACAS	FORTALEZA	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+72a06aec-4106-4019-948f-b95310832845	ANA ALICE DE MATOS ALVES	ana@escola.com.br	123	aluno	\N	\N	85986135975	Rua Professor José Bonifácio 1016		Álvaro Weyne	Fortaleza	CE	60335-080	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+8c6d30f7-6521-4259-9235-d609a21e4366	JOSIANE SOUZA TEIXEIRA DE MATOS ALVES	josiane@escola.com.br	123	responsavel	63941538349	\N	85986135975	Rua Professor José Bonifácio 1016		Álvaro Weyne	Fortaleza	CE	60335-080	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+c21c082c-bfbb-4a77-9ec7-60df29f94aae	ANA CECÍLIA CHAVES BESERRA	ana@escola.com.br	123	aluno	\N	\N	85 98189-0259	Avenida Francisco Sá, 2410	Ap 104 Bl I	Jacarecanga	FORTALEZA	CE	60310000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+29e98987-8bc8-48bb-84d0-d8cb21c4230a	FRANCISCO CESAR FEITOSA BESERRA JUNIOR	francisco@escola.com.br	123	responsavel	038.846.083-04	\N	85 98189-0259	Avenida Francisco Sá, 2410	Ap 104 Bl I	Jacarecanga	FORTALEZA	CE	60310000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+20813e1a-0fda-44a1-bb60-e3aa455a07cd	ANA ISADORA ALVES DE AZEVEDO	ana@escola.com.br	123	aluno	\N	\N	85 99100-4818	Rua Val Ter Moura, 124	BL Martinica Ap 302 CD Sea Gol	Icarai	CAUCAIA	CE	61620310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+22b1ac2d-1b36-44ad-a9f5-07ca1954d6bc	FRANCISCO LEANDRO DE AZEVEDO SOUSA	francisco@escola.com.br	123	responsavel	008.512.153-35	\N	85 99100-4818	Rua Val Ter Moura, 124	BL Martinica Ap 302 CD Sea Gol	Icarai	CAUCAIA	CE	61620310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+ec27626d-6c6e-455a-af98-d36727815799	ANA SOPHIA FEITOSA LIMA	ana@escola.com.br	123	aluno	\N	\N	85 98642-3900	RUA OLAVO DE ANDRADE, 40		JACARECANGA	FORTALEZA	CE	60310680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+1319da79-6407-49e9-b9b6-95287f36310e	GIOVANNA KAREN PIRES FEITOSA	giovanna@escola.com.br	123	responsavel	047.658.113-36	\N	85 98642-3900	RUA OLAVO DE ANDRADE, 40		JACARECANGA	FORTALEZA	CE	60310680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	34853908	\N
+2d687568-f1e8-4927-a63e-8f3c8419f433	ANNA BEATRIZ SILVA SERRA	anna@escola.com.br	123	aluno	\N	\N	8,59989E+11	Rua Dom Quintino, 1109		Pirambu	Fortaleza	CE	60310-520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+3d161e46-2d97-4fe6-8c9d-c68869c4c804	FRANCISCO WANDICK SERRA XAVIER	francisco@escola.com.br	123	responsavel	009.316.433-50	\N	8,59989E+11	Rua Dom Quintino, 1109		Pirambu	Fortaleza	CE	60310-520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+6668ad46-b18b-4f03-8578-e6d1dcddfe80	CALEBE DE MELO RODRIGUES	calebe@escola.com.br	123	aluno	\N	\N	85 98799-7183	Rua Pro Jose Bonifacio, 1016	Cs Altos	Carlito Pamplona	FORTALEZA	CE	60335080	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256	\N	\N
+17829820-25a4-472e-826d-d4e86e427c0f	LADY DIANA DE MELO ASSIS RODRIGUES	lady@escola.com.br	123	responsavel	621.148.833-53	\N	85 98799-7183	Rua Pro Jose Bonifacio, 1016	Cs Altos	Carlito Pamplona	FORTALEZA	CE	60335080	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.262256	2025-07-02 23:55:16.262256		\N
+bb857b06-3777-4fe7-b332-61c4a780aa0d	CAMILLA AGRELA COSTA DA SILVA	camilla@escola.com.br	123	aluno	\N	\N	85 98865-2873	RUA DOM HELIO CAMPOS, 80	QD A BL 12 AP 403	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+885a6234-ead7-41e7-9f5b-7a055ba3dd05	AUREA CELIA AGRELA COSTA	aurea@escola.com.br	123	responsavel	004.212.453-01	\N	85 98865-2873	RUA DOM HELIO CAMPOS, 80	QD A BL 12 AP 403	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	988652873	\N
+dcfa74e6-7c7f-4c97-a35e-329df7e067d5	ELIAS DA SILVA FERNANDES	elias@escola.com.br	123	aluno	\N	\N	85 98825-3992	Rua 2 Cj St Aratanha, 56		Barra do Ceará	FORTALEZA	CE	60333370	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+195f84d9-19fe-4d4e-a0b0-cf76be9e5cfd	RONALDO FERNANDES GOMES	ronaldo@escola.com.br	123	responsavel	625.970.863-72	\N	85 98825-3992	Rua 2 Cj St Aratanha, 56		Barra do Ceará	FORTALEZA	CE	60333370	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	85987620084	\N
+14985b10-b814-4280-bc39-881a0a739645	ELLEN CRISTINA DE SOUZA FERREIRA DA SILVA	ellen@escola.com.br	123	aluno	\N	\N	85 99728-5349	Rua Dom Quintino, 697		Pirambu	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+ff456ac1-913e-4b6e-8d0b-9d9fa79baf68	ELI ANANIAS DA SILVA	eli@escola.com.br	123	responsavel	641.383.213-49	\N	85 99728-5349	Rua Dom Quintino, 697		Pirambu	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129		\N
+c23b0278-0d01-49e0-883e-3b68680cf695	EMANUELE COSTA BARROS	emanuele@escola.com.br	123	aluno	\N	\N	85 98733-5804	RUA SANTA INES, 923		PIRAMBU	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+f6f8cef8-9809-48c1-bfb1-e20942c5d5b0	MARA JEANE HERMINIO COSTA	mara@escola.com.br	123	responsavel	656.371.603-25	\N	85 98733-5804	RUA SANTA INES, 923		PIRAMBU	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129		\N
+5d0ce47a-329c-49a9-8c5b-c401e8bceac5	FELIPE DA SILVA GOMES	felipe@escola.com.br	123	aluno	\N	\N	85 99800-0058	RUA SAO JOSE DO ARPOADOR, 567		COLONIA	FORTALEZA	CE	60333745	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+872d77b3-a7d7-4349-b870-60da474f663f	FRANCISCO PAULO FERREIRA GOMES	francisco@escola.com.br	123	responsavel	004.349.263-02	\N	85 99800-0058	RUA SAO JOSE DO ARPOADOR, 567		COLONIA	FORTALEZA	CE	60333745	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129		\N
+358aac0e-d443-474d-b796-cdd0706ce500	HEITOR NASCIMENTO ALMEIDA DE HOLANDA	heitor@escola.com.br	123	aluno	\N	\N	85 99234-7467	RUA ALVARO DE ALENCAR, 05 BL 110		CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+25a85a18-85e2-406d-adec-e478a932954f	VALDENIA NASCIMENTO DOS SANTOS	valdenia@escola.com.br	123	responsavel	052.763.433-65	\N	85 99234-7467	RUA ALVARO DE ALENCAR, 05 BL 110		CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	989106233	\N
+8e2fe719-0774-4fd8-981d-a2db49c4d99e	ISAAC FERNANDES SOUSA	isaac@escola.com.br	123	aluno	\N	\N	85 99620-7118	RUA PRO DOMINGOS BONIFACIO, 20		CARLITO PAMPLONA	FORTALEZA	CE	60311820	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+33126aca-2062-4aa8-b9b2-2d33be8d6f99	MAGNA MARIA FERNANDES DA SILVA	magna@escola.com.br	123	responsavel	005.281.823-31	\N	85 99620-7118	RUA PRO DOMINGOS BONIFACIO, 20		CARLITO PAMPLONA	FORTALEZA	CE	60311820	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129		\N
+133f25c1-0092-42f8-908e-6f48a55869d3	JOAO DAVI MOURA ROCHA	joao@escola.com.br	123	aluno	\N	\N	85 99869-4217	RUA SANTA ROSA, 629		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+b5f7ae12-7e4e-4846-8e19-5386eb51d38f	MARIA QUELE MOURA SOUSA	maria@escola.com.br	123	responsavel	973.933.043-68	\N	85 99869-4217	RUA SANTA ROSA, 629		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129		\N
+b8a58dab-2ef8-4cc0-90c9-6d515bcd354c	LARA GOMES DE OLIVEIRA	lara@escola.com.br	123	aluno	\N	\N	85988853983	Rua Deputado Matoso Filho, 69 CS A	até 1004/1005	Olavo Oliveira	Fortaleza	CE	60351-365	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+c78841b5-df9d-437a-bb2e-63249a88901e	MARIA ANGELINE GOMES DA SILVA	maria@escola.com.br	123	responsavel	5531611307	\N	85988853983	Rua Deputado Matoso Filho, 69 CS A	até 1004/1005	Olavo Oliveira	Fortaleza	CE	60351-365	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129		\N
+08ba8b80-1650-4c2a-82fd-d802b8210c72	LEVI DE OLIVEIRA FERREIRA	levi@escola.com.br	123	aluno	\N	\N	85 99783-0028	RUA PEDRO ARTUR, 383		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	\N	\N
+03530aca-65eb-42e3-b09e-e6a9597ef70d	MARIA ELIEUDA ALVES DE OLIVEIRA FERREIRA	maria@escola.com.br	123	responsavel	708.060.393-53	\N	85 99783-0028	RUA PEDRO ARTUR, 383		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.270129	2025-07-02 23:55:16.270129	85 98528-1675	\N
+543fd228-5652-4430-aff1-42ec96c13c00	SOPHIA FERREIRA DOS SANTOS OLIVEIRA	sophia@escola.com.br	123	aluno	\N	\N	85 92000-1232	RUA DOM QUINTINO, 1401		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+bc9c1422-7e50-435e-89a8-d3f9ab5323a6	CICERO EMANUEL DOS SANTOS OLIVEIRA	cicero@escola.com.br	123	responsavel	037.897.953-13	\N	85 92000-1232	RUA DOM QUINTINO, 1401		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	85 92000-1232	\N
+c12282b6-0507-42a1-bd84-34129ecd8ff9	ADRIELLY SILVA OLIVEIRA	adrielly@escola.com.br	123	aluno	\N	\N	85 98510-8554	Rua São Luiz, 271	Cs 03	Guajeru	CAUCAIA	CE	61629-310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+8502332f-721f-44ad-b856-62227c09522a	ERIKA VIEIRA SILVA	erika@escola.com.br	123	responsavel	019.306.473-10	\N	85 98510-8554	Rua São Luiz, 271	Cs 03	Guajeru	CAUCAIA	CE	61629-310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+93ea25d3-bb78-4ee9-b807-4734ee9330e1	AGNES MARIA ALVES CARDOSO BATISTA	agnes@escola.com.br	123	aluno	\N	\N	85 98873-1144	Rua Dom Quintino, 1337		CRISTO REDENTOR	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+deabcc1c-54dc-4b1b-a71d-56e1ee50f572	BRENA ALVES CARDOSO BATISTA	brena@escola.com.br	123	responsavel	036.291.533-48	\N	85 98873-1144	Rua Dom Quintino, 1337		CRISTO REDENTOR	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	85986131257	\N
+c9f8f747-a078-4973-9b38-a1bff0ded75c	ANA CECILIA RODRIGUES DE SOUSA	ana@escola.com.br	123	aluno	\N	\N	85985946073	Rua Santa Elisa,192	até 498/499	Pirambu	Fortaleza	CE	60311-020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+5582318f-fd4d-44aa-b6b6-2b467780ce7a	GISELE SOUSA RODRIGUES	gisele@escola.com.br	123	responsavel	076.874.083-57	\N	85985946073	Rua Santa Elisa,192	até 498/499	Pirambu	Fortaleza	CE	60311-020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+a3c12a1a-af62-4ee2-ba77-f3d3a199a789	ANA CLARA VIANA DA GUIA	ana@escola.com.br	123	aluno	\N	\N	85 98871-8466	Rua Chico Xavier, 186		Jardim Ptropolis	FORTALEZA	CE	60332320	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+0f6b7b52-0654-4a39-b890-be0672323b10	AURICELIA SAMPAIO VIANA	auricelia@escola.com.br	123	responsavel	979.645.063-15	\N	85 98871-8466	Rua Chico Xavier, 186		Jardim Ptropolis	FORTALEZA	CE	60332320	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+0c52a579-90b7-49ab-900d-b0b0c8eb5e32	ANA ELOÁ GOMES MOURA	ana@escola.com.br	123	aluno	\N	\N	85 98891-8899	Rua Victor Meireles, 75		Crsito Redentor	FORTALEZA	CE	60337260	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+1cbe6c10-2fb7-49ad-9caa-6e66be2bba9d	VANUSA VASCONCELOS SOUSA	vanusa@escola.com.br	123	responsavel	414.549.953-00	\N	85 98891-8899	Rua Victor Meireles, 75		Crsito Redentor	FORTALEZA	CE	60337260	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+d1ac8e36-2318-46ec-9830-13c20e22a1a4	ANA LYS PEREIRA CONSTANTINO	ana@escola.com.br	123	aluno	\N	\N	85991692614	Rua Engenheiro João Nogueira, 594		Álvaro Weyne	Fortaleza	CE	60335-140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+1481ab9c-6a43-4f4f-8840-03ac681976f6	ANA PATRICIA PINHEIRO PEREIRA	ana@escola.com.br	123	responsavel	60554296322	\N	85991692614	Rua Engenheiro João Nogueira, 594		Álvaro Weyne	Fortaleza	CE	60335-140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+f8db5a33-6003-49ae-b92d-6fb7e1e7ff5e	ANNA GABRIELLY MORAIS ABRANTES	anna@escola.com.br	123	aluno	\N	\N	85988568479	Rua Pereira Valente, 408	CS 05	Padre Romualdo	Caucaia	CE	61601-360	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+f4a03aee-348e-4ac1-9a75-635fbe71f9aa	ANDRE LUIZ MORAIS BATISTA	andre@escola.com.br	123	responsavel	1274741378	\N	85988568479	Rua Pereira Valente, 408	CS 05	Padre Romualdo	Caucaia	CE	61601-360	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+68e9969a-e410-4b05-9e92-65699d391d35	ANNE LUIZE DO NASCIMENTO MOREIRA	anne@escola.com.br	123	aluno	\N	\N	85 98849-1689	Rua Otaviano Laurindo, 515	Ap 05	Parque Leblon	FORTALEZA	CE	61631-290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+04b97bb7-916c-4515-b8f5-b18a4509a346	JOYCE PATRICIA DO NASCIMENTO MOREIRA	joyce@escola.com.br	123	responsavel	047.463.873-11	\N	85 98849-1689	Rua Otaviano Laurindo, 515	Ap 05	Parque Leblon	FORTALEZA	CE	61631-290	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+c1778e7d-c513-4278-a242-5b1911db82d5	ANTONIO EDUARDO GONÇALVES RIBEIRO	antonio@escola.com.br	123	aluno	\N	\N	85 99244-2700	Rua São José, 1005		Pacheco	CAUCAIA	CE	61626370	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216	\N	\N
+916e6425-5a40-47c9-a860-62acbb3a2a76	ANA CLAUDIA GONÇALVES DOS SANTOS	ana@escola.com.br	123	responsavel	000.042.983-06	\N	85 99244-2700	Rua São José, 1005		Pacheco	CAUCAIA	CE	61626370	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.282216	2025-07-02 23:55:16.282216		\N
+275b5d5d-db5f-4892-b91f-475ecc141852	BENJAMIN NOJOSA SOMBRA DE SOUSA	benjamin@escola.com.br	123	aluno	\N	\N	85987484859	Rua Cauby Damasceno 200	AP 1102	Icaraí	Caucaia	CE	61620-250	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+bf81f569-a654-4494-9626-d4a22d2ee80d	JESSICA CORDEIRO DE NOJOSA SOMBRA	jessica@escola.com.br	123	responsavel	4858740323	\N	85987484859	Rua Cauby Damasceno 200	AP 1102	Icaraí	Caucaia	CE	61620-250	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+2b7f0c36-8718-4a33-9d43-d6c3d34074b5	CYNTIA MARIANA RIBEIRO BEZERRA	cyntia@escola.com.br	123	aluno	\N	\N	85 98582-1592	Rua Norma Guilhon Mitoso, 100	Bl 18 Apto 401	Paumirim	CAUCAIA	CE	61611045	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+25389adc-0e00-4bf6-95b5-558048ac9fd7	FERNANDA RODRIGUES RIBEIRO BEZERRA	fernanda@escola.com.br	123	responsavel	762.499.643-04	\N	85 98582-1592	Rua Norma Guilhon Mitoso, 100	Bl 18 Apto 401	Paumirim	CAUCAIA	CE	61611045	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+dcd7431c-ee10-4032-8abb-d96a8edab7a3	EMMANUEL ASAFE LIMA OLIVEIRA	emmanuel@escola.com.br	123	aluno	\N	\N	85 99973-7423	RUA VERA CRUZ, 63		NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+5b7dcd74-8653-439b-9f9e-9124be32473c	TAINARA BATISTA DE LIMA	tainara@escola.com.br	123	responsavel	606.546.693-09	\N	85 99973-7423	RUA VERA CRUZ, 63		NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+10ef17be-db69-4f4c-9eb5-b2669f17a157	GIULIA MIRELLA SILVA RODRIGUES	giulia@escola.com.br	123	aluno	\N	\N	85 99219-6890	RUA RIO NEGRO, 248	CS B	NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60311560	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+350f040c-351f-4771-b4fd-3a3e8098ee0d	FRANCISCO GILDERLAN RODRIGUES	francisco@escola.com.br	123	responsavel	043.645.773-32	\N	85 99219-6890	RUA RIO NEGRO, 248	CS B	NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60311560	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+37093d55-0fd5-4ba6-9564-ea50dddd96a5	JOAO GABRIEL DE SOUSA SILVA	joao@escola.com.br	123	aluno	\N	\N	85 98883-2411	Avenida Francisco Sá, 3572	Ap 401 Bl M	Carlito Pamplona	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+8b5b95af-5085-4e25-9d9f-4727d075f4cd	FERNANDO OLIVEIRA E SILVA	fernando@escola.com.br	123	responsavel	419.140.663-91	\N	85 98883-2411	Avenida Francisco Sá, 3572	Ap 401 Bl M	Carlito Pamplona	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	85996618755	\N
+85a58851-2e90-4014-a7b9-069e3a58cb34	JOAO LUCAS RODRIGUES LAMEU	joao@escola.com.br	123	aluno	\N	\N	85 99998-7014	Rua Nossa Senhroa das Graças, 1337	CS AT	Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+f4ac5ad9-bd24-4641-b753-ddd8b3b15b7b	FERNANDA DE CASSIA SILVA RODRIGUES LAMEU	fernanda@escola.com.br	123	responsavel	029.932.193-24	\N	85 99998-7014	Rua Nossa Senhroa das Graças, 1337	CS AT	Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+c10b95db-740d-47a0-85f3-367b6b7de1fb	MARCOS SUYEL AQUINO DE QUEIROZ	marcos@escola.com.br	123	aluno	\N	\N	85 99736-8634	Rua Dom Quintino, 413		Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+1f760fa3-1011-47b3-acc0-5241f7fec91e	SUYANNE MARIA DE AQUINO SILVA	suyanne@escola.com.br	123	responsavel	067.482.543-88	\N	85 99736-8634	Rua Dom Quintino, 413		Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+65b63f60-4c5a-4214-9f13-de0b07dbbd2e	MARIA EVELLIN BARBOZA DA SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98514-1660	Rua Nossa Senhora das Graças, 640		Nossa Senhora das Graças	FORTALEZA	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+edf87608-29a5-4080-93a1-46ce0e8c689b	ROSANGELA MARIA DA FONSECA VIEIRA BARBOZA	rosangela@escola.com.br	123	responsavel	835.105.323-68	\N	85 98514-1660	Rua Nossa Senhora das Graças, 640		Nossa Senhora das Graças	FORTALEZA	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+a482f929-5141-4586-b4a0-6c65209a1b87	MARIA ÍSIS PEREIRA LIMA	maria@escola.com.br	123	aluno	\N	\N	85 99737-9080	Rua Leao Marinho, 927		Parque Leblon	FORTALEZA	CE	61631295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+22a74d54-ce9c-4ec6-8d10-b45c195dffcb	IGOR ITALO PEREIRA LOPES	igor@escola.com.br	123	responsavel	034.476.283-16	\N	85 99737-9080	Rua Leao Marinho, 927		Parque Leblon	FORTALEZA	CE	61631295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+ac636787-ee6b-4853-8a02-cf1429e130b7	MARIA JULIA MELO DE SOUSA	maria@escola.com.br	123	aluno	\N	\N	85 98846-3411	AVENIDA PRESIDENTE CASTELO BRANCO, 2948	ALTOS	PIRAMBU	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269	\N	\N
+19f896b1-9534-49ee-838b-833a19cceb6f	FRANCISCA DALMACIA DA SILVA DE MELO	francisca@escola.com.br	123	responsavel	613.325.263-49	\N	85 98846-3411	AVENIDA PRESIDENTE CASTELO BRANCO, 2948	ALTOS	PIRAMBU	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.291269	2025-07-02 23:55:16.291269		\N
+3ba432bf-d385-4f56-98ff-7237d2dc6bf6	MARIA JÚLIA ROCHA DE PAULA	maria@escola.com.br	123	aluno	\N	\N	85996541725	Rua Odorico de Morais, 250	BLOCO 11/ AP. 504	Jacarecanga	Fortaleza	CE	60310-350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+2c0bff1f-66b9-429f-a985-22356f3a4eda	LUAN FELIPE BARROSO DE PAULA	luan@escola.com.br	123	responsavel	4363919370	\N	85996541725	Rua Odorico de Morais, 250	BLOCO 11/ AP. 504	Jacarecanga	Fortaleza	CE	60310-350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+1264dfc4-db9b-407f-8098-48ad50e18711	MARIA YSIS LIMA PINTO	maria@escola.com.br	123	aluno	\N	\N	85997510104	Rua Dom Quintino, 150		Pirambu	Fortaleza	CE	60310-520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+ecd6ea2e-fe6f-4dfd-bb06-04e1fc2fb538	BRUNA XAVIER LIMA	bruna@escola.com.br	123	responsavel	040.701.533-73	\N	85997510104	Rua Dom Quintino, 150		Pirambu	Fortaleza	CE	60310-520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+4931e414-eb36-4735-a6e2-b5673e315c32	RAUL FREITAS RODRIGUES	raul@escola.com.br	123	aluno	\N	\N	85 98918-5162	Rua Alvaro de Alencar, 63		Pirambu	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+8c7eac88-bf3b-4cc1-9c6d-b2da302279ef	ROMULO RODRIGUES DE LIMA	romulo@escola.com.br	123	responsavel	968.108.903-00	\N	85 98918-5162	Rua Alvaro de Alencar, 63		Pirambu	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+7482d278-63ce-4081-a932-cc150d776940	RUAN CHRYSTIAN NASCIMENTO ALVES	ruan@escola.com.br	123	aluno	\N	\N	85 99403-4114	Avenida Dom Manoel, 385		Centro	FORTALEZA	CE	60060090	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+2b3bb8c7-afd4-45df-b86c-f803f7d52ca2	AYLA EMANUELA ALVES NASCIMENTO	ayla@escola.com.br	123	responsavel	035.044.133-28	\N	85 99403-4114	Avenida Dom Manoel, 385		Centro	FORTALEZA	CE	60060090	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+89fd40a4-9b62-4850-a230-3a3182acb1e5	THEO DIAS MARTINS	theo@escola.com.br	123	aluno	\N	\N	85988129635	Rua Nossa Senhora das Graças, 1339		Pirambu	Fortaleza	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+704e80a6-d3aa-42ce-b945-7d6a3cc06f82	VALERIO MARTINS DOS SANTOS	valerio@escola.com.br	123	responsavel	60519319370	\N	85988129635	Rua Nossa Senhora das Graças, 1339		Pirambu	Fortaleza	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+c2bc63f0-d8ed-42e3-8937-fbee344dee30	ADRYEL ISAAC VIEIRA DOS SANTOS	adryel@escola.com.br	123	aluno	\N	\N	85 98601-1519	SÃO RAIMUNDO 851		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+1f4af236-73c8-465e-82fc-40cd35b8d1fb	ADEILSON CAVALCANTE DOS SANTOS	adeilson@escola.com.br	123	responsavel	010.809.913-01	\N	85 98601-1519	SÃO RAIMUNDO 851		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311-030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	32363633	\N
+194ff744-48fb-4a32-92f9-ad9aa0954f62	ALESSANDRO MORAIS GALVÃO	alessandro@escola.com.br	123	aluno	\N	\N	85 99280-5116	Rua Santa Inês, 545	C ALTO	Pirambu	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+8da1d98e-3232-4aa6-bba4-47d905bf330a	ESTEFANIA DA SILVA DE MORAIS	estefania@escola.com.br	123	responsavel	036.986.753-07	\N	85 99280-5116	Rua Santa Inês, 545	C ALTO	Pirambu	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+09cbd1be-4567-4bf3-8c51-83374c157677	ÁLVARO LEVI DE SOUSA SANTOS OLIVEIRA	alvaro@escola.com.br	123	aluno	\N	\N	85 92000-1232	RUA DOM QUINTINO, 1401		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+eccfa592-064d-4ccb-b1ff-3202e64e2899	CICERO EMANUEL DOS SANTOS OLIVEIRA	cicero@escola.com.br	123	responsavel	037.897.953-13	\N	85 92000-1232	RUA DOM QUINTINO, 1401		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	85 92000-1232	\N
+fccb859e-76fe-4bed-91d8-7682882c363e	ANA JULIA QUEIROZ PINHEIRO	ana@escola.com.br	123	aluno	\N	\N	85 98862-7850	RUA HENRIQUE DIAS, 21	ALTOS	PIRAMBU	FORTALEZA	CE	60311570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+f49402e8-f744-4178-b112-f0bc6b7516d8	RAFAEL DA COSTA PINHEIRO	rafael@escola.com.br	123	responsavel	004.936.503-77	\N	85 98862-7850	RUA HENRIQUE DIAS, 21	ALTOS	PIRAMBU	FORTALEZA	CE	60311570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+371d9456-e5db-4439-a834-bece74ad2470	ANTONIO GUSTAVO TAVARES LIMA	antonio@escola.com.br	123	aluno	\N	\N	85 98856-3929	RUA PAIOL, 363		CARLITO PAMPLONA	FORTALEZA	CE	60311370	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093	\N	\N
+76b8d80e-d656-46a5-b478-5a6325f50271	DEBORA DE SOUSA TAVARES	debora@escola.com.br	123	responsavel	975.344.983-68	\N	85 98856-3929	RUA PAIOL, 363		CARLITO PAMPLONA	FORTALEZA	CE	60311370	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.302093	2025-07-02 23:55:16.302093		\N
+2c800e9a-220e-4555-a176-9e10a4851242	ARTHUR TEIXEIRA DE ABREU	arthur@escola.com.br	123	aluno	\N	\N	85 99774-1760	RUA SANTA ELISA, 665 CS A		CRISTO REDENTOR	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+37024474-03c7-47f0-83fe-bd08285a1555	CARLOS ATILA FREITAS DE ABREU	carlos@escola.com.br	123	responsavel	904.892.253-49	\N	85 99774-1760	RUA SANTA ELISA, 665 CS A		CRISTO REDENTOR	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	997741760	\N
+446bd0a9-762d-4d25-ab11-29e3b1f148ea	CALEBE NUNES TABOSA	calebe@escola.com.br	123	aluno	\N	\N	85 99263-4406	Pr Melquiades, 98	Cs A	Cristo Redentor	FORTALEZA	CE	60337230	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+012f5b08-b6a6-47bc-85ac-d5c3fce7357b	FRANCISCO ESTEVÃO DA SILVA TABOSA	francisco@escola.com.br	123	responsavel	751.587.793-68	\N	85 99263-4406	Pr Melquiades, 98	Cs A	Cristo Redentor	FORTALEZA	CE	60337230	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873		\N
+220b380f-ceaf-428e-9698-82cf80849616	CECILIA VITORIA FERREIRA FLOR	cecilia@escola.com.br	123	aluno	\N	\N	85 98963-8616	Avenida Presidente Castelo Branco, 2983	Cs Altos	Nossa Senhora das Graças	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+b42911dc-c5d4-4e3b-8c57-2c000e912260	SUELY DE SOUSA MENEZES	suely@escola.com.br	123	responsavel	580.803.253-91	\N	85 98963-8616	Avenida Presidente Castelo Branco, 2983	Cs Altos	Nossa Senhora das Graças	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873		\N
+7bcfa6fc-7a21-46af-87cf-b8e569ef3560	DANIEL SOARES MENEZES	daniel@escola.com.br	123	aluno	\N	\N	85 98552-2505	Rua Nossa Senhora das Graças, 365		Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+4ff7c400-5f4d-465a-9def-38366e254c66	AILA SOARES CHAGAS PARENTE MENEZES	aila@escola.com.br	123	responsavel	010.713.563-99	\N	85 98552-2505	Rua Nossa Senhora das Graças, 365		Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873		\N
+fae1573a-85b1-434f-94bc-112c15207b7e	EMANUEL BATISTA BARBOSA LIMA	emanuel@escola.com.br	123	aluno	\N	\N	85 99141-3264	Rua Monsenhor Rosa 977		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+179f2f3a-7e1c-4611-8546-9523fb2b8995	FRANCISCO ESTÊNIO BARBOSA LIMA	francisco@escola.com.br	123	responsavel	156.184.983-91	\N	85 99141-3264	Rua Monsenhor Rosa 977		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873		\N
+c78dd72e-2396-4550-9ae6-0bea6c36e731	FRANCISCO EMANUEL DA SILVA RUFINO	francisco@escola.com.br	123	aluno	\N	\N	85 99166-7899	Rua dos Coqueirais, 89, AP 102		Floresta	Fortaleza	CE	60336-322	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+9751fe09-9634-40a2-a947-962d3367af14	BRENA KELLY DA SILVA SOUZA	brena@escola.com.br	123	responsavel	063.230.763-30	\N	85 99166-7899	Rua dos Coqueirais, 89, AP 102		Floresta	Fortaleza	CE	60336-322	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	985208351	\N
+8cb97669-decf-4578-a6f5-fd2e9ee681b3	GEORGIANA DA SILVA BARBOSA	georgiana@escola.com.br	123	aluno	\N	\N	85 98916-6428	RUA MARCILIO DIAS, 999		PIRAMBU	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+fca09ba0-49c4-49c6-8837-f5e99360502a	RAQUEL DA SILVA RIO NEGRO	raquel@escola.com.br	123	responsavel	063.265.633-64	\N	85 98916-6428	RUA MARCILIO DIAS, 999		PIRAMBU	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	85 98827-6863	\N
+8cebbd04-eaba-45de-a1b4-c935d81397cd	GIOVANNA SOUSA REIS	giovanna@escola.com.br	123	aluno	\N	\N	85 98683-0666	Rua Pedro Artur, 199		Carlito Pamplona	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+89c4d880-2914-456b-af3b-995831737d86	FRANCISCO CHARLES DE SOUSA SILVA	francisco@escola.com.br	123	responsavel	618.865.483-15	\N	85 98683-0666	Rua Pedro Artur, 199		Carlito Pamplona	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873		\N
+91f4e07e-da5f-4aad-babc-2a49a77c0f3d	GUILHERME DUARTE LIMA	guilherme@escola.com.br	123	aluno	\N	\N	85 98435-2015	RUA MONSENHOR HÉLIO CAMPOS, 532	532	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60336800	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+19a627b1-3c62-4808-9ff5-05a376e5ba60	ANTÔNIA GEICIANE DUARTE LIMA	antonia@escola.com.br	123	responsavel	061.232.743-41	\N	85 98435-2015	RUA MONSENHOR HÉLIO CAMPOS, 532	532	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60336800	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873		\N
+62f77f82-d686-4ae6-94c8-7ebae2473fbd	ICARO DA COSTA FROTA	icaro@escola.com.br	123	aluno	\N	\N	85 99763-1673	RUA OLAVO DE ANDRADE, 161		CARLITO PAMPLONA	FORTALEZA	CE	60310680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	\N	\N
+b706d931-ed99-4fa2-ad07-94c0dd6b729e	ROSIMAR ALVES DA COSTA	rosimar@escola.com.br	123	responsavel	424.205.123-91	\N	85 99763-1673	RUA OLAVO DE ANDRADE, 161		CARLITO PAMPLONA	FORTALEZA	CE	60310680	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.311873	2025-07-02 23:55:16.311873	986870429	\N
+d90e882f-b6c2-4ba9-bd2c-6ce7c14b400b	INGRID RAQUEL DA SILVA MOREIRA	ingrid@escola.com.br	123	aluno	\N	\N	85 98983-1080	RUA GAL MUNIZ ARAGÃO, 865		BARRA DO CEARÁ	FORTALEZA	CE	60332660	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+0b9c7c75-2d8a-40ec-872f-83bac52583e3	RAFAELA DA SILVA BRITO	rafaela@escola.com.br	123	responsavel	011.628.093-02	\N	85 98983-1080	RUA GAL MUNIZ ARAGÃO, 865		BARRA DO CEARÁ	FORTALEZA	CE	60332660	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631		\N
+a136a36c-ef14-4ca6-8b8c-91eb56394dbd	ISABELLA DA SILVA SARAIVA	isabella@escola.com.br	123	aluno	\N	\N	85 9262-2944	RUA DOM QUINTINO, 591		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+de5ac7b4-8950-4e84-8997-24d712373199	JOSILANA DA SILVA EUZEBIO	josilana@escola.com.br	123	responsavel	032.826.403-23	\N	85 9262-2944	RUA DOM QUINTINO, 591		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631		\N
+0061dc47-cc78-4a98-abe9-f1f520869dc4	ISABELLA SOUSA REIS	isabella@escola.com.br	123	aluno	\N	\N	85 98683-0666	Rua Pedro Artur, 199		Carlito Pamplona	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+fab0bdbd-9ed8-4554-8413-d8229ae866e8	FRANCISCO CHARLES DE SOUSA SILVA	francisco@escola.com.br	123	responsavel	618.865.483-15	\N	85 98683-0666	Rua Pedro Artur, 199		Carlito Pamplona	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631		\N
+6e484066-71ab-4e3f-9fb6-0b1c39948f81	JOÃO PEDRO BEZERRA HOLANDA PEIXOTO	joao@escola.com.br	123	aluno	\N	\N	85 98876-9227	TRAVESSA DAS ORQUIDIAS, 48		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311-640	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+67e3675a-942f-465d-a806-503417180e23	ANA ROGERIA BEZERRA MARI	ana@escola.com.br	123	responsavel	944.818.063-20	\N	85 98876-9227	TRAVESSA DAS ORQUIDIAS, 48		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311-640	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	989237386	\N
+e49b5ce1-44e1-4ac8-8829-6e0d3ce0773a	JOÃO PEDRO RIBEIRO PESSOA	joao@escola.com.br	123	aluno	\N	\N	85 98796-3244	RUA SANTA ROSA, 493 CS 58		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311420	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+d15ad1aa-a5db-43eb-9641-da4c117b5359	GERMANO DA SILVA PESSOA	germano@escola.com.br	123	responsavel	485.919.983-91	\N	85 98796-3244	RUA SANTA ROSA, 493 CS 58		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311420	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	987963244	\N
+a97e213f-8ef3-464c-b530-ac027aebcea9	JULIA DIAS PAIVA	julia@escola.com.br	123	aluno	\N	\N	85 98798-6104	RUA ALVES DE LIMA, 331		CRISTO REDENTOR	FORTALEZA	CE	60337350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+09e46962-1ef6-4a9b-88e4-52b9cf5e7f43	JOEL PAIVA DE OLIVEIRA	joel@escola.com.br	123	responsavel	029.809.333-25	\N	85 98798-6104	RUA ALVES DE LIMA, 331		CRISTO REDENTOR	FORTALEZA	CE	60337350	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631		\N
+8c1f7037-bf45-4173-bb62-0aaac41e0f97	LARA HANDREZA DE OLIVEIRA SOUZA	lara@escola.com.br	123	aluno	\N	\N	85 98975-5723	RUA FELIPE CAMARÃO, 131		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+ede33517-0470-48cd-bc05-cf4505d4a03c	ELYDIANE DE OLIVEIRA SILVA	elydiane@escola.com.br	123	responsavel	000.966.183-29	\N	85 98975-5723	RUA FELIPE CAMARÃO, 131		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	987268178	\N
+b42d946f-68b8-4f07-9c04-2fe07c31142f	MARIA ALICIA SALDANHA JUSTINO	maria@escola.com.br	123	aluno	\N	\N	85 99169-6577	RUA JOSE ARIMATEIA PINTO, 60		BARRA DO CEARÁ	FORTALEZA	CE	60334200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+7d31e534-dc90-4d6a-935a-2208a4b78d31	IVANILDE SALDANHA DA SILVA	ivanilde@escola.com.br	123	responsavel	006.549.353-27	\N	85 99169-6577	RUA JOSE ARIMATEIA PINTO, 60		BARRA DO CEARÁ	FORTALEZA	CE	60334200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	85 99169-6577 (PAI)	\N
+bbe8405c-aa8b-46bf-b4a9-54b1e8e85f51	MARIA IRISMAR RODRIGUES DA SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98852-9459	RUA SAO RAIMUNDO, 351		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+b23c7062-a8ae-4875-ab69-a384abc82365	ROSEMARY DA SILVA	rosemary@escola.com.br	123	responsavel	580.227.243-00	\N	85 98852-9459	RUA SAO RAIMUNDO, 351		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	85 98896-5956	\N
+0657ec1b-2e70-48a9-bb03-d8a1320042e3	MARIA SOFIA DELMIRO DA SILVA	maria@escola.com.br	123	aluno	\N	\N	85 98629-8469	Rua Marcilio Dias, 755	Cs Altos	Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631	\N	\N
+4e57d39d-5108-4bde-8b14-b0a494a8e545	SILVIA REJANE DELMIRO DE CARVALHO	silvia@escola.com.br	123	responsavel	658.503.943-20	\N	85 98629-8469	Rua Marcilio Dias, 755	Cs Altos	Nossa Senhora das Graças	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.319631	2025-07-02 23:55:16.319631		\N
+35c3a177-8636-4b7a-ac2b-9f3932713620	MARIA VALENTINA SANTOS DE LIMA	maria@escola.com.br	123	aluno	\N	\N	85 98858-5372	RUA DA SAUDADE, 159	CS A	CENTRO	FORTALEZA	CE	60010200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+06ddc321-783f-4713-9c4c-72b9fdbe75c0	ROBERTA JULIANA SANTOS DA SILVA	roberta@escola.com.br	123	responsavel	620.596.533-04	\N	85 98858-5372	RUA DA SAUDADE, 159	CS A	CENTRO	FORTALEZA	CE	60010200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911		\N
+1f6e62d4-1b7b-476b-b79c-7c4ba492e617	MARIA VITORIA DE OLIVEIRA NASCIMENTO	maria@escola.com.br	123	aluno	\N	\N	85 98967-1195	RUA MARCILIO DIAS, 775		JACARECANGA	FORTALEZA	CE	60310-750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+876f785f-9e9f-447c-b9c6-c15dffffb456	MARIA AUXILIADORA DE OLIVEIRA	maria@escola.com.br	123	responsavel	383.651.623-34	\N	85 98967-1195	RUA MARCILIO DIAS, 775		JACARECANGA	FORTALEZA	CE	60310-750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	85 98573-9402	\N
+b0fc1b9f-629a-4d12-a08d-977b6fb37f3c	MAYRA VALESKA DE SOUZA SAMPAIO	mayra@escola.com.br	123	aluno	\N	\N	85 98432-6920	RUA MARCILIO DIAS, 1289	CS A	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+5767cbd5-8a13-48e5-a8be-aab306510e4b	MAGNA CARVALHO DE SOUZA SAMPAIO	magna@escola.com.br	123	responsavel	046.619.383-13	\N	85 98432-6920	RUA MARCILIO DIAS, 1289	CS A	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	85 98862-2622	\N
+794219e8-f776-4f26-9936-26acfcff3a54	RAMON VITOR FERREIRA DE SANTANA	ramon@escola.com.br	123	aluno	\N	\N	85 99723-1730	Rua Dona Mendinha, 1025	AP 311 BL B	COLONIA	FORTALEZA	CE	60337-385	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+9c7f9bbe-a050-41c5-be7d-4fc3bdffdff6	PRISCILA FERREIRA DA SILVA COSTA	priscila@escola.com.br	123	responsavel	623.377.263-04	\N	85 99723-1730	Rua Dona Mendinha, 1025	AP 311 BL B	COLONIA	FORTALEZA	CE	60337-385	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	85 98756-1845	\N
+41f9e149-891e-4f72-acb7-02e5772caf2f	THALYS KAUE CHRISTIAN OLIVEIRA	thalys@escola.com.br	123	aluno	\N	\N	85997353188	Rua 1121	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+a0e8c18b-3463-45b8-9afa-30d4a4779ddb	THALITA HELENA CHRISTIAN OLIVEIRA	thalita@escola.com.br	123	responsavel	044.268.423-10	\N	85997353188	Rua 1121	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911		\N
+73fbbad6-f3d7-4c19-9a1d-19edc77896b9	ANA JAYNE PAIXÃO DA SILVA	ana@escola.com.br	123	aluno	\N	\N	85 99717-0313	RUA DOM QUINTINO, 720		NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+d6835547-e82b-417e-a17b-38749c7c57ca	EMERSON PEREIRA DA SILVA	emerson@escola.com.br	123	responsavel	690.697.273-15	\N	85 99717-0313	RUA DOM QUINTINO, 720		NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	987933058 WHATSAPP	\N
+a79133f2-3b88-40a8-a048-e91e18d9e1dc	ANA LYLA SECUNDO COSTA	ana@escola.com.br	123	aluno	\N	\N	85 98674-9333	SANTA INES 523		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+b74984dd-315c-4a68-8c36-8a748583de20	ANA GABRIELA SECUNDO	ana@escola.com.br	123	responsavel	606.455.063-54	\N	85 98674-9333	SANTA INES 523		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	32144726	\N
+7c4956ab-2b46-40f9-ae21-dce3a61348b9	ANTONIO BRYAN FREIRES SOBRINHO	antonio@escola.com.br	123	aluno	\N	\N	85 99770-1282	RUA SAO CURADARES, 63		CRISTO REDENTOR	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+73e10296-e31f-4378-85f0-12dc85e1b8da	DALVANIR DA SILVA FREIRES SOBRINHO	dalvanir@escola.com.br	123	responsavel	670.182.973-20	\N	85 99770-1282	RUA SAO CURADARES, 63		CRISTO REDENTOR	FORTALEZA	CE	60311020	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	85992568346	\N
+344179a1-c75d-4abd-98ed-9fe2fdc28a09	ARTHUR GOMES SARAIVA	arthur@escola.com.br	123	aluno	\N	\N	85 98706-9863	RUA INACIO CAMPELO, 402	CS A	COLONIA	FORTALEZA	CE	60337300	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+2834838a-2e64-405c-af41-1ad9cbab6607	ANA CRISTINA GOMES DA SILVA	ana@escola.com.br	123	responsavel	776.254.393-72	\N	85 98706-9863	RUA INACIO CAMPELO, 402	CS A	COLONIA	FORTALEZA	CE	60337300	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	85987706997	\N
+da1b4f24-2059-4401-9c1d-15203457883d	ARTHUR PIETRO SOARES DA SILVA	arthur@escola.com.br	123	aluno	\N	\N	85 98618-2066	RUA DOM QUINTINO, 1400		JACARECANGA	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	\N	\N
+fcdde000-ab19-42c7-8281-5d0f3247ae86	MARIA ROSIMEIRE SOARES DA SILVA	maria@escola.com.br	123	responsavel	009.900.883-16	\N	85 98618-2066	RUA DOM QUINTINO, 1400		JACARECANGA	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.328911	2025-07-02 23:55:16.328911	32363561	\N
+a106a187-a2ab-404e-bf08-23da3075c47f	CLARA EMILLY SECUNDO ALCANTARA	clara@escola.com.br	123	aluno	\N	\N	85 98905-7624	DOM QUINTINO 599		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60510520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+df6fc81f-f237-42fb-ba49-e3baef139b82	JESSICA SECUNDO COSTA	jessica@escola.com.br	123	responsavel	612.217.763-63	\N	85 98905-7624	DOM QUINTINO 599		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60510520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	32144726	\N
+15fecf38-c0fe-4c6c-805d-44a53e63cfd1	DAVID WILKER ALVES CARDOSO BATISTA	david@escola.com.br	123	aluno	\N	\N	85 99729-8833	Rua Dom Quintino, 1337		CRISTO REDENTOR	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+a1f3b3d5-44dd-459d-b6f7-8b0404ef74b0	ANTONIO WILQUE JUSTINO BATISTA	antonio@escola.com.br	123	responsavel	037.670.243-57	\N	85 99729-8833	Rua Dom Quintino, 1337		CRISTO REDENTOR	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	85986131257	\N
+a36f3b16-6bfc-43c5-9d71-dd6d0a9b5992	FABIO YUDI MESQUITA DE SOUSA	fabio@escola.com.br	123	aluno	\N	\N	85 99202-9260	RUA DA FE, 196		CARLITO PAMPLONA	FORTALEZA	CE	60311730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+3d359b06-963d-410c-9340-1057d895c7bb	JOAQUIM OLIVEIRA DE SOUSA	joaquim@escola.com.br	123	responsavel	819.133.623-53	\N	85 99202-9260	RUA DA FE, 196		CARLITO PAMPLONA	FORTALEZA	CE	60311730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	30943595	\N
+b58dafc6-3ad9-47a0-bf21-d6ea7ddb8846	GUSTAVO LORENZO MUNIZ OLIVEIRA SILVA	gustavo@escola.com.br	123	aluno	\N	\N	85 99729-4141	RUA NOSSA SENHORA DO CARMO, 54		CARLITO PAMPLONA	FORTALEZA	CE	60832148	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+448b09a4-bae8-4d5d-83e6-af110e7b2096	ROSANGELA MUNIZ DO NASCIMENTO	rosangela@escola.com.br	123	responsavel	715.787.493-87	\N	85 99729-4141	RUA NOSSA SENHORA DO CARMO, 54		CARLITO PAMPLONA	FORTALEZA	CE	60832148	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	997611463	\N
+351b7577-c4e1-4a54-967f-641ce0d551e2	ÍCARO MIGUEL DE SENA RODRIGUES	icaro@escola.com.br	123	aluno	\N	\N	85 99705-9132	Rua Monsenhor Rosa, 39		Jacarecanga	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+8d96e7f3-1cdb-4f74-8699-273eb4ad9579	CAMILA SILVA DE SENA	camila@escola.com.br	123	responsavel	043.617.983-03	\N	85 99705-9132	Rua Monsenhor Rosa, 39		Jacarecanga	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364		\N
+3d8238a6-98a9-4b18-ad9d-f1f8d824974c	JOAO DAVI ARRUDA AMARAL	joao@escola.com.br	123	aluno	\N	\N	85 99293-2584	Rua Daniel Miranda,166, cs A		Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+61d6981d-60c3-4c4e-b4d0-1ff24aca65bb	LEILSON FERREIRA AMARAL DO VALE	leilson@escola.com.br	123	responsavel	032.196.843-35	\N	85 99293-2584	Rua Daniel Miranda,166, cs A		Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364		\N
+4502d509-7b58-4c9e-883a-d24e22f65344	JOÃO MIGUEL DE OLIVEIRA PAULA	joao@escola.com.br	123	aluno	\N	\N	85 99689-4682	Rua Alvaro de Alencar, 14	Bl 300	Carlito Pamplona	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+2421064e-7879-43db-9a9e-8b236ecbc268	MARIA ROSEMEIRE DE OLIVEIRA	maria@escola.com.br	123	responsavel	031.119.933-02	\N	85 99689-4682	Rua Alvaro de Alencar, 14	Bl 300	Carlito Pamplona	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364		\N
+418574cd-3022-487b-9e6f-e8ed27ab4403	JOSÉ YAN RODRIGUES CAVALCANTE	jose@escola.com.br	123	aluno	\N	\N	85 99148-9556	Rua da Republica, 111		Nossa Senhora das Graças	FORTALEZA	CE	60310730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+dce532c9-6582-4672-b53b-ffff5f527703	ERIVANIA PAULA RODRIGUES	erivania@escola.com.br	123	responsavel	418.984.433-00	\N	85 99148-9556	Rua da Republica, 111		Nossa Senhora das Graças	FORTALEZA	CE	60310730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364		\N
+c1f23f20-8cd5-4d46-89e2-66c086ae61fe	KALEBE RODRIGUES SOARES	kalebe@escola.com.br	123	aluno	\N	\N	85992236510	Rua São José do Paiol		Nossa senhora das graças	Fortaleza	CE	60310-470	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+6fbd665e-b855-489f-a0a9-b394a0323756	MARIA VALDIRENE GUEDES RODRIGUES DE AQUINO	maria@escola.com.br	123	responsavel	6599960308	\N	85992236510	Rua São José do Paiol		Nossa senhora das graças	Fortaleza	CE	60310-470	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364		\N
+3b3cfacc-68d5-41ef-989e-9928d8f83bcc	LUCAS CAUÊ ARAGÃO DE CASTRO	lucas@escola.com.br	123	aluno	\N	\N	85 99669-7698	RUA DA FÉ 106		CARLITO PAMPLONA	FORTALEZA	CE	60311730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	\N	\N
+5cc85775-0be9-4f3e-ae00-7c340cf5b75b	CARLA YASMIM ARAGAO DE CASTRO	carla@escola.com.br	123	responsavel	053.614.113-45	\N	85 99669-7698	RUA DA FÉ 106		CARLITO PAMPLONA	FORTALEZA	CE	60311730	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.336364	2025-07-02 23:55:16.336364	986218897	\N
+ea45d19a-5279-4ff8-bb6b-cbfef6611265	MAISA ELEN DA SILVA MEDEIROS	maisa@escola.com.br	123	aluno	\N	\N	85 98611-6911	AVENIDA PRESIDENTE CASTELO BRANCO, 2800	ALTOS	PIRAMBU	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+42b9560f-de04-46f3-9d19-4d2e4b7d51e7	HEITOR DIEGO SILVA MEDEIROS	heitor@escola.com.br	123	responsavel	601.233.323-46	\N	85 98611-6911	AVENIDA PRESIDENTE CASTELO BRANCO, 2800	ALTOS	PIRAMBU	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+d958508e-9702-4e38-8dbf-cf4b7b479ea9	MARIA ARIELA FERREIRA DO NASCIMENTO	maria@escola.com.br	123	aluno	\N	\N	85 98685-7260	Rua Monsenhor Rosa, 341	Altos	Jacarecanga	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+b438c232-6209-4ee2-93ab-491ba7f3b8e4	JOSÉ KAUÊ SOUSA DO NASCIMENTO	jose@escola.com.br	123	responsavel	035.286.993-37	\N	85 98685-7260	Rua Monsenhor Rosa, 341	Altos	Jacarecanga	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+fd3c322b-a478-4a05-966c-d9912a5428e9	MARIA ELOISA COSTA FREITAS	maria@escola.com.br	123	aluno	\N	\N	85 99280-0569	AV. PRS CASTELO BRANCO, 3107		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+afbe0021-f1e5-41b4-935f-093ebedd7247	JOSICLEIDE ALBERTO DA COSTA	josicleide@escola.com.br	123	responsavel	026.029.283-48	\N	85 99280-0569	AV. PRS CASTELO BRANCO, 3107		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60312-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+82b909b1-9e4b-4bd4-8011-4f49df1afbcd	MIKAELEN HERCULANO OLIVEIRA	mikaelen@escola.com.br	123	aluno	\N	\N	85 98509-9272	RUA NOSSA SENHORA DAS GRAÇAS, 850		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+42bc7066-e8e2-4067-b649-906f5ef4f252	MIRELLA HERCULANO DE SOUZA OLIVEIRA	mirella@escola.com.br	123	responsavel	005.793.093-71	\N	85 98509-9272	RUA NOSSA SENHORA DAS GRAÇAS, 850		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+5c5462a6-f6f3-4314-b335-7b6a5389b276	NICHOLAS KELVIN FERREIRA DA SILVA	nicholas@escola.com.br	123	aluno	\N	\N	85 99786-9835	RUA DOM HELIO CAMPOS, 741	CS AT A	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+09ae4ff9-6c18-4340-91bb-9c67cf3f61a0	ALESSANDRA FERREIRA BRAGA	alessandra@escola.com.br	123	responsavel	616.206.963-04	\N	85 99786-9835	RUA DOM HELIO CAMPOS, 741	CS AT A	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+9de1c75f-7f71-4c6c-a275-b580c455b8b5	THIAGO FELIPE ALMEIDA DA COSTA	thiago@escola.com.br	123	aluno	\N	\N	85 98664-3862	RUA PADRE FROTA, 784		MONTE CASTELO	FORTALEZA	CE	60325160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+42f29214-9c2f-4a56-88c3-c9949f2e1c02	DANIELLE ALMEIDA DE ARAUJO	danielle@escola.com.br	123	responsavel	615.722.053-85	\N	85 98664-3862	RUA PADRE FROTA, 784		MONTE CASTELO	FORTALEZA	CE	60325160	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+b25039a9-833e-49b6-8920-ee5692e29871	ALAN DA SILVA FREITAS	alan@escola.com.br	123	aluno	\N	\N	85 98744-7858	RUA FRANCISCO CORDEIRO, 48	(85) 992637365 Mãe	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+8517d58d-5728-412b-b249-058a962d6ada	ALEXANDRE DA SILVA SOUZA	alexandre@escola.com.br	123	responsavel	633.474.583-20	\N	85 98744-7858	RUA FRANCISCO CORDEIRO, 48	(85) 992637365 Mãe	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310490	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	85987324144	\N
+f5511326-2977-4db2-ba80-035650fcb6e3	ANA LIVIA PONTES MELO	ana@escola.com.br	123	aluno	\N	\N	85 99411-6026							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+a4f6fbaa-7c34-4323-ae0a-f533aa467568	TAYSA PONTES SANTIAGO	taysa@escola.com.br	123	responsavel	054.959.123-06	\N	85 99411-6026							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+bb35860c-fff7-4e25-b303-4ad03a507416	ANA SOFIA RABELO ALEXANDRE	ana@escola.com.br	123	aluno	\N	\N	85 98720-3937	Rua Lucas Pinto, 285		Carlito Pamplona	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+a1a4c13d-cdf0-4d27-99fe-af798ac7150e	ANA MARUSIA RABELO ALEXANDRE	ana@escola.com.br	123	responsavel	795.056.433-49	\N	85 98720-3937	Rua Lucas Pinto, 285		Carlito Pamplona	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134		\N
+602b0c54-366e-4d75-a6fc-1e61f96e2869	ANA SOPHIA DA SILVA LIMA	ana@escola.com.br	123	aluno	\N	\N	85 98566-1064	Rua das Crianças		Cristo Redentor	Fortaleza	CE	60337-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	\N	\N
+14facc9c-ca13-42e1-a234-6c98b57ea146	KAUAN ARAÚJO DE LIMA	kauan@escola.com.br	123	responsavel	038.194.723-80	\N	85 98566-1064	Rua das Crianças		Cristo Redentor	Fortaleza	CE	60337-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.345134	2025-07-02 23:55:16.345134	85 3213-1126	\N
+ea3b6a8e-4e6f-4e81-99af-512657f6d890	CAUÊ CRISTIAN GONÇALVES GIRÃO	caue@escola.com.br	123	aluno	\N	\N	85 98511-8202	Rua Cruzeiro do Sul, 75	CS ALTOS	Carlito Pamplona	FORTALEZA	CE	60335190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+5ce87e25-d548-4e9f-a750-d91471234c06	NATALIA DA SILVA GONÇALVES	natalia@escola.com.br	123	responsavel	013.207.483-41	\N	85 98511-8202	Rua Cruzeiro do Sul, 75	CS ALTOS	Carlito Pamplona	FORTALEZA	CE	60335190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+e005b5aa-aa59-4dec-8355-35e8d22863ad	FRANCISCO FABIO ALVES MARTINS FILHO	francisco@escola.com.br	123	aluno	\N	\N	85 98873-8602	RUA PAIOL, 386		CARLITO PAMPLONA	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+c1ef2d50-9627-4ee1-957d-4d945082e6ef	GLÁUCIA APARECIDASALES DE MORAES ALVES	glaucia@escola.com.br	123	responsavel	834.746.683-15	\N	85 98873-8602	RUA PAIOL, 386		CARLITO PAMPLONA	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	988738602	\N
+aa95c852-35c2-47a0-bb4b-ba1c55be09ad	GABRIEL SILVA DO NASCIMENTO	gabriel@escola.com.br	123	aluno	\N	\N	85 98855-1577	Rua Daniel Miranda, 190, CS		Parque Leblon	CAUCAIA	CE	61600004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+29cedb09-ea6f-41fb-968c-9c97b81adfe9	JOICELENE FERREIRA SILVA	joicelene@escola.com.br	123	responsavel	013.699.593-46	\N	85 98855-1577	Rua Daniel Miranda, 190, CS		Parque Leblon	CAUCAIA	CE	61600004	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+9284ec66-0375-4baf-ae66-7e2ed259061f	GABRYELLA DOS SANTOS CAMPOS	gabryella@escola.com.br	123	aluno	\N	\N	85989656180	Rua Tenente Benévolo, 420	de 891/892 ao fim	Meireles	Fortaleza	CE	60160-041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+0a7968c9-4948-4e48-acea-e09fd00f43ad	MARIA DE FATIMA DOS SANTOS ALVES	maria@escola.com.br	123	responsavel	50058827315	\N	85989656180	Rua Tenente Benévolo, 420	de 891/892 ao fim	Meireles	Fortaleza	CE	60160-041	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+ecf640e1-4b0f-4574-a57d-03d08e1ae7e1	IKARO WALLACE SOUSA ANDRADE	ikaro@escola.com.br	123	aluno	\N	\N	85 98705-2326	Rua Osmani, 44	CS 63	Barra do Ceará	FORTALEZA	CE	60331572	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+af93a067-61ee-43f7-8e72-0b12488892b6	ANTONIA IRINEUDA DIAS DE SOUSA	antonia@escola.com.br	123	responsavel	631.828.743-49	\N	85 98705-2326	Rua Osmani, 44	CS 63	Barra do Ceará	FORTALEZA	CE	60331572	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+68eaf19e-969c-4b80-ba8f-20e379e0dcbe	ISAAC FURTADO GRANGEIRO	isaac@escola.com.br	123	aluno	\N	\N	85988167704	Rua Santa Inês, 979		Canindezinho	Fortaleza	CE	60733-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+1979bab0-2825-4f01-8545-1036d1948483	RAQUEL FURTADO RODRIGUES	raquel@escola.com.br	123	responsavel	10091335	\N	85988167704	Rua Santa Inês, 979		Canindezinho	Fortaleza	CE	60733-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+3ab3cde9-96bc-4b42-a8d1-2ee694d0131c	JADE MANUELLA RIBEIRO COSTA	jade@escola.com.br	123	aluno	\N	\N	85 99631-5139	Rua Santa Inês, 1564 Cs Altos		Pirambu	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+3208b411-ac7b-4558-a0a6-9326c4fe751b	JOSSLYN COSTA ROCHA	josslyn@escola.com.br	123	responsavel	040.042.783-41	\N	85 99631-5139	Rua Santa Inês, 1564 Cs Altos		Pirambu	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+10fbd004-8ee1-4cb9-bef7-19f7e33e6549	JENNYFER MIKAELLY MELGAÇO MELO	jennyfer@escola.com.br	123	aluno	\N	\N	85 98690-8211	Rua Camelia, 751		Nossa Senhora das Graças	FORTALEZA	CE	60337380	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+3940326a-01a2-4580-9567-25ed2c060d11	VIRLANIA MELGAÇO BARROS	virlania@escola.com.br	123	responsavel	002.791.793-24	\N	85 98690-8211	Rua Camelia, 751		Nossa Senhora das Graças	FORTALEZA	CE	60337380	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+77fd8a61-a9bf-4362-9d9d-842e7f4ffb90	JOÃO PABLO LIMA TELES	joao@escola.com.br	123	aluno	\N	\N	85 99741-2705	RUA ALVARO DE ALENCAR, 279	CASA ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60311760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+4d88e1df-dd63-46ca-b689-915c93e5b48e	ELISANE LIMA NUNES	elisane@escola.com.br	123	responsavel	613.688.813-00	\N	85 99741-2705	RUA ALVARO DE ALENCAR, 279	CASA ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60311760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+35ed302e-93b8-4108-bf13-1f084efedc58	JULIA COSTA DE SOUSA	julia@escola.com.br	123	aluno	\N	\N	85 98815-5582	RUA LUCAS PINTO, 181		CARLITO PAMPLONA	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882	\N	\N
+2705d21c-64e2-41db-aab9-237c16017ccc	FRANCINEIDE COSTA DE SOUSA	francineide@escola.com.br	123	responsavel	510.930.573-00	\N	85 98815-5582	RUA LUCAS PINTO, 181		CARLITO PAMPLONA	FORTALEZA	CE	60312280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.352882	2025-07-02 23:55:16.352882		\N
+16d00620-097c-4bbd-85ec-7f9f428f1d56	KAUANNY LISE PEIXOTO DOS SANTOS	kauanny@escola.com.br	123	aluno	\N	\N	85 99175-4376	Rua São Raimundo, 606		Pirambu	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+3d2b9404-9222-4e9d-94e9-52593717430d	CARLOS JOSE SOUSA DOS SANTOS	carlos@escola.com.br	123	responsavel	668.974.913-49	\N	85 99175-4376	Rua São Raimundo, 606		Pirambu	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+785f9b07-ac93-43c0-a9e6-ad24398de4d2	KIMBERLY ARIANE GOMES LIMA	kimberly@escola.com.br	123	aluno	\N	\N	85 98816-1380	RUA DOM HELIO CAMPOS, 80	AP 102 BL 05 QD A	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+0906a3a6-d39d-4f45-abf1-76b4e850fc1f	MICHEL ANGELO MACIEL LIMA	michel@escola.com.br	123	responsavel	646.173.353-15	\N	85 98816-1380	RUA DOM HELIO CAMPOS, 80	AP 102 BL 05 QD A	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	85 98816-1380	\N
+0993b90d-3853-4509-a27a-470e987e344d	LUCAS JAZIEL SANTOS MANGABEIRA	lucas@escola.com.br	123	aluno	\N	\N	85 98677-2105	Rua Dom Quintino, 694	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+56c8d3a8-b924-4eef-b8f2-1d3cfd2f710c	ISMÁLIA SANTOS RODRIGUES	ismalia@escola.com.br	123	responsavel	645.666.503-59	\N	85 98677-2105	Rua Dom Quintino, 694	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+95de6e90-126b-4237-bd84-f5a3c507ef1e	LUCCA MARINHO OTONI	lucca@escola.com.br	123	aluno	\N	\N	85 98940-2419	RUA ALVARO DE ALENCAR, 18 A	BL 280	CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+83561178-86d4-457f-9ac9-b0edd53218fb	ALEXANDRE OTONI DO ESPIRITO SANTO	alexandre@escola.com.br	123	responsavel	059.892.506-65	\N	85 98940-2419	RUA ALVARO DE ALENCAR, 18 A	BL 280	CARLITO PAMPLONA	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+bd17a741-42ca-43ec-bdc9-d244f3b4f78a	LUIZ GUILHERME BARBOSA MACIEL	luiz@escola.com.br	123	aluno	\N	\N	85999833530	Avenida Jovita Feitosa 2150	de 892 a 3298 - lado par	Parquelândia	Fortaleza	CE	60455-410	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+3902f1d6-8473-4b62-b3f2-9c508f242be2	KARLA DANIELLE DE OLIVEIRA BARBOSA	karla@escola.com.br	123	responsavel	4923486341	\N	85999833530	Avenida Jovita Feitosa 2150	de 892 a 3298 - lado par	Parquelândia	Fortaleza	CE	60455-410	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+8e3f4599-c4f7-440c-94a0-a7838436db8b	LUIZ GUSTAVO DE ALENCAR SOUSA	luiz@escola.com.br	123	aluno	\N	\N	85 98538-4550	RUA DOM HELIO CAMPOS 80 AP 301 BL 13 DR A		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+fff9aa2e-3b26-4b14-993a-5ae65bb41081	THELMA CRISTINA DE ALENCAR SOUSA	thelma@escola.com.br	123	responsavel	622.844.603-72	\N	85 98538-4550	RUA DOM HELIO CAMPOS 80 AP 301 BL 13 DR A		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	32360374	\N
+62664dfe-d2f4-42e6-9457-84458b58258e	MARIA CLARA NASCIMENTO ALMEIDA	maria@escola.com.br	123	aluno	\N	\N	85 98834-5623	AV. FRANCISCO SA, 3572	AP 304 BL G	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+8b7d3a6b-e54e-48bf-aeec-887df83b3dda	SILVIA FERREIRA ALMEIDA	silvia@escola.com.br	123	responsavel	167.744.263-87	\N	85 98834-5623	AV. FRANCISCO SA, 3572	AP 304 BL G	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+4f8670b7-5b80-4353-8ca0-bfdbae40917a	MARIA EDUARDA OLIVEIRA MARTINS	maria@escola.com.br	123	aluno	\N	\N	85 98430-2206	Rua São Jose do Paiol, 201		Nossa Senhora das Graças	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+d956d71f-8b18-4139-8133-c32169b756e3	MARIA ELIEUDA OLIVEIRA DA SILVA	maria@escola.com.br	123	responsavel	053.470.733-57	\N	85 98430-2206	Rua São Jose do Paiol, 201		Nossa Senhora das Graças	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+b738a082-8643-4a0a-b194-c66943542ed0	MARIA VITORIA LUCINDO DA SILVA ROCHA	maria@escola.com.br	123	aluno	\N	\N	85998411968	Avenida Presidente Castelo Branco, 4024, cs Altos	de 3152 a 4236 - lado par	Cristo Redentor	Fortaleza	CE	60337-224	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+d9608ab1-e312-443b-aa50-98b5b07821e5	FRANCISCO ERINALDO DA ROCHA	francisco@escola.com.br	123	responsavel	1340011336	\N	85998411968	Avenida Presidente Castelo Branco, 4024, cs Altos	de 3152 a 4236 - lado par	Cristo Redentor	Fortaleza	CE	60337-224	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+68045bd4-e8db-4d78-9bb6-847ead3f6fc7	MARIA YASMIM PEREIRA PENHA	maria@escola.com.br	123	aluno	\N	\N	85 98835-1757	RUA HENRIQUE DIAS, 81	CS ALTOS	NOSSA SENHORA DASS GRAÇAS	FORTALEZA	CE	60311570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931	\N	\N
+3d2279f9-46c1-4026-aa90-11ebc2f05cb7	MARIA CELIA DA COSTA PEREIRA	maria@escola.com.br	123	responsavel	784.099.773-20	\N	85 98835-1757	RUA HENRIQUE DIAS, 81	CS ALTOS	NOSSA SENHORA DASS GRAÇAS	FORTALEZA	CE	60311570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.361931	2025-07-02 23:55:16.361931		\N
+a1c6e124-b353-4131-85c1-72ec9466de79	PEDRO LUCAS ALVES ARAUJO	pedro@escola.com.br	123	aluno	\N	\N	85 98791-2582	RUA MONSENHOR ROSA, 747		CARLITO PAMPLONA	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+912845af-b13f-408d-8b3b-7a1d6ebff3a6	JUCILENE ALVES MONTEIRO DE SOUZA	jucilene@escola.com.br	123	responsavel	601.235.143-71	\N	85 98791-2582	RUA MONSENHOR ROSA, 747		CARLITO PAMPLONA	FORTALEZA	CE	60310440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751		\N
+e9e4c69c-89c3-47c0-9d5a-4b6b33b76187	SAVIO HOLANDA OLIVEIRA ROCHA	savio@escola.com.br	123	aluno	\N	\N	85 98817-0570	RUA FELIPE DOS SANTOS, 48		NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60310580	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+6946ed65-d0a5-451b-8400-a360c4f2fdf6	LUCIA ANDREIA NASCIMENTO DE HOLANDA	lucia@escola.com.br	123	responsavel	619.732.383-49	\N	85 98817-0570	RUA FELIPE DOS SANTOS, 48		NOSSA SRA DAS GRAÇAS	FORTALEZA	CE	60310580	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	988063718	\N
+d9ee41a2-7bb7-405d-9435-2ba5752c836d	SOFIA GADELHA PIRES	sofia@escola.com.br	123	aluno	\N	\N	85 98625-6964	Rua das Hortas, 48		Jardim Metropolis	FORTALEZA	CE	60332480	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+80e0886a-ec31-4cfe-80a1-e04de30b7e35	MARCELINO PIRES DA SILVA JUNIOR	marcelino@escola.com.br	123	responsavel	030.168.663-74	\N	85 98625-6964	Rua das Hortas, 48		Jardim Metropolis	FORTALEZA	CE	60332480	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751		\N
+9e6ee976-19e7-4bd7-ac9c-97c232315a28	SOFIE OLIVEIRA GOMES	sofie@escola.com.br	123	aluno	\N	\N	85 98867-8438	RUA:PEDRO ARTUR 248		CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+1992eb54-eee4-4a45-85c9-f55449da360a	LUCIMAR RODRIGUES DE OLIVEIRA	lucimar@escola.com.br	123	responsavel	011.236.673-22	\N	85 98867-8438	RUA:PEDRO ARTUR 248		CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	988678438	\N
+67909e0f-290b-4000-bfe7-e0f9e42fd2d6	ALICIA CRISTINA VASCONCELOS FÉLIX	alicia@escola.com.br	123	aluno	\N	\N	85 98818-4783	RUA VERA CRUZ, 200		PIRAMBU	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+f2cf3a32-4fc5-43e7-aa48-4d6a7b56aca9	FERNANDO FÉLIX FERREIRA	fernando@escola.com.br	123	responsavel	323.064.583-91	\N	85 98818-4783	RUA VERA CRUZ, 200		PIRAMBU	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751		\N
+63c4c65c-be9f-4014-ab47-7b9c000b873d	ANA KAROLINE COSTA BARROS	ana@escola.com.br	123	aluno	\N	\N	85 98622-9418							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+e31a4dfd-48b0-4bab-b9e9-eb88e9bf34e4	ANA KARINE DA SILVA COSTA BARROS	ana@escola.com.br	123	responsavel	020.887.103-96	\N	85 98622-9418							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751		\N
+e94b98f7-5538-4d2c-905b-ceb2fef34b2d	ANA LETICIA GOMES DA COSTA	ana@escola.com.br	123	aluno	\N	\N	85 98821-6698	RUA DOM QUINTINO, 1085		PIRAMBU	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+0b2b40ab-82fc-4c97-9056-309f2f838efa	ANA RAQUEL GOMES DE OLIVEIRA	ana@escola.com.br	123	responsavel	026.613.253-79	\N	85 98821-6698	RUA DOM QUINTINO, 1085		PIRAMBU	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	988216698	\N
+9d3dde1e-8bbd-40f9-b74a-746ec7f00820	ANNY GABRIELLE BATISTA DE LIMA	anny@escola.com.br	123	aluno	\N	\N	85 99929-9778	RUA GENERAL COSTA MATOS, 187		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310690	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+9c6e475f-8049-4589-80ba-13fa87097969	ANTONIO DE SOUSA LIMA NETO	antonio@escola.com.br	123	responsavel	378.488.283-87	\N	85 99929-9778	RUA GENERAL COSTA MATOS, 187		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310690	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	85 98606-2056	\N
+f9cbfc0f-2160-4c81-bd0d-f5732308f3d6	ANTONIO MIGUEL ANGELO COSTA DA SILVA	antonio@escola.com.br	123	aluno	\N	\N	85 99770-0454	Rua Victor Meireles, 333		Cristo Redentor	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+492654a8-7012-464b-b1da-f21e9f83b821	FRANCISCO DE ASSIS PAULO DA SILVA JUNIOR	francisco@escola.com.br	123	responsavel	670.824.753-49	\N	85 99770-0454	Rua Victor Meireles, 333		Cristo Redentor	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	85 98170-0740	\N
+b57f425e-2986-4fcb-89be-27c9b912cff6	ARTHUR DA SILVA TEIXEIRA	arthur@escola.com.br	123	aluno	\N	\N	85 98770-5821	AVENIDA PASTEUR, 356		CRISTO REDENTOR	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	\N	\N
+bc4b452f-90f3-42fc-8aec-d1aa975e63dd	MICHELE FERREIRA DA SILVA TEIXEIRA	michele@escola.com.br	123	responsavel	744.232.233-68	\N	85 98770-5821	AVENIDA PASTEUR, 356		CRISTO REDENTOR	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.369751	2025-07-02 23:55:16.369751	32365356	\N
+ee9e88df-6f77-4206-92a9-9bb665d5690f	DIOGO WILLIAM VIANA DE SOUSA	diogo@escola.com.br	123	aluno	\N	\N	85 98831-3379	AV PASTEUR, 624		CRISTO REDENTOR	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+a6716539-de7b-4688-802e-6a95ed11bea3	FREDERICO RODRIGUES DE SOUSA	frederico@escola.com.br	123	responsavel	621.897.863-04	\N	85 98831-3379	AV PASTEUR, 624		CRISTO REDENTOR	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	988313379	\N
+139ab5a9-de9d-422c-84dc-58b037e820ca	ESTER SOPHIA DOS SANTOS UCHOA	ester@escola.com.br	123	aluno	\N	\N	85 98843-5304	AVENIDA FRANCISCO SA, 3572	AP 102 BL B	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+61e99f19-8268-4c6f-a499-af6d5d354bcd	TITO SERGIO DA SILVA UCHOA	tito@escola.com.br	123	responsavel	580.242.983-68	\N	85 98843-5304	AVENIDA FRANCISCO SA, 3572	AP 102 BL B	CARLITO PAMPLONA	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+c8b9ec07-97d2-416f-abb6-047ea7141b9a	FRANCISCO ADRIANO DOS SANTOS OLIVEIRA	francisco@escola.com.br	123	aluno	\N	\N	85 98869-2545	Tr Jose Marques de Mesquita, 6		Nossa Senhora das Graças	FORTALEZA	CE	60310630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+43a8dcbb-6374-4d7f-99ac-f1db5c62f09e	JANETE GONZAGA DOS SANTOS	janete@escola.com.br	123	responsavel	953.306.903-15	\N	85 98869-2545	Tr Jose Marques de Mesquita, 6		Nossa Senhora das Graças	FORTALEZA	CE	60310630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+c6b50714-8591-43cd-a2a3-dd31c417121e	IAN JOHN ALVES DA SILVA	ian@escola.com.br	123	aluno	\N	\N	85 98552-6782	Rua Dom Quintino, 471	Fundos	Pirambu	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+78ee297c-981a-42fc-b342-a370bc306c66	MARIA IVIANE ALVES DE LIMA SILVA	maria@escola.com.br	123	responsavel	032.313.713-09	\N	85 98552-6782	Rua Dom Quintino, 471	Fundos	Pirambu	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+901a8389-63aa-49a7-aa40-16ef190f6122	ISABELLY SOUSA LIMA	isabelly@escola.com.br	123	aluno	\N	\N	85 98678-5227	Rua Pedro Artur, 197 Altos		Pirambu	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+c6e5cc13-99bb-40d6-a743-7bb6b07b7cc9	DIJAELSON FERREIRA LIMA	dijaelson@escola.com.br	123	responsavel	626.153.003-34	\N	85 98678-5227	Rua Pedro Artur, 197 Altos		Pirambu	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+f261031a-0d3b-4328-811c-40fd0c86361a	ITAMAR ITALO PAIXAO DE CASTRO SPINOSA	itamar@escola.com.br	123	aluno	\N	\N	85 98513-3211							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+adb03f46-20b6-40f7-9f5c-792d09203387	ITAMAR SPINOSA FELIX	itamar@escola.com.br	123	responsavel	298.444.793-04	\N	85 98513-3211							t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+45eae564-4141-461f-ae87-8f1527174d78	JOÃO ANTONY SANTOS OLIVEIRA	joao@escola.com.br	123	aluno	\N	\N	85 99901-0065	Avenida Francisco Sá, 3572	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+3e477834-35d4-415e-9cad-7c8f2ccecf17	GLEICIANE SANTOS DO NASCIMENTO	gleiciane@escola.com.br	123	responsavel	002.454.933-95	\N	85 99901-0065	Avenida Francisco Sá, 3572	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	999010065	\N
+38a71958-3098-41ba-b433-15573a98f59f	JOAO HENRIQUE ARRUDA AMARAL	joao@escola.com.br	123	aluno	\N	\N	85 99293-2584	Rua Daniel Miranda 188	Casa A	Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+33dab948-efa2-4414-a655-2f55b9bf1222	LEILSON FERREIRA AMARAL DO VALE	leilson@escola.com.br	123	responsavel	032.196.843-35	\N	85 99293-2584	Rua Daniel Miranda 188	Casa A	Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+16446a4f-08fb-48a3-87fc-1e3970363202	KAYO RAFAEL COSTA MENDONÇA	kayo@escola.com.br	123	aluno	\N	\N	85 98886-6481	RUA DOM HELIO CAMPOS, 388	AN TERREO AP 01	CARLITO PAMPLONA	FORTALEZA	CE	60311-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+63042e31-d61d-4f95-b690-f118266b84f1	SEVYA MARIA ASSIS COSTA	sevya@escola.com.br	123	responsavel	615.851.573-68	\N	85 98886-6481	RUA DOM HELIO CAMPOS, 388	AN TERREO AP 01	CARLITO PAMPLONA	FORTALEZA	CE	60311-630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678		\N
+5377bed2-b313-4d9f-af75-cf3f4caa11d3	LIVIA VITORIA AQUINO DE MELO	livia@escola.com.br	123	aluno	\N	\N	85 98973-6146	RUA NOSSA SRA DAS GRACAS, 1017		PIRAMBU	FORTALEZA	CE	60310760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	\N	\N
+cbde4dca-2d1e-4d9c-9bb9-4f98fdd61c27	FRANCISCO DA SILVA DE MELO	francisco@escola.com.br	123	responsavel	726.348.553-20	\N	85 98973-6146	RUA NOSSA SRA DAS GRACAS, 1017		PIRAMBU	FORTALEZA	CE	60310760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.377678	2025-07-02 23:55:16.377678	32367252	\N
+58adbf86-6154-4d13-bd4f-53f9e7bca5b1	ARTHUR GOES DE FREITAS	arthur@escola.com.br	123	aluno	\N	\N	85 99611-0629	TRAVESSA CORAÇÃO DE JESUS, 40		PIRAMBU	FORTALEZA	CE	60312270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+66850a4f-9c31-4f3a-aa3e-39c6d6f28a5c	AYRLA LIZANDRA SOUZA DE OLIVEIRA	ayrla@escola.com.br	123	responsavel	604.615.383-26	\N	85 99611-0629	TRAVESSA CORAÇÃO DE JESUS, 40		PIRAMBU	FORTALEZA	CE	60312270	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	996449502	\N
+3841dc25-933b-4075-82dd-8ba6457a7981	CRISLÂNIA DE CASTRO MOURA	crislania@escola.com.br	123	aluno	\N	\N	85 98671-3469	RUA DOS COQUEIROS, 61 AP 101		ALVARO WEYNE	FORTALEZA	CE	60000000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+e7befd6d-81f6-4f1e-808c-0e088dc0c380	VERIDIANA LOPES DE CASTRO	veridiana@escola.com.br	123	responsavel	038.582.833-04	\N	85 98671-3469	RUA DOS COQUEIROS, 61 AP 101		ALVARO WEYNE	FORTALEZA	CE	60000000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	85986713469	\N
+b40ce547-d06d-4c3b-8614-dd86516a2349	DAFINY OLIVEIRA DANTAS	dafiny@escola.com.br	123	aluno	\N	\N	85 98466-5318	RUA SÃO RAIMUNDO, 484		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+0f3de152-a4c3-4a7f-a690-65abdea5417e	LAURINEIDE OLIVEIRA FREIRES DANTAS	laurineide@escola.com.br	123	responsavel	613.730.103-63	\N	85 98466-5318	RUA SÃO RAIMUNDO, 484		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174		\N
+932b2968-aaa1-4574-b50a-20b136f45ff1	DEBORAH HADASSA DANTAS SOARES	deborah@escola.com.br	123	aluno	\N	\N	85 99797-2527	RUA SAO RAIMUNDO, 465		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+744fbbe3-7d0f-4f31-a327-5820c133417a	FRANCISCO SOARES DA SILVA	francisco@escola.com.br	123	responsavel	144.454.173-00	\N	85 99797-2527	RUA SAO RAIMUNDO, 465		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	85 99145-7978	\N
+bc7b8463-f2d2-4555-8fe4-eec96c148e0f	DIONE LEVY DE OLIVEIRA MARTINS	dione@escola.com.br	123	aluno	\N	\N	85994343300	Rua Monsenhor Rosa, 900		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+18221416-57dd-49ae-857a-9772404dff36	ANA PATRICIA DE OLIVEIRA GOMES	ana@escola.com.br	123	responsavel	492466319	\N	85994343300	Rua Monsenhor Rosa, 900		Carlito Pamplona	Fortaleza	CE	60310-440	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174		\N
+c58098fb-90f6-40ec-9ffe-b24ae9af6652	ERIC DE OLIVEIRA FELIPE FILHO	eric@escola.com.br	123	aluno	\N	\N	85 99985-7386	RUA NOSSA SENHORA DAS GRAÇAS, 833		PIRAMBU	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+eadf034a-3fda-41a4-b80d-161ce39b0ae9	ANNE JAMILE ALVES DOS SANTOS	anne@escola.com.br	123	responsavel	609.892.663-89	\N	85 99985-7386	RUA NOSSA SENHORA DAS GRAÇAS, 833		PIRAMBU	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174		\N
+e2d10389-e3cf-4b8c-8fb2-27a98a983e84	ISAQUE MOTA AZEVEDO	isaque@escola.com.br	123	aluno	\N	\N	85 98894-4964	Rua Nossa Senhora das Graças, 851		Nossa Senhora das Graças	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+98f69405-5add-4403-ad4b-187ae9b59f6b	AURILENE LIMA MOTA	aurilene@escola.com.br	123	responsavel	600.395.023-41	\N	85 98894-4964	Rua Nossa Senhora das Graças, 851		Nossa Senhora das Graças	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174		\N
+2c12191a-da97-41c3-be66-6061f32b1b67	KARLA ARIANNY GOMES DO NASCIMENTO	karla@escola.com.br	123	aluno	\N	\N	85 99405-4604	RUA DOM HELIO CAMPOS, 80	Ap 101 Bl 10 Qd A	Carlito Pamplona	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+ccc990ed-4720-4134-bd38-9831cc8553d6	JANAYNA GOMES TAVORA	janayna@escola.com.br	123	responsavel	050.965.443-62	\N	85 99405-4604	RUA DOM HELIO CAMPOS, 80	Ap 101 Bl 10 Qd A	Carlito Pamplona	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174		\N
+2b0f845e-5938-4bd9-88e1-c62fa3cda3c4	LUANA PAIXÃO ALMEIDA	luana@escola.com.br	123	aluno	\N	\N	85988814264	Rua Nossa Senhora das Graças, 604		Pirambu	Fortaleza	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+e63aa323-bb36-4ab6-bc9a-55b50e10282a	MARCELO PEREIRA ALMEIDA	marcelo@escola.com.br	123	responsavel	96041722391	\N	85988814264	Rua Nossa Senhora das Graças, 604		Pirambu	Fortaleza	CE	60310-770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174		\N
+6f448932-3d11-4c90-9981-d08c72dba6d5	MARDESSON VASCONCELOS RAMOS DE SOUSA	mardesson@escola.com.br	123	aluno	\N	\N	85 98517-3759	Rua Pedro Artur, 868	ALTOS	Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	\N	\N
+68dd26e1-495c-4cf1-b39b-9aef7f7493f1	RAYSSA VASCONCELOS DO NASCIMENTO	rayssa@escola.com.br	123	responsavel	620.380.963-25	\N	85 98517-3759	Rua Pedro Artur, 868	ALTOS	Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.390174	2025-07-02 23:55:16.390174	85 98732-4938	\N
+6ef30988-c80d-4755-b51a-6e6fc291b178	MARIA EDUARDA FREITAS GOMES DA SILVA	maria@escola.com.br	123	aluno	\N	\N	85 99931-0029	AVENIDA PASTEUR,1116	AP 301 BL 01 B	CRISTO REDENTOR	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+f8cf4d14-09a4-4d75-9399-8a594b4d84df	FRANCISCO VALBER GOMES DA SILVA	francisco@escola.com.br	123	responsavel	701.424.593-72	\N	85 99931-0029	AVENIDA PASTEUR,1116	AP 301 BL 01 B	CRISTO REDENTOR	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+d61736e8-5e05-4116-bbd8-075468bfc07a	MARIA LETICIA FERREIRA BRAGA BARROS	maria@escola.com.br	123	aluno	\N	\N	85 98666-0519	RUA PADRE HENRIQUE, 1103		COLONIA	FORTALEZA	CE	60333240	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+10f1ad5f-84d3-44cc-853a-05a1592b5874	LEIDIANA FERREIRA BRAGA BARROS	leidiana@escola.com.br	123	responsavel	036.016.613-06	\N	85 98666-0519	RUA PADRE HENRIQUE, 1103		COLONIA	FORTALEZA	CE	60333240	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	986656376	\N
+ea4351dd-43a7-4720-bb58-55701fe59576	MARIANA PEREIRA CAMPOS PIMENTA	mariana@escola.com.br	123	aluno	\N	\N	85 9 8158-3022	Rua Leão Marinho, 856		Parque Leblon	Caucaia	CE	61631-295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+f3f15788-b210-42d5-a6fe-57dbbd85f0f6	WARLLEY BARCELOS PIMENTA	warlley@escola.com.br	123	responsavel	5700389797	\N	85 9 8158-3022	Rua Leão Marinho, 856		Parque Leblon	Caucaia	CE	61631-295	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+86ad90f2-2713-4e4c-8c34-d25685e2d0da	MIGUEL GOMES DAMASCENO	miguel@escola.com.br	123	aluno	\N	\N	85 98734-6721	Rua Vicente Saboia, 582		Carlito Pamplona	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+31e90341-5057-4326-bc04-6da7535fd929	SILVANIA GOMES DA SILVA DAMASCENO	silvania@escola.com.br	123	responsavel	510.952.543-91	\N	85 98734-6721	Rua Vicente Saboia, 582		Carlito Pamplona	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+117764a7-61ff-4f91-801c-129e3956edea	PEDRO ENZO MOREIRA DE SOUSA	pedro@escola.com.br	123	aluno	\N	\N	85992085834	Rua Ana Faco 399		Álvaro Weyne	Fortaleza	CE	60335-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+b6a87cab-18a1-4db2-9d4a-5ebcfd9758b4	EMERSON LIMA DE SOUSA	emerson@escola.com.br	123	responsavel	3550379390	\N	85992085834	Rua Ana Faco 399		Álvaro Weyne	Fortaleza	CE	60335-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+8ad765f5-0a66-4493-9c47-5a4bc826af1c	SAMUEL DAMASCENO DE OLIVEIRA	samuel@escola.com.br	123	aluno	\N	\N	85 99682-8859	RUA 20 DE JANEIRO, 1061		BARRA DO CEARA	FORTALEZA	CE	60331200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+59f2c226-8ec2-494f-a65f-77be79e8d1b1	MARIA GORETE DAMASCENO	maria@escola.com.br	123	responsavel	029.181.903-65	\N	85 99682-8859	RUA 20 DE JANEIRO, 1061		BARRA DO CEARA	FORTALEZA	CE	60331200	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+76a7a9c5-4f6e-4e49-9b22-4339295bb1f6	SAMUEL FELIPE BRITO DA SILVA	samuel@escola.com.br	123	aluno	\N	\N	85985005978	Rua do Tirol, 351		Carlito Pamplona	Fortaleza	CE	60311-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+13812fef-d3d9-497f-9f26-a5c19a963cc1	VITORIA DA CONCEIÇÃO BRITO BEZERRA	vitoria@escola.com.br	123	responsavel	4333167302	\N	85985005978	Rua do Tirol, 351		Carlito Pamplona	Fortaleza	CE	60311-400	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+971a2ebf-28fa-47d9-9b23-71dd472b6d14	VINICIUS LUXEMBURGO GOMES DE MENESES	vinicius@escola.com.br	123	aluno	\N	\N	85 98545-9961	Rua 43	(Cj Planalto da Barra)	Vila Velha	Fortaleza	CE	60348-570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+77fb5013-6171-4ccb-a565-113ae2825157	VERIDIANA GOMES DOS SANTOS MENESES	veridiana@escola.com.br	123	responsavel	64.658.961/334	\N	85 98545-9961	Rua 43	(Cj Planalto da Barra)	Vila Velha	Fortaleza	CE	60348-570	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+8a3b4f73-44e9-4a2d-a433-8c590654ec84	WESLEY LEVI DE SOUSA FERREIRA	wesley@escola.com.br	123	aluno	\N	\N	85 98588-4768	AV. PRESIDENTE CASTELO BRANCO 2431	CS 102	JACARECANGA	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+eef3694d-4f77-48d6-a809-c5183eda37a0	JOÃO PAULO CÉSAR FERREIRA	joao@escola.com.br	123	responsavel	052.316.323-17	\N	85 98588-4768	AV. PRESIDENTE CASTELO BRANCO 2431	CS 102	JACARECANGA	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	988654006	\N
+748a31f4-d39f-4a59-bc4f-fb4859839a65	WILAINE SIMOES SILVA	wilaine@escola.com.br	123	aluno	\N	\N	85981339410	Rua Adarias de Lima 206		Moura Brasil	Fortaleza	CE	60010-130	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766	\N	\N
+3b3c5aad-4755-4bca-ac23-e7e150a14293	SIMONE SIMOES SILVA	simone@escola.com.br	123	responsavel	456.687.873-20	\N	85981339410	Rua Adarias de Lima 206		Moura Brasil	Fortaleza	CE	60010-130	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.398766	2025-07-02 23:55:16.398766		\N
+b7c95473-ddb7-42ee-94b9-ae66b48f415c	AGATA MIRELLA MARTINS BARBOSA	agata@escola.com.br	123	aluno	\N	\N	85 99451-8593	RUA FELIPE CAMARÃO, 614		PIRAMBU	FORTALEZA	CE	60310790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+578f45ee-58a5-45ce-918f-60c3d0cc36aa	YAGO DA SILVA BARBOSA	yago@escola.com.br	123	responsavel	066.086.523-80	\N	85 99451-8593	RUA FELIPE CAMARÃO, 614		PIRAMBU	FORTALEZA	CE	60310790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651		\N
+6cb30dec-94c3-47b1-b0b4-f0a83171dcdb	ANDREINA JULIA MARTINS DA SILVA	andreina@escola.com.br	123	aluno	\N	\N	85 98547-9619	RUA PE ALFREDO NESI, 1995		PQ POTIRA II	CAUCAIA	CE	61650280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+510db9ea-d94a-4c40-828b-f285484bdf05	ANTONIO MAXIMIANO DA SILVA NETO	antonio@escola.com.br	123	responsavel	439.157.283-49	\N	85 98547-9619	RUA PE ALFREDO NESI, 1995		PQ POTIRA II	CAUCAIA	CE	61650280	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	986856685	\N
+16251224-3386-4d1c-b0b7-33cc71953a63	JOÃO LUCAS NASCIMENTO BEZERRA	joao@escola.com.br	123	aluno	\N	\N	85 99951-0352	Rua Gomes Parente, 377		Jacarecanga	FORTALEZA	CE	60310450	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+cc6c966c-eafc-4fd6-a7ae-03f601a6de57	FRANCISCO GLEISON SANTOS BEZERRA	francisco@escola.com.br	123	responsavel	020.887.263-90	\N	85 99951-0352	Rua Gomes Parente, 377		Jacarecanga	FORTALEZA	CE	60310450	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651		\N
+b604625a-b94c-450f-b608-549f45b28f68	LIVIA RAYELLA MARTINS DE MENEZES	livia@escola.com.br	123	aluno	\N	\N	85 98955-8890	RUA:DOM HELIO CAMPOS80 AP 302BL21 QDA		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+f4af3747-e071-4ed6-911f-17d2244cb179	MARCOS RANIERE MENEZES DA SILVA	marcos@escola.com.br	123	responsavel	468.983.363-04	\N	85 98955-8890	RUA:DOM HELIO CAMPOS80 AP 302BL21 QDA		CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	989422637	\N
+b9d8a147-d606-46c2-9aa0-5be16fbb3055	MARIA EDUARDA DA SILVA ARRUDA	maria@escola.com.br	123	aluno	\N	\N	85 99871-6958	Rua Daniel Miranda 188	CASA A	Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+e76e1f29-470e-4e8b-81c1-d97fb66a1cb6	HERIKA ARRUDA LOPES	herika@escola.com.br	123	responsavel	044.341.413-09	\N	85 99871-6958	Rua Daniel Miranda 188	CASA A	Parque Leblon	Caucaia	CE	61631-190	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651		\N
+ad273996-7167-4564-8d2a-2f861c266611	MARIA EDUARDA DE SOUZA SANTOS	maria@escola.com.br	123	aluno	\N	\N	85 98500-4173	RUA LUCAS PINTO, 382		CARLITO PAMPLONA	FORTALEZA	CE	60311790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+92bbf6cf-c2f5-4ea7-a8aa-ad7a8239802b	ROBERTA CRISLANE DOS SANTOS SOUZA	roberta@escola.com.br	123	responsavel	060.734.883-60	\N	85 98500-4173	RUA LUCAS PINTO, 382		CARLITO PAMPLONA	FORTALEZA	CE	60311790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	30132066	\N
+cb7f5e16-d83a-4a5a-9f45-6bf970b8e41d	MATEUS LIMA SOARES DA SILVA	mateus@escola.com.br	123	aluno	\N	\N	85 98963-7823	RUA ALVARO DE ALENCAR, 59	A	PIRAMBU	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+719307c4-f895-463d-80c8-5fd3b0afc163	REJANE LIMA SOARES DA SILVA	rejane@escola.com.br	123	responsavel	696.416.173-20	\N	85 98963-7823	RUA ALVARO DE ALENCAR, 59	A	PIRAMBU	FORTALEZA	CE	60311750	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	32368821	\N
+06ce5b8d-c661-4194-aa50-793f75d7b348	MATEUS VITOR LIMA DA SILVA	mateus@escola.com.br	123	aluno	\N	\N	85 99910-9295	Rua Pro Jose Bonifacio, 344	Altos	Alvaro Weyne	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+6468aa08-2d1e-431d-8928-888685c6ddd1	MARIA ARLENE LIMA DA SILVA	maria@escola.com.br	123	responsavel	662.203.193-20	\N	85 99910-9295	Rua Pro Jose Bonifacio, 344	Altos	Alvaro Weyne	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651		\N
+60f7e48f-e641-43d0-b93a-85146014bc00	OTAVIO BRENO SOUZA COSTA	otavio@escola.com.br	123	aluno	\N	\N	85 98661-0458	RUA RIO NEGRO, 278	B ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60311-560	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+041a34a7-6263-4135-9978-9e53a4da1711	ALINE DE SOUZA MATOS	aline@escola.com.br	123	responsavel	036.293.233-67	\N	85 98661-0458	RUA RIO NEGRO, 278	B ALTOS	CARLITO PAMPLONA	FORTALEZA	CE	60311-560	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651		\N
+3d0c47c5-5bec-42f3-be2c-9de4832bb30e	ROGIÊ ISAAC VIANA DA SILVA FELIPE	rogie@escola.com.br	123	aluno	\N	\N	85 98867-6954	Rua Pedro Artur, 592, cs A		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651	\N	\N
+3bcc9304-488a-4181-ab46-a0bb1d5a9ffd	DIANA DE OLIVEIRA VIANA	diana@escola.com.br	123	responsavel	635.162.093-72	\N	85 98867-6954	Rua Pedro Artur, 592, cs A		Carlito Pamplona	Fortaleza	CE	60310-430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.406651	2025-07-02 23:55:16.406651		\N
+4b685deb-b694-4aad-8af8-6c1bdcb61016	YASMIN SOUSA LIMA	yasmin@escola.com.br	123	aluno	\N	\N	85 98678-5227	Rua Pedro Artur, 197 Altos		Pirambu	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+51ed2b27-9b22-4c75-90d2-b687a5f0eb71	DIJAELSON FERREIRA LIMA	dijaelson@escola.com.br	123	responsavel	626.153.003-34	\N	85 98678-5227	Rua Pedro Artur, 197 Altos		Pirambu	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+e5c9d8ab-0cf0-4340-8d9c-5586dbc5fd78	YULI OLIVEIRA REBOUÇAS	yuli@escola.com.br	123	aluno	\N	\N	85 98805-8398	RUA DOM HELIO CAMPOS, 493	AP 304 BL A CM 02	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+1f5f1874-f888-4fd6-8122-5e64fbb13a30	JOSE MARQUES REBOUÇAS	jose@escola.com.br	123	responsavel	398.961.453-34	\N	85 98805-8398	RUA DOM HELIO CAMPOS, 493	AP 304 BL A CM 02	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	985822169	\N
+28a070ba-7940-4acd-94f8-4b3a42caa7a4	ANA BEATRIZ DAS CHAGAS ALEXANDRE	ana@escola.com.br	123	aluno	\N	\N	85 99769-3370	Rua Camelia, 130	CS Altos B	Cristo Redentor	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+fedce204-c770-4704-833e-16e775188f23	MARCIO GEORGIO ALEXANDRE DA SILVA	marcio@escola.com.br	123	responsavel	009.744.684-01	\N	85 99769-3370	Rua Camelia, 130	CS Altos B	Cristo Redentor	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+86cc47b4-977a-4c65-9d74-7e8c8bd415fa	ANTONIO VENICIO MARTINS SILVESTRE	antonio@escola.com.br	123	aluno	\N	\N	82 8142-4252	Rua Felipe Camarão, 790	até 699/700	Pirambu	Fortaleza	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+951e131f-db0d-49cb-a6d2-2d6c6c75b062	RAILTON SILVESTRE MAGALHAES LESSA	railton@escola.com.br	123	responsavel	212.584.905-44	\N	82 8142-4252	Rua Felipe Camarão, 790	até 699/700	Pirambu	Fortaleza	CE	60310-790	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+4356f63d-e810-44c0-931d-d9e8107a0ea1	CAUÃ DOS SANTOS CASTRO	caua@escola.com.br	123	aluno	\N	\N	85 99210-3929	AV. PRESIDENTE CASTELO BRANCO, 2996		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+a975bf52-897f-4b01-bf66-36032cf9f009	INGRID COIMBRA DOS SANTOS	ingrid@escola.com.br	123	responsavel	044.497.813-50	\N	85 99210-3929	AV. PRESIDENTE CASTELO BRANCO, 2996		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+d9a8754b-44c9-4e8e-a54f-c432f5fb7074	GABRIEL VASCONCELOS DA SILVA	gabriel@escola.com.br	123	aluno	\N	\N	85 99436-5600	RUA SAO RAIMUNDO, 298	CS ALTOS	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+f916e4fb-cc86-4f0c-8fc3-c0059cf91eeb	ELAINE CRISTINA DE VASCONCELOS	elaine@escola.com.br	123	responsavel	012.350.863-05	\N	85 99436-5600	RUA SAO RAIMUNDO, 298	CS ALTOS	NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311030	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	85 99151-7794	\N
+e2bc4bc8-03a7-4e67-9e87-a95c42ff0f80	GIOVANNA DE SOUZA FREITAS	giovanna@escola.com.br	123	aluno	\N	\N	85 98703-4500	RUA SÃO JOÃO DO PAIOL		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310460	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+120b0cd6-9413-4d1e-b076-9f981dd46393	CARLOS ATILA DE OLIVEIRA FREITAS	carlos@escola.com.br	123	responsavel	007.193.683-16	\N	85 98703-4500	RUA SÃO JOÃO DO PAIOL		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310460	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+676ba863-33ea-4b01-80cc-1e008ccc17cd	GUSTAVO NOGUEIRA DE SOUSA	gustavo@escola.com.br	123	aluno	\N	\N	85 98787-1884	RUA DA PAZ, 108		PIRAMBU	FORTALEZA	CE	60310510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+41ed7f84-858e-45bf-877a-14f4d4d04991	FRANCISCA ELAINE NOGUEIRA DE LIMA	francisca@escola.com.br	123	responsavel	642.678.573-34	\N	85 98787-1884	RUA DA PAZ, 108		PIRAMBU	FORTALEZA	CE	60310510	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	32836816	\N
+22dacc70-92fd-4646-8ff3-ce1088a52869	HELLEN KAYLLANE GUEDES MARTINS	hellen@escola.com.br	123	aluno	\N	\N	85 99685-5273	Rua Olegário Mariano, 136		Jacarecanga	Fortaleza	CE	60310-230	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+3fb8201c-04d6-48d1-a8a0-c414f5eb4e50	JOSE DE GOES MARTINS NETO	jose@escola.com.br	123	responsavel	029.506.953-88	\N	85 99685-5273	Rua Olegário Mariano, 136		Jacarecanga	Fortaleza	CE	60310-230	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+f8246b77-f216-4df1-9a78-ee5c4cb87dd6	ISADORA MESQUITA BRASIL	isadora@escola.com.br	123	aluno	\N	\N	85 98705-2536	RUA VI CONJ JAPÃO, 85	AT	NOSSA SENHORAS DAS GRAÇAS	FORTALEZA	CE	60337710	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572	\N	\N
+991ff8d9-9203-4360-a8c0-96fe713fa576	FRANCISCO JONATHAN BRASIL DA SILVA	francisco@escola.com.br	123	responsavel	663.413.023-04	\N	85 98705-2536	RUA VI CONJ JAPÃO, 85	AT	NOSSA SENHORAS DAS GRAÇAS	FORTALEZA	CE	60337710	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.414572	2025-07-02 23:55:16.414572		\N
+964771ec-9a38-4cab-bd36-739813f0ed10	ISRAEL RODRIGUES DE ABREU	israel@escola.com.br	123	aluno	\N	\N	85 99431-0614	AV. PASTEUR, 123		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+354f5052-6582-4380-a82f-9aa8bd2d97da	ERIVANIA RODRIGUES DE ABREU	erivania@escola.com.br	123	responsavel	624.485.283-49	\N	85 99431-0614	AV. PASTEUR, 123		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60335000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	(85) 99981-1768	\N
+dc57d4a5-4f86-44dd-990c-627863867abb	ITALA THAWANY SOUSA CORDEIRO	itala@escola.com.br	123	aluno	\N	\N	85 9212-3059	AV PRES. CASTELO BRANCO, 2178	AP 03	CARLITO PAMPLONA	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+368d2503-7820-4ce0-af70-27d1cb4c0f8b	LUZIANE SOARES DE SOUSA	luziane@escola.com.br	123	responsavel	644.983.013-15	\N	85 9212-3059	AV PRES. CASTELO BRANCO, 2178	AP 03	CARLITO PAMPLONA	FORTALEZA	CE	60110000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	85 99212-3059	\N
+f28af2e6-7ca6-4bf0-ac92-9254ca324c6c	IZABELLA FIRMINO MARTINS DE ALMEIDA	izabella@escola.com.br	123	aluno	\N	\N	85 98715-5400	Rua Nossa Senhora das Graças, 1100	Cs Altos	Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+2e6c6e8c-c8a7-46f1-bc3b-3fb2cc394600	DEBORA FIRMINO DE SOUZA	debora@escola.com.br	123	responsavel	021.334.953-12	\N	85 98715-5400	Rua Nossa Senhora das Graças, 1100	Cs Altos	Nossa Senhora das Graças	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+521b32f6-e7f3-47c4-bdc7-5e9cf1a345b2	JOÃO PEDRO AMARAL BARBOSA	joao@escola.com.br	123	aluno	\N	\N	85 98923-2660	RUA GOMES PASSOS, 528		CRISTO REDENTOR	FORTALEZA	CE	60335-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+a0260190-0b0a-4288-a23c-fafbdb7861f6	VANDA AMARAL DOS SANTOS	vanda@escola.com.br	123	responsavel	023.981.053-85	\N	85 98923-2660	RUA GOMES PASSOS, 528		CRISTO REDENTOR	FORTALEZA	CE	60335-060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+d6ba01ca-bedf-48f3-8fb2-b2c6fa16cfd8	KAROLLAINY KELLY FERNANDES DE OLIVEIRA	karollainy@escola.com.br	123	aluno	\N	\N	85987926138	Avenida Presidente Castelo Branco 4723 Casa A	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+edab4190-3534-4d7f-a193-8feba572b2c6	MARIA DAS GRAÇAS FERNANDES DO NASCIMENTO	maria@escola.com.br	123	responsavel	66909180330	\N	85987926138	Avenida Presidente Castelo Branco 4723 Casa A	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+fae289d6-a3df-4d3e-8485-cae554556268	KAUÃ LEVI PEREIRA LIMA	kaua@escola.com.br	123	aluno	\N	\N	85 99271-7184	Rua Dom Quintino, 1200	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+459ebb0d-5bf4-45e8-824f-151477699ea9	ALENIA DA SILVA MENDES	alenia@escola.com.br	123	responsavel	620.244.933-00	\N	85 99271-7184	Rua Dom Quintino, 1200	CS A	Nossa Senhora das Graças	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+81de670d-1780-453e-9d99-c9eed6c2a7c8	LARISSA DO NASCIMENTO SANTOS	larissa@escola.com.br	123	aluno	\N	\N	85 98850-8132	RUA NOSSA SENHORA DAS GRAÇAS, 1031		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+a31eb702-e1ed-428f-97da-bdc734a43a97	MARIA DO LIVRAMENTO DO NASCIMENTO SANTOS	maria@escola.com.br	123	responsavel	734.263.003-97	\N	85 98850-8132	RUA NOSSA SENHORA DAS GRAÇAS, 1031		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310760	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	988508132	\N
+83b5a210-1194-4594-b446-7e7add611843	LARISSA FORTE DE AGUIAR GARCIA	larissa@escola.com.br	123	aluno	\N	\N	85988094397	Rua Irineu de Sousa 301		Álvaro Weyne	Fortaleza	CE	60337-180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+2ad41b24-b3e6-4ae8-8324-c66dd29637df	MAYARA FORTE DE AGUIAR	mayara@escola.com.br	123	responsavel	008.793.053-63	\N	85988094397	Rua Irineu de Sousa 301		Álvaro Weyne	Fortaleza	CE	60337-180	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+573c144a-8384-4cbb-aa9b-d59d67e0c08b	LETICIA GABRIELA DOS SANTOS SOUSA	leticia@escola.com.br	123	aluno	\N	\N	85 98974-6756	RUA SANTA INÊS, 1321	ALTOS	PIRAMBU	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+7b068fd8-8098-4df1-8dba-3ce7a9ad563d	LUCIO FLAVIO SOUSA	lucio@escola.com.br	123	responsavel	659.487.773-91	\N	85 98974-6756	RUA SANTA INÊS, 1321	ALTOS	PIRAMBU	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+a0eb105c-c0e7-45b3-89c8-b7778460650d	LEVI SILVA FERREIRA	levi@escola.com.br	123	aluno	\N	\N	85 98672-1359	RUA PAIOL, 311		CARLITO PAMPLONA	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632	\N	\N
+134ef403-65c6-44fb-bff3-ad9d256f7b6d	FRANCISCO AURÉLIO DOS SANTOS	francisco@escola.com.br	123	responsavel	073.434.183-00	\N	85 98672-1359	RUA PAIOL, 311		CARLITO PAMPLONA	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.503632	2025-07-02 23:55:16.503632		\N
+c673f5a0-1fe5-46b6-b63d-6884cd4757c7	JOHNNY ALLEF DA SILVA REIS	johnny@escola.com.br	123	aluno	\N	\N	85 98884-7160	RUA:SANTA INES 1082		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+f5d642da-e542-4180-bb77-6be9d39daa58	JOSE FERREIRA DOS REIS JUNIOR	jose@escola.com.br	123	responsavel	695.837.143-72	\N	85 98884-7160	RUA:SANTA INES 1082		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	987594614	\N
+a995d68b-7755-415b-9c47-212dc526e051	MURILLO HEITOR SOARES COSTA	murillo@escola.com.br	123	aluno	\N	\N	85 98866-8678	RUA DOM HELIO CAMPOS, 493	AP 105 BL A CM 01	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+a0b3e5dc-3f5a-4383-be1d-48171ac7f54a	JANAINA RODRIGUES SOARES COSTA	janaina@escola.com.br	123	responsavel	626.195.433-04	\N	85 98866-8678	RUA DOM HELIO CAMPOS, 493	AP 105 BL A CM 01	CARLITO PAMPLONA	FORTALEZA	CE	60311630	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014		\N
+b48faf8c-336b-49e3-943b-170f25eb90eb	PEDRO LUAN DE OLIVEIRA MACÊDO	pedro@escola.com.br	123	aluno	\N	\N	85 99116-0435	Rua Nossa Senhora das Graças, 1197		Pirambu	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+67eea712-d975-4b5e-a12f-f55726220889	LEIDIANE DE OLIVEIRA MACÊDO	leidiane@escola.com.br	123	responsavel	652.983.813-91	\N	85 99116-0435	Rua Nossa Senhora das Graças, 1197		Pirambu	FORTALEZA	CE	60310770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014		\N
+fcb234d7-a30f-4368-99ce-1312277a0ec9	PEDRO LYEDSON QUEIROZ QUINTINO	pedro@escola.com.br	123	aluno	\N	\N	85986214297	Avenida Francisco Sá, 2834, AP 02	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+9912ef9b-d107-496b-bf29-666632f7d697	JOSE EDMILSON QUINTINO NETO	jose@escola.com.br	123	responsavel	85670693353	\N	85986214297	Avenida Francisco Sá, 2834, AP 02	de 2680 a 3964 - lado par	Carlito Pamplona	Fortaleza	CE	60310-052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014		\N
+7906e541-dc63-40ed-a0e2-739187c8e9c3	ANA LÍVIA RAFAEL SANTOS	ana@escola.com.br	123	aluno	\N	\N	85 98716-6792	RUA PEDRO ARTUR, 968 ALTOS		CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+c09108f8-b5f7-413b-934f-83471f347b62	ODAILZA DE ARAUJO RAFAEL SANTOS	odailza@escola.com.br	123	responsavel	056.319.514-28	\N	85 98716-6792	RUA PEDRO ARTUR, 968 ALTOS		CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	987166792	\N
+e3d0c4ca-36fc-4e2b-8904-4b84e71b1f27	EMANUEL ESTEVÃO COSTA BARROS	emanuel@escola.com.br	123	aluno	\N	\N	85 99152-2493	RUA SANTA INÊS, 923		JACARECANGA	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+d10d1cc7-6257-4f7f-8fbb-a3fde2101b3f	FRANCISCO ERIVELTON ARAUJO BARROS	francisco@escola.com.br	123	responsavel	646.059.813-49	\N	85 99152-2493	RUA SANTA INÊS, 923		JACARECANGA	FORTALEZA	CE	60311310	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	32360781	\N
+95b6bfef-5755-4480-ac8d-8876534195e2	FRANCISCO DOUGLAS DE FREITAS SOUZA	francisco@escola.com.br	123	aluno	\N	\N	85 99403-2545	RUA DOM QUINTINO, 471		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+a07aca32-1e3a-4617-9035-e5540e50a8e8	MARIA ANTONIETA DE FREITAS PEREIRA	maria@escola.com.br	123	responsavel	356.424.243-00	\N	85 99403-2545	RUA DOM QUINTINO, 471		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60310520	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	85 98684-6216	\N
+cfe48cb5-1db7-4254-978d-9544cb6e8ef4	FRANCISCO LUCAS MARTINS DELFINO	francisco@escola.com.br	123	aluno	\N	\N	85 98708-4548	Rua Hugo Rocha, 660		Alvaro Weyne	FORTALEZA	CE	60335770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+5751ac45-86ee-4ee2-85aa-b1d207191cfb	LUCIANA MARTINS DELFINO	luciana@escola.com.br	123	responsavel	664.629.243-49	\N	85 98708-4548	Rua Hugo Rocha, 660		Alvaro Weyne	FORTALEZA	CE	60335770	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014		\N
+a6df5cfb-1368-4554-9049-c157566309af	JULLIA FARIAS DE SOUSA VIEIRA	jullia@escola.com.br	123	aluno	\N	\N	85 98615-1448	Rua Engenheiro João Nogueira, 238		Álvaro Weyne	Fortaleza	CE	60335-140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+96e3a51a-0603-4832-9b78-fd6e4084e2a4	REBECA FARIAS DE SOUSA	rebeca@escola.com.br	123	responsavel	028.604.713-67	\N	85 98615-1448	Rua Engenheiro João Nogueira, 238		Álvaro Weyne	Fortaleza	CE	60335-140	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	986151448	\N
+d94f703b-7c46-4b18-b279-010ef9a38f00	LAURA FERNANDES DA FONSECA HERRERA	laura@escola.com.br	123	aluno	\N	\N	85 99664-2346	Rua Filgueiras Sampaio, 1490	Cs 04	Centro de Caucaia	FORTALEZA	CE	61631016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	\N	\N
+025062b3-202f-4e79-8a3a-8bf7266ef060	JORDANA FERNANDES DOS SANTOS HERRERA	jordana@escola.com.br	123	responsavel	018.986.603-95	\N	85 99664-2346	Rua Filgueiras Sampaio, 1490	Cs 04	Centro de Caucaia	FORTALEZA	CE	61631016	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.541014	2025-07-02 23:55:16.541014	85988608915	\N
+c5ddf77c-5d38-4916-92cd-e01062756daf	LAURA MAELY DA COSTA	laura@escola.com.br	123	aluno	\N	\N	85 98772-4104	Avenida Presidente Castelo Branco, 3220		Cristo Redentor	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+16457016-5b26-4207-92fd-a15ff6f0f77c	ALEX SANDRA DA COSTA	alex@escola.com.br	123	responsavel	618.233.093-72	\N	85 98772-4104	Avenida Presidente Castelo Branco, 3220		Cristo Redentor	FORTALEZA	CE	60312060	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+2a0bbef5-2ca2-48d8-867b-0e89a64c4972	LIA YASMIM ALVES LIMA	lia@escola.com.br	123	aluno	\N	\N	85 98646-9529	RUA PEDRO ARTUR, 941 ALTO		CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+92f7fc7c-6b00-4365-992d-3797831a4447	ELENILDA ALVES VASCONCELOS	elenilda@escola.com.br	123	responsavel	204.167.253-68	\N	85 98646-9529	RUA PEDRO ARTUR, 941 ALTO		CARLITO PAMPLONA	FORTALEZA	CE	60310430	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	85996053993	\N
+0b5b4251-65d4-48b4-ae27-6eac376f498d	LORENZO PEREIRA FORTE	lorenzo@escola.com.br	123	aluno	\N	\N	85 98798-5169	Rua Expedito Xavier, 149	CS Altos	Alvaro Weyne	FORTALEZA	CE	60336172	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+0a32aaeb-c453-4295-a7a1-bb72b2d07558	AILTON CESAR ALVES FORTE	ailton@escola.com.br	123	responsavel	414.554.013-15	\N	85 98798-5169	Rua Expedito Xavier, 149	CS Altos	Alvaro Weyne	FORTALEZA	CE	60336172	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+842fde70-cf27-4fdc-8f11-31e6d48d23ca	RUAN GABRIEL OLIVEIRA SILVA	ruan@escola.com.br	123	aluno	\N	\N	85 99435-5927	RUA DO TIROL, 565		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60000000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+beb8f886-e229-4a30-a73d-de12f6819f51	MARIA JOSÉ DE SOUSA SILVA	maria@escola.com.br	123	responsavel	435.188.853-91	\N	85 99435-5927	RUA DO TIROL, 565		NOSSA SENHORA DAS GRAÇAS	FORTALEZA	CE	60000000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+cc5d2270-facb-4d74-8589-6f2c668ecce1	SAMUEL CORDEIRO MORAIS	samuel@escola.com.br	123	aluno	\N	\N	85985034595	Rua Nossa Senhora das Graças, 1001	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+eb3e1a15-f613-437d-90ec-567415f0e6b3	MARIA NEUMA CORDEIRO MORAIS	maria@escola.com.br	123	responsavel	35749890325	\N	85985034595	Rua Nossa Senhora das Graças, 1001	até 1419/1420	Centro	Fortaleza	CE	60110-000	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+b21c8bdc-699b-482a-a082-6e814fb460f9	SAMUEL DIÊGO SOARES ALMEIDA DOS SANTOS CASTRO	samuel@escola.com.br	123	aluno	\N	\N	85992001932	Rua César Correia, 82	até 709/710	Barra do Ceará	Fortaleza	CE	60334-130	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+36aa74fd-9dec-4a3e-9127-d81776b06df9	THAIANY SOARES COSTA DOS SANTOS	thaiany@escola.com.br	123	responsavel	2772062350	\N	85992001932	Rua César Correia, 82	até 709/710	Barra do Ceará	Fortaleza	CE	60334-130	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+04a14905-d449-4098-875c-518e7bb2b216	SARA MARIA SILVA DO NASCIMENTO	sara@escola.com.br	123	aluno	\N	\N	85 99929-4662	RUA SANTO ANTONIO DO PAIOL, 64		CARLITO PAMPLONA	FORTALEZA	CE	60310480	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+522a2f20-bfb4-41d1-9b66-343c2343d528	MARCUS DIEGO PINTO DO NASCIMENTO	marcus@escola.com.br	123	responsavel	884.822.002-91	\N	85 99929-4662	RUA SANTO ANTONIO DO PAIOL, 64		CARLITO PAMPLONA	FORTALEZA	CE	60310480	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	32145089	\N
+820cfcd1-f48c-4a1e-a3a5-c8969da85344	SARAH CIBELY PAULA MONTEIRO	sarah@escola.com.br	123	aluno	\N	\N	85 92148-9863	Rua Vicente Saboia, 390	Casa A	Alvaro Weyne	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+28a89670-59e7-4765-ad7d-e45cd089c8d8	CHRISTIANE ALMEIDA PAULA	christiane@escola.com.br	123	responsavel	829.489.413-34	\N	85 92148-9863	Rua Vicente Saboia, 390	Casa A	Alvaro Weyne	FORTALEZA	CE	60335010	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+da26a3bc-42ba-42dd-a1f7-40fdbf1eff87	YASMIN GABRIELE BARBOSA SIGMARINGA	yasmin@escola.com.br	123	aluno	\N	\N	21 96940-2248	Rua Valter Pompeu, 400	Ap 302	Alvaro Weyne	FORTALEZA	CE	60337120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+aef22211-d083-4268-ade5-d1f365aa7018	PRISCILA BARBOSA DA SILVA SIGMARINGA	priscila@escola.com.br	123	responsavel	128.231.297-90	\N	21 96940-2248	Rua Valter Pompeu, 400	Ap 302	Alvaro Weyne	FORTALEZA	CE	60337120	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+5c866069-4acd-428f-b6e7-9b021bc75396	YASMIN PAIXÃO LIMA	yasmin@escola.com.br	123	aluno	\N	\N	85 99904-3979	Avenida Francisco Sá, 3572	AP 404 BL M	Carlito Pamplona	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315	\N	\N
+797a7be9-4aa4-4d25-ac42-882b9f249c61	IOLANDA LORENA E VASCONCELOS PAIXÃO	iolanda@escola.com.br	123	responsavel	041.604.933-86	\N	85 99904-3979	Avenida Francisco Sá, 3572	AP 404 BL M	Carlito Pamplona	FORTALEZA	CE	60310052	t	f6f27f20-d1a4-4030-b7ad-0559781a1795	f6f27f20-d1a4-4030-b7ad-0559781a1795	2025-07-02 23:55:16.555315	2025-07-02 23:55:16.555315		\N
+\.
+
+
+--
+-- Data for Name: usuarios_escolas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuarios_escolas (usuario_id, escola_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_23; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_23 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_24; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_24 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_25; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_25 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_26; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_26 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_27; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_27 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_28; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_28 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_06_29; Type: TABLE DATA; Schema: realtime; Owner: postgres
+--
+
+COPY realtime.messages_2025_06_29 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_07_01; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.messages_2025_07_01 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_07_02; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.messages_2025_07_02 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_07_03; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.messages_2025_07_03 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_07_04; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.messages_2025_07_04 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: messages_2025_07_05; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.messages_2025_07_05 (topic, extension, payload, event, private, updated_at, inserted_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.schema_migrations (version, inserted_at) FROM stdin;
+20211116024918	2025-07-02 23:32:25
+20211116045059	2025-07-02 23:32:25
+20211116050929	2025-07-02 23:32:25
+20211116051442	2025-07-02 23:32:25
+20211116212300	2025-07-02 23:32:25
+20211116213355	2025-07-02 23:32:25
+20211116213934	2025-07-02 23:32:25
+20211116214523	2025-07-02 23:32:25
+20211122062447	2025-07-02 23:32:25
+20211124070109	2025-07-02 23:32:25
+20211202204204	2025-07-02 23:32:25
+20211202204605	2025-07-02 23:32:25
+20211210212804	2025-07-02 23:32:25
+20211228014915	2025-07-02 23:32:25
+20220107221237	2025-07-02 23:32:25
+20220228202821	2025-07-02 23:32:25
+20220312004840	2025-07-02 23:32:25
+20220603231003	2025-07-02 23:32:25
+20220603232444	2025-07-02 23:32:25
+20220615214548	2025-07-02 23:32:25
+20220712093339	2025-07-02 23:32:25
+20220908172859	2025-07-02 23:32:25
+20220916233421	2025-07-02 23:32:25
+20230119133233	2025-07-02 23:32:25
+20230128025114	2025-07-02 23:32:25
+20230128025212	2025-07-02 23:32:25
+20230227211149	2025-07-02 23:32:25
+20230228184745	2025-07-02 23:32:25
+20230308225145	2025-07-02 23:32:25
+20230328144023	2025-07-02 23:32:25
+20231018144023	2025-07-02 23:32:25
+20231204144023	2025-07-02 23:32:25
+20231204144024	2025-07-02 23:32:25
+20231204144025	2025-07-02 23:32:25
+20240108234812	2025-07-02 23:32:25
+20240109165339	2025-07-02 23:32:25
+20240227174441	2025-07-02 23:32:25
+20240311171622	2025-07-02 23:32:25
+20240321100241	2025-07-02 23:32:25
+20240401105812	2025-07-02 23:32:25
+20240418121054	2025-07-02 23:32:25
+20240523004032	2025-07-02 23:32:25
+20240618124746	2025-07-02 23:32:25
+20240801235015	2025-07-02 23:32:25
+20240805133720	2025-07-02 23:32:25
+20240827160934	2025-07-02 23:32:25
+20240919163303	2025-07-02 23:32:25
+20240919163305	2025-07-02 23:32:25
+20241019105805	2025-07-02 23:32:25
+20241030150047	2025-07-02 23:32:25
+20241108114728	2025-07-02 23:32:25
+20241121104152	2025-07-02 23:32:25
+20241130184212	2025-07-02 23:32:25
+20241220035512	2025-07-02 23:32:25
+20241220123912	2025-07-02 23:32:25
+20241224161212	2025-07-02 23:32:25
+20250107150512	2025-07-02 23:32:25
+20250110162412	2025-07-02 23:32:25
+20250123174212	2025-07-02 23:32:25
+20250128220012	2025-07-02 23:32:25
+20250506224012	2025-07-02 23:32:25
+20250523164012	2025-07-02 23:32:26
+\.
+
+
+--
+-- Data for Name: subscription; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.subscription (id, subscription_id, entity, filters, claims, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: buckets; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.buckets (id, name, owner, created_at, updated_at, public, avif_autodetection, file_size_limit, allowed_mime_types, owner_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: migrations; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.migrations (id, name, hash, executed_at) FROM stdin;
+0	create-migrations-table	e18db593bcde2aca2a408c4d1100f6abba2195df	2025-07-02 23:32:40.751422
+1	initialmigration	6ab16121fbaa08bbd11b712d05f358f9b555d777	2025-07-02 23:32:40.754518
+2	storage-schema	5c7968fd083fcea04050c1b7f6253c9771b99011	2025-07-02 23:32:40.755718
+3	pathtoken-column	2cb1b0004b817b29d5b0a971af16bafeede4b70d	2025-07-02 23:32:40.76299
+4	add-migrations-rls	427c5b63fe1c5937495d9c635c263ee7a5905058	2025-07-02 23:32:40.767668
+5	add-size-functions	79e081a1455b63666c1294a440f8ad4b1e6a7f84	2025-07-02 23:32:40.768636
+6	change-column-name-in-get-size	f93f62afdf6613ee5e7e815b30d02dc990201044	2025-07-02 23:32:40.770236
+7	add-rls-to-buckets	e7e7f86adbc51049f341dfe8d30256c1abca17aa	2025-07-02 23:32:40.774049
+8	add-public-to-buckets	fd670db39ed65f9d08b01db09d6202503ca2bab3	2025-07-02 23:32:40.775042
+9	fix-search-function	3a0af29f42e35a4d101c259ed955b67e1bee6825	2025-07-02 23:32:40.775965
+10	search-files-search-function	68dc14822daad0ffac3746a502234f486182ef6e	2025-07-02 23:32:40.777483
+11	add-trigger-to-auto-update-updated_at-column	7425bdb14366d1739fa8a18c83100636d74dcaa2	2025-07-02 23:32:40.778968
+12	add-automatic-avif-detection-flag	8e92e1266eb29518b6a4c5313ab8f29dd0d08df9	2025-07-02 23:32:40.780554
+13	add-bucket-custom-limits	cce962054138135cd9a8c4bcd531598684b25e7d	2025-07-02 23:32:40.781642
+14	use-bytes-for-max-size	941c41b346f9802b411f06f30e972ad4744dad27	2025-07-02 23:32:40.782592
+15	add-can-insert-object-function	934146bc38ead475f4ef4b555c524ee5d66799e5	2025-07-02 23:32:40.791888
+16	add-version	76debf38d3fd07dcfc747ca49096457d95b1221b	2025-07-02 23:32:40.79309
+17	drop-owner-foreign-key	f1cbb288f1b7a4c1eb8c38504b80ae2a0153d101	2025-07-02 23:32:40.793994
+18	add_owner_id_column_deprecate_owner	e7a511b379110b08e2f214be852c35414749fe66	2025-07-02 23:32:40.795098
+19	alter-default-value-objects-id	02e5e22a78626187e00d173dc45f58fa66a4f043	2025-07-02 23:32:40.796775
+20	list-objects-with-delimiter	cd694ae708e51ba82bf012bba00caf4f3b6393b7	2025-07-02 23:32:40.797603
+21	s3-multipart-uploads	8c804d4a566c40cd1e4cc5b3725a664a9303657f	2025-07-02 23:32:40.799219
+22	s3-multipart-uploads-big-ints	9737dc258d2397953c9953d9b86920b8be0cdb73	2025-07-02 23:32:40.804495
+23	optimize-search-function	9d7e604cddc4b56a5422dc68c9313f4a1b6f132c	2025-07-02 23:32:40.808693
+24	operation-function	8312e37c2bf9e76bbe841aa5fda889206d2bf8aa	2025-07-02 23:32:40.810053
+25	custom-metadata	d974c6057c3db1c1f847afa0e291e6165693b990	2025-07-02 23:32:40.811303
+26	objects-prefixes	ef3f7871121cdc47a65308e6702519e853422ae2	2025-07-02 23:32:40.812284
+27	search-v2	33b8f2a7ae53105f028e13e9fcda9dc4f356b4a2	2025-07-02 23:32:40.818167
+28	object-bucket-name-sorting	ba85ec41b62c6a30a3f136788227ee47f311c436	2025-07-02 23:32:40.820526
+29	create-prefixes	a7b1a22c0dc3ab630e3055bfec7ce7d2045c5b7b	2025-07-02 23:32:40.822269
+30	update-object-levels	6c6f6cc9430d570f26284a24cf7b210599032db7	2025-07-02 23:32:40.823856
+31	objects-level-index	33f1fef7ec7fea08bb892222f4f0f5d79bab5eb8	2025-07-02 23:32:40.825548
+32	backward-compatible-index-on-objects	2d51eeb437a96868b36fcdfb1ddefdf13bef1647	2025-07-02 23:32:40.827008
+33	backward-compatible-index-on-prefixes	fe473390e1b8c407434c0e470655945b110507bf	2025-07-02 23:32:40.828511
+34	optimize-search-function-v1	82b0e469a00e8ebce495e29bfa70a0797f7ebd2c	2025-07-02 23:32:40.828876
+35	add-insert-trigger-prefixes	63bb9fd05deb3dc5e9fa66c83e82b152f0caf589	2025-07-02 23:32:40.831148
+36	optimise-existing-functions	81cf92eb0c36612865a18016a38496c530443899	2025-07-02 23:32:40.831985
+37	add-bucket-name-length-trigger	3944135b4e3e8b22d6d4cbb568fe3b0b51df15c1	2025-07-02 23:32:40.835339
+\.
+
+
+--
+-- Data for Name: objects; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.objects (id, bucket_id, name, owner, created_at, updated_at, last_accessed_at, metadata, version, owner_id, user_metadata, level) FROM stdin;
+\.
+
+
+--
+-- Data for Name: prefixes; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.prefixes (bucket_id, name, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: s3_multipart_uploads; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.s3_multipart_uploads (id, in_progress_size, upload_signature, bucket_id, key, version, owner_id, created_at, user_metadata) FROM stdin;
+\.
+
+
+--
+-- Data for Name: s3_multipart_uploads_parts; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.s3_multipart_uploads_parts (id, upload_id, size, part_number, bucket_id, key, etag, owner_id, version, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: hooks; Type: TABLE DATA; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+COPY supabase_functions.hooks (id, hook_table_id, hook_name, created_at, request_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: migrations; Type: TABLE DATA; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+COPY supabase_functions.migrations (version, inserted_at) FROM stdin;
+initial	2025-07-02 23:32:09.57683+00
+20210809183423_update_grants	2025-07-02 23:32:09.57683+00
+\.
+
+
+--
+-- Data for Name: secrets; Type: TABLE DATA; Schema: vault; Owner: supabase_admin
+--
+
+COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
+--
+
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1, false);
+
+
+--
+-- Name: subscription_id_seq; Type: SEQUENCE SET; Schema: realtime; Owner: supabase_admin
+--
+
+SELECT pg_catalog.setval('realtime.subscription_id_seq', 1, false);
+
+
+--
+-- Name: hooks_id_seq; Type: SEQUENCE SET; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+SELECT pg_catalog.setval('supabase_functions.hooks_id_seq', 1, false);
+
+
+--
+-- Name: extensions extensions_pkey; Type: CONSTRAINT; Schema: _realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY _realtime.extensions
+    ADD CONSTRAINT extensions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: _realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY _realtime.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: tenants tenants_pkey; Type: CONSTRAINT; Schema: _realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY _realtime.tenants
+    ADD CONSTRAINT tenants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mfa_amr_claims amr_id_pk; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_amr_claims
+    ADD CONSTRAINT amr_id_pk PRIMARY KEY (id);
+
+
+--
+-- Name: audit_log_entries audit_log_entries_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.audit_log_entries
+    ADD CONSTRAINT audit_log_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_state flow_state_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.flow_state
+    ADD CONSTRAINT flow_state_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: identities identities_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.identities
+    ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: identities identities_provider_id_provider_unique; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.identities
+    ADD CONSTRAINT identities_provider_id_provider_unique UNIQUE (provider_id, provider);
+
+
+--
+-- Name: instances instances_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.instances
+    ADD CONSTRAINT instances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mfa_amr_claims mfa_amr_claims_session_id_authentication_method_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_amr_claims
+    ADD CONSTRAINT mfa_amr_claims_session_id_authentication_method_pkey UNIQUE (session_id, authentication_method);
+
+
+--
+-- Name: mfa_challenges mfa_challenges_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_challenges
+    ADD CONSTRAINT mfa_challenges_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mfa_factors mfa_factors_last_challenged_at_key; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_factors
+    ADD CONSTRAINT mfa_factors_last_challenged_at_key UNIQUE (last_challenged_at);
+
+
+--
+-- Name: mfa_factors mfa_factors_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_factors
+    ADD CONSTRAINT mfa_factors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: one_time_tokens one_time_tokens_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.one_time_tokens
+    ADD CONSTRAINT one_time_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: refresh_tokens refresh_tokens_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.refresh_tokens
+    ADD CONSTRAINT refresh_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: refresh_tokens refresh_tokens_token_unique; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.refresh_tokens
+    ADD CONSTRAINT refresh_tokens_token_unique UNIQUE (token);
+
+
+--
+-- Name: saml_providers saml_providers_entity_id_key; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.saml_providers
+    ADD CONSTRAINT saml_providers_entity_id_key UNIQUE (entity_id);
+
+
+--
+-- Name: saml_providers saml_providers_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.saml_providers
+    ADD CONSTRAINT saml_providers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: saml_relay_states saml_relay_states_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.saml_relay_states
+    ADD CONSTRAINT saml_relay_states_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sso_domains sso_domains_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.sso_domains
+    ADD CONSTRAINT sso_domains_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sso_providers sso_providers_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.sso_providers
+    ADD CONSTRAINT sso_providers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_phone_key; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.users
+    ADD CONSTRAINT users_phone_key UNIQUE (phone);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: albuns_alunos albuns_alunos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_alunos
+    ADD CONSTRAINT albuns_alunos_pkey PRIMARY KEY (album_id, aluno_usuario_id);
+
+
+--
+-- Name: albuns_escolas albuns_escolas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_escolas
+    ADD CONSTRAINT albuns_escolas_pkey PRIMARY KEY (album_id, escola_id);
+
+
+--
+-- Name: albuns albuns_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns
+    ADD CONSTRAINT albuns_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: albuns_series albuns_series_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_series
+    ADD CONSTRAINT albuns_series_pkey PRIMARY KEY (album_id, serie_id);
+
+
+--
+-- Name: albuns_turmas albuns_turmas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_turmas
+    ADD CONSTRAINT albuns_turmas_pkey PRIMARY KEY (album_id, turma_id);
+
+
+--
+-- Name: alunos_turmas alunos_turmas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.alunos_turmas
+    ADD CONSTRAINT alunos_turmas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: escolas escolas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.escolas
+    ADD CONSTRAINT escolas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: fotos fotos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fotos
+    ADD CONSTRAINT fotos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: logs_auditoria logs_auditoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.logs_auditoria
+    ADD CONSTRAINT logs_auditoria_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: responsaveis_alunos responsaveis_alunos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsaveis_alunos
+    ADD CONSTRAINT responsaveis_alunos_pkey PRIMARY KEY (usuario_id, aluno_usuario_id);
+
+
+--
+-- Name: segmentos segmentos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.segmentos
+    ADD CONSTRAINT segmentos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: series series_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.series
+    ADD CONSTRAINT series_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: turmas turmas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.turmas
+    ADD CONSTRAINT turmas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: turnos turnos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.turnos
+    ADD CONSTRAINT turnos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: usuarios_escolas usuarios_escolas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuarios_escolas
+    ADD CONSTRAINT usuarios_escolas_pkey PRIMARY KEY (usuario_id, escola_id);
+
+
+--
+-- Name: usuarios usuarios_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuarios
+    ADD CONSTRAINT usuarios_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: messages messages_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER TABLE ONLY realtime.messages
+    ADD CONSTRAINT messages_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_23 messages_2025_06_23_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_23
+    ADD CONSTRAINT messages_2025_06_23_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_24 messages_2025_06_24_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_24
+    ADD CONSTRAINT messages_2025_06_24_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_25 messages_2025_06_25_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_25
+    ADD CONSTRAINT messages_2025_06_25_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_26 messages_2025_06_26_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_26
+    ADD CONSTRAINT messages_2025_06_26_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_27 messages_2025_06_27_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_27
+    ADD CONSTRAINT messages_2025_06_27_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_28 messages_2025_06_28_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_28
+    ADD CONSTRAINT messages_2025_06_28_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_06_29 messages_2025_06_29_pkey; Type: CONSTRAINT; Schema: realtime; Owner: postgres
+--
+
+ALTER TABLE ONLY realtime.messages_2025_06_29
+    ADD CONSTRAINT messages_2025_06_29_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_07_01 messages_2025_07_01_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages_2025_07_01
+    ADD CONSTRAINT messages_2025_07_01_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_07_02 messages_2025_07_02_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages_2025_07_02
+    ADD CONSTRAINT messages_2025_07_02_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_07_03 messages_2025_07_03_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages_2025_07_03
+    ADD CONSTRAINT messages_2025_07_03_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_07_04 messages_2025_07_04_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages_2025_07_04
+    ADD CONSTRAINT messages_2025_07_04_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: messages_2025_07_05 messages_2025_07_05_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.messages_2025_07_05
+    ADD CONSTRAINT messages_2025_07_05_pkey PRIMARY KEY (id, inserted_at);
+
+
+--
+-- Name: subscription pk_subscription; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.subscription
+    ADD CONSTRAINT pk_subscription PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY realtime.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: buckets buckets_pkey; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.buckets
+    ADD CONSTRAINT buckets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: migrations migrations_name_key; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.migrations
+    ADD CONSTRAINT migrations_name_key UNIQUE (name);
+
+
+--
+-- Name: migrations migrations_pkey; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.migrations
+    ADD CONSTRAINT migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: objects objects_pkey; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.objects
+    ADD CONSTRAINT objects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: prefixes prefixes_pkey; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.prefixes
+    ADD CONSTRAINT prefixes_pkey PRIMARY KEY (bucket_id, level, name);
+
+
+--
+-- Name: s3_multipart_uploads_parts s3_multipart_uploads_parts_pkey; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads_parts
+    ADD CONSTRAINT s3_multipart_uploads_parts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: s3_multipart_uploads s3_multipart_uploads_pkey; Type: CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads
+    ADD CONSTRAINT s3_multipart_uploads_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hooks hooks_pkey; Type: CONSTRAINT; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+ALTER TABLE ONLY supabase_functions.hooks
+    ADD CONSTRAINT hooks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: migrations migrations_pkey; Type: CONSTRAINT; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+ALTER TABLE ONLY supabase_functions.migrations
+    ADD CONSTRAINT migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: extensions_tenant_external_id_index; Type: INDEX; Schema: _realtime; Owner: supabase_admin
+--
+
+CREATE INDEX extensions_tenant_external_id_index ON _realtime.extensions USING btree (tenant_external_id);
+
+
+--
+-- Name: extensions_tenant_external_id_type_index; Type: INDEX; Schema: _realtime; Owner: supabase_admin
+--
+
+CREATE UNIQUE INDEX extensions_tenant_external_id_type_index ON _realtime.extensions USING btree (tenant_external_id, type);
+
+
+--
+-- Name: tenants_external_id_index; Type: INDEX; Schema: _realtime; Owner: supabase_admin
+--
+
+CREATE UNIQUE INDEX tenants_external_id_index ON _realtime.tenants USING btree (external_id);
+
+
+--
+-- Name: audit_logs_instance_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX audit_logs_instance_id_idx ON auth.audit_log_entries USING btree (instance_id);
+
+
+--
+-- Name: confirmation_token_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX confirmation_token_idx ON auth.users USING btree (confirmation_token) WHERE ((confirmation_token)::text !~ '^[0-9 ]*$'::text);
+
+
+--
+-- Name: email_change_token_current_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX email_change_token_current_idx ON auth.users USING btree (email_change_token_current) WHERE ((email_change_token_current)::text !~ '^[0-9 ]*$'::text);
+
+
+--
+-- Name: email_change_token_new_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX email_change_token_new_idx ON auth.users USING btree (email_change_token_new) WHERE ((email_change_token_new)::text !~ '^[0-9 ]*$'::text);
+
+
+--
+-- Name: factor_id_created_at_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX factor_id_created_at_idx ON auth.mfa_factors USING btree (user_id, created_at);
+
+
+--
+-- Name: flow_state_created_at_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX flow_state_created_at_idx ON auth.flow_state USING btree (created_at DESC);
+
+
+--
+-- Name: identities_email_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX identities_email_idx ON auth.identities USING btree (email text_pattern_ops);
+
+
+--
+-- Name: INDEX identities_email_idx; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON INDEX auth.identities_email_idx IS 'Auth: Ensures indexed queries on the email column';
+
+
+--
+-- Name: identities_user_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX identities_user_id_idx ON auth.identities USING btree (user_id);
+
+
+--
+-- Name: idx_auth_code; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX idx_auth_code ON auth.flow_state USING btree (auth_code);
+
+
+--
+-- Name: idx_user_id_auth_method; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX idx_user_id_auth_method ON auth.flow_state USING btree (user_id, authentication_method);
+
+
+--
+-- Name: mfa_challenge_created_at_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX mfa_challenge_created_at_idx ON auth.mfa_challenges USING btree (created_at DESC);
+
+
+--
+-- Name: mfa_factors_user_friendly_name_unique; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX mfa_factors_user_friendly_name_unique ON auth.mfa_factors USING btree (friendly_name, user_id) WHERE (TRIM(BOTH FROM friendly_name) <> ''::text);
+
+
+--
+-- Name: mfa_factors_user_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX mfa_factors_user_id_idx ON auth.mfa_factors USING btree (user_id);
+
+
+--
+-- Name: one_time_tokens_relates_to_hash_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX one_time_tokens_relates_to_hash_idx ON auth.one_time_tokens USING hash (relates_to);
+
+
+--
+-- Name: one_time_tokens_token_hash_hash_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX one_time_tokens_token_hash_hash_idx ON auth.one_time_tokens USING hash (token_hash);
+
+
+--
+-- Name: one_time_tokens_user_id_token_type_key; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX one_time_tokens_user_id_token_type_key ON auth.one_time_tokens USING btree (user_id, token_type);
+
+
+--
+-- Name: reauthentication_token_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX reauthentication_token_idx ON auth.users USING btree (reauthentication_token) WHERE ((reauthentication_token)::text !~ '^[0-9 ]*$'::text);
+
+
+--
+-- Name: recovery_token_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX recovery_token_idx ON auth.users USING btree (recovery_token) WHERE ((recovery_token)::text !~ '^[0-9 ]*$'::text);
+
+
+--
+-- Name: refresh_tokens_instance_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX refresh_tokens_instance_id_idx ON auth.refresh_tokens USING btree (instance_id);
+
+
+--
+-- Name: refresh_tokens_instance_id_user_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX refresh_tokens_instance_id_user_id_idx ON auth.refresh_tokens USING btree (instance_id, user_id);
+
+
+--
+-- Name: refresh_tokens_parent_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX refresh_tokens_parent_idx ON auth.refresh_tokens USING btree (parent);
+
+
+--
+-- Name: refresh_tokens_session_id_revoked_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX refresh_tokens_session_id_revoked_idx ON auth.refresh_tokens USING btree (session_id, revoked);
+
+
+--
+-- Name: refresh_tokens_updated_at_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX refresh_tokens_updated_at_idx ON auth.refresh_tokens USING btree (updated_at DESC);
+
+
+--
+-- Name: saml_providers_sso_provider_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX saml_providers_sso_provider_id_idx ON auth.saml_providers USING btree (sso_provider_id);
+
+
+--
+-- Name: saml_relay_states_created_at_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX saml_relay_states_created_at_idx ON auth.saml_relay_states USING btree (created_at DESC);
+
+
+--
+-- Name: saml_relay_states_for_email_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX saml_relay_states_for_email_idx ON auth.saml_relay_states USING btree (for_email);
+
+
+--
+-- Name: saml_relay_states_sso_provider_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX saml_relay_states_sso_provider_id_idx ON auth.saml_relay_states USING btree (sso_provider_id);
+
+
+--
+-- Name: sessions_not_after_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX sessions_not_after_idx ON auth.sessions USING btree (not_after DESC);
+
+
+--
+-- Name: sessions_user_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX sessions_user_id_idx ON auth.sessions USING btree (user_id);
+
+
+--
+-- Name: sso_domains_domain_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX sso_domains_domain_idx ON auth.sso_domains USING btree (lower(domain));
+
+
+--
+-- Name: sso_domains_sso_provider_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX sso_domains_sso_provider_id_idx ON auth.sso_domains USING btree (sso_provider_id);
+
+
+--
+-- Name: sso_providers_resource_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX sso_providers_resource_id_idx ON auth.sso_providers USING btree (lower(resource_id));
+
+
+--
+-- Name: unique_phone_factor_per_user; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX unique_phone_factor_per_user ON auth.mfa_factors USING btree (user_id, phone);
+
+
+--
+-- Name: user_id_created_at_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX user_id_created_at_idx ON auth.sessions USING btree (user_id, created_at);
+
+
+--
+-- Name: users_email_partial_key; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE UNIQUE INDEX users_email_partial_key ON auth.users USING btree (email) WHERE (is_sso_user = false);
+
+
+--
+-- Name: INDEX users_email_partial_key; Type: COMMENT; Schema: auth; Owner: supabase_auth_admin
+--
+
+COMMENT ON INDEX auth.users_email_partial_key IS 'Auth: A partial unique index that applies only when is_sso_user is false';
+
+
+--
+-- Name: users_instance_id_email_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX users_instance_id_email_idx ON auth.users USING btree (instance_id, lower((email)::text));
+
+
+--
+-- Name: users_instance_id_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX users_instance_id_idx ON auth.users USING btree (instance_id);
+
+
+--
+-- Name: users_is_anonymous_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX users_is_anonymous_idx ON auth.users USING btree (is_anonymous);
+
+
+--
+-- Name: ix_realtime_subscription_entity; Type: INDEX; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE INDEX ix_realtime_subscription_entity ON realtime.subscription USING btree (entity);
+
+
+--
+-- Name: subscription_subscription_id_entity_filters_key; Type: INDEX; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE UNIQUE INDEX subscription_subscription_id_entity_filters_key ON realtime.subscription USING btree (subscription_id, entity, filters);
+
+
+--
+-- Name: bname; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE UNIQUE INDEX bname ON storage.buckets USING btree (name);
+
+
+--
+-- Name: bucketid_objname; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE UNIQUE INDEX bucketid_objname ON storage.objects USING btree (bucket_id, name);
+
+
+--
+-- Name: idx_multipart_uploads_list; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE INDEX idx_multipart_uploads_list ON storage.s3_multipart_uploads USING btree (bucket_id, key, created_at);
+
+
+--
+-- Name: idx_name_bucket_level_unique; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE UNIQUE INDEX idx_name_bucket_level_unique ON storage.objects USING btree (name COLLATE "C", bucket_id, level);
+
+
+--
+-- Name: idx_objects_bucket_id_name; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE INDEX idx_objects_bucket_id_name ON storage.objects USING btree (bucket_id, name COLLATE "C");
+
+
+--
+-- Name: idx_objects_lower_name; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE INDEX idx_objects_lower_name ON storage.objects USING btree ((path_tokens[level]), lower(name) text_pattern_ops, bucket_id, level);
+
+
+--
+-- Name: idx_prefixes_lower_name; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE INDEX idx_prefixes_lower_name ON storage.prefixes USING btree (bucket_id, level, ((string_to_array(name, '/'::text))[level]), lower(name) text_pattern_ops);
+
+
+--
+-- Name: name_prefix_search; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE INDEX name_prefix_search ON storage.objects USING btree (name text_pattern_ops);
+
+
+--
+-- Name: objects_bucket_id_level_idx; Type: INDEX; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE UNIQUE INDEX objects_bucket_id_level_idx ON storage.objects USING btree (bucket_id, level, name COLLATE "C");
+
+
+--
+-- Name: supabase_functions_hooks_h_table_id_h_name_idx; Type: INDEX; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+CREATE INDEX supabase_functions_hooks_h_table_id_h_name_idx ON supabase_functions.hooks USING btree (hook_table_id, hook_name);
+
+
+--
+-- Name: supabase_functions_hooks_request_id_idx; Type: INDEX; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+CREATE INDEX supabase_functions_hooks_request_id_idx ON supabase_functions.hooks USING btree (request_id);
+
+
+--
+-- Name: messages_2025_06_23_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_23_pkey;
+
+
+--
+-- Name: messages_2025_06_24_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_24_pkey;
+
+
+--
+-- Name: messages_2025_06_25_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_25_pkey;
+
+
+--
+-- Name: messages_2025_06_26_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_26_pkey;
+
+
+--
+-- Name: messages_2025_06_27_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_27_pkey;
+
+
+--
+-- Name: messages_2025_06_28_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_28_pkey;
+
+
+--
+-- Name: messages_2025_06_29_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_06_29_pkey;
+
+
+--
+-- Name: messages_2025_07_01_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_07_01_pkey;
+
+
+--
+-- Name: messages_2025_07_02_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_07_02_pkey;
+
+
+--
+-- Name: messages_2025_07_03_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_07_03_pkey;
+
+
+--
+-- Name: messages_2025_07_04_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_07_04_pkey;
+
+
+--
+-- Name: messages_2025_07_05_pkey; Type: INDEX ATTACH; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER INDEX realtime.messages_pkey ATTACH PARTITION realtime.messages_2025_07_05_pkey;
+
+
+--
+-- Name: subscription tr_check_filters; Type: TRIGGER; Schema: realtime; Owner: supabase_admin
+--
+
+CREATE TRIGGER tr_check_filters BEFORE INSERT OR UPDATE ON realtime.subscription FOR EACH ROW EXECUTE FUNCTION realtime.subscription_check_filters();
+
+
+--
+-- Name: buckets enforce_bucket_name_length_trigger; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER enforce_bucket_name_length_trigger BEFORE INSERT OR UPDATE OF name ON storage.buckets FOR EACH ROW EXECUTE FUNCTION storage.enforce_bucket_name_length();
+
+
+--
+-- Name: objects objects_delete_delete_prefix; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER objects_delete_delete_prefix AFTER DELETE ON storage.objects FOR EACH ROW EXECUTE FUNCTION storage.delete_prefix_hierarchy_trigger();
+
+
+--
+-- Name: objects objects_insert_create_prefix; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER objects_insert_create_prefix BEFORE INSERT ON storage.objects FOR EACH ROW EXECUTE FUNCTION storage.objects_insert_prefix_trigger();
+
+
+--
+-- Name: objects objects_update_create_prefix; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER objects_update_create_prefix BEFORE UPDATE ON storage.objects FOR EACH ROW WHEN (((new.name <> old.name) OR (new.bucket_id <> old.bucket_id))) EXECUTE FUNCTION storage.objects_update_prefix_trigger();
+
+
+--
+-- Name: prefixes prefixes_create_hierarchy; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER prefixes_create_hierarchy BEFORE INSERT ON storage.prefixes FOR EACH ROW WHEN ((pg_trigger_depth() < 1)) EXECUTE FUNCTION storage.prefixes_insert_trigger();
+
+
+--
+-- Name: prefixes prefixes_delete_hierarchy; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER prefixes_delete_hierarchy AFTER DELETE ON storage.prefixes FOR EACH ROW EXECUTE FUNCTION storage.delete_prefix_hierarchy_trigger();
+
+
+--
+-- Name: objects update_objects_updated_at; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
+--
+
+CREATE TRIGGER update_objects_updated_at BEFORE UPDATE ON storage.objects FOR EACH ROW EXECUTE FUNCTION storage.update_updated_at_column();
+
+
+--
+-- Name: extensions extensions_tenant_external_id_fkey; Type: FK CONSTRAINT; Schema: _realtime; Owner: supabase_admin
+--
+
+ALTER TABLE ONLY _realtime.extensions
+    ADD CONSTRAINT extensions_tenant_external_id_fkey FOREIGN KEY (tenant_external_id) REFERENCES _realtime.tenants(external_id) ON DELETE CASCADE;
+
+
+--
+-- Name: identities identities_user_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.identities
+    ADD CONSTRAINT identities_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: mfa_amr_claims mfa_amr_claims_session_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_amr_claims
+    ADD CONSTRAINT mfa_amr_claims_session_id_fkey FOREIGN KEY (session_id) REFERENCES auth.sessions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: mfa_challenges mfa_challenges_auth_factor_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_challenges
+    ADD CONSTRAINT mfa_challenges_auth_factor_id_fkey FOREIGN KEY (factor_id) REFERENCES auth.mfa_factors(id) ON DELETE CASCADE;
+
+
+--
+-- Name: mfa_factors mfa_factors_user_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.mfa_factors
+    ADD CONSTRAINT mfa_factors_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: one_time_tokens one_time_tokens_user_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.one_time_tokens
+    ADD CONSTRAINT one_time_tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: refresh_tokens refresh_tokens_session_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.refresh_tokens
+    ADD CONSTRAINT refresh_tokens_session_id_fkey FOREIGN KEY (session_id) REFERENCES auth.sessions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: saml_providers saml_providers_sso_provider_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.saml_providers
+    ADD CONSTRAINT saml_providers_sso_provider_id_fkey FOREIGN KEY (sso_provider_id) REFERENCES auth.sso_providers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: saml_relay_states saml_relay_states_flow_state_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.saml_relay_states
+    ADD CONSTRAINT saml_relay_states_flow_state_id_fkey FOREIGN KEY (flow_state_id) REFERENCES auth.flow_state(id) ON DELETE CASCADE;
+
+
+--
+-- Name: saml_relay_states saml_relay_states_sso_provider_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.saml_relay_states
+    ADD CONSTRAINT saml_relay_states_sso_provider_id_fkey FOREIGN KEY (sso_provider_id) REFERENCES auth.sso_providers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sessions sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.sessions
+    ADD CONSTRAINT sessions_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sso_domains sso_domains_sso_provider_id_fkey; Type: FK CONSTRAINT; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE ONLY auth.sso_domains
+    ADD CONSTRAINT sso_domains_sso_provider_id_fkey FOREIGN KEY (sso_provider_id) REFERENCES auth.sso_providers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: albuns_alunos albuns_alunos_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_alunos
+    ADD CONSTRAINT albuns_alunos_album_id_fkey FOREIGN KEY (album_id) REFERENCES public.albuns(id);
+
+
+--
+-- Name: albuns_alunos albuns_alunos_aluno_usuario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_alunos
+    ADD CONSTRAINT albuns_alunos_aluno_usuario_id_fkey FOREIGN KEY (aluno_usuario_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: albuns albuns_criado_por_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns
+    ADD CONSTRAINT albuns_criado_por_id_fkey FOREIGN KEY (criado_por_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: albuns_escolas albuns_escolas_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_escolas
+    ADD CONSTRAINT albuns_escolas_album_id_fkey FOREIGN KEY (album_id) REFERENCES public.albuns(id);
+
+
+--
+-- Name: albuns_escolas albuns_escolas_escola_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_escolas
+    ADD CONSTRAINT albuns_escolas_escola_id_fkey FOREIGN KEY (escola_id) REFERENCES public.escolas(id);
+
+
+--
+-- Name: albuns_series albuns_series_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_series
+    ADD CONSTRAINT albuns_series_album_id_fkey FOREIGN KEY (album_id) REFERENCES public.albuns(id);
+
+
+--
+-- Name: albuns_series albuns_series_serie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_series
+    ADD CONSTRAINT albuns_series_serie_id_fkey FOREIGN KEY (serie_id) REFERENCES public.series(id);
+
+
+--
+-- Name: albuns_turmas albuns_turmas_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_turmas
+    ADD CONSTRAINT albuns_turmas_album_id_fkey FOREIGN KEY (album_id) REFERENCES public.albuns(id);
+
+
+--
+-- Name: albuns_turmas albuns_turmas_turma_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.albuns_turmas
+    ADD CONSTRAINT albuns_turmas_turma_id_fkey FOREIGN KEY (turma_id) REFERENCES public.turmas(id);
+
+
+--
+-- Name: alunos_turmas alunos_turmas_turma_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.alunos_turmas
+    ADD CONSTRAINT alunos_turmas_turma_id_fkey FOREIGN KEY (turma_id) REFERENCES public.turmas(id);
+
+
+--
+-- Name: alunos_turmas alunos_turmas_usuario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.alunos_turmas
+    ADD CONSTRAINT alunos_turmas_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: fotos fotos_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fotos
+    ADD CONSTRAINT fotos_album_id_fkey FOREIGN KEY (album_id) REFERENCES public.albuns(id);
+
+
+--
+-- Name: fotos fotos_criado_por_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.fotos
+    ADD CONSTRAINT fotos_criado_por_id_fkey FOREIGN KEY (criado_por_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: responsaveis_alunos responsaveis_alunos_aluno_usuario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsaveis_alunos
+    ADD CONSTRAINT responsaveis_alunos_aluno_usuario_id_fkey FOREIGN KEY (aluno_usuario_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: responsaveis_alunos responsaveis_alunos_usuario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsaveis_alunos
+    ADD CONSTRAINT responsaveis_alunos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: series series_escola_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.series
+    ADD CONSTRAINT series_escola_id_fkey FOREIGN KEY (escola_id) REFERENCES public.escolas(id);
+
+
+--
+-- Name: series series_segmento_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.series
+    ADD CONSTRAINT series_segmento_id_fkey FOREIGN KEY (segmento_id) REFERENCES public.segmentos(id);
+
+
+--
+-- Name: series series_turno_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.series
+    ADD CONSTRAINT series_turno_id_fkey FOREIGN KEY (turno_id) REFERENCES public.turnos(id);
+
+
+--
+-- Name: turmas turmas_escola_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.turmas
+    ADD CONSTRAINT turmas_escola_id_fkey FOREIGN KEY (escola_id) REFERENCES public.escolas(id);
+
+
+--
+-- Name: turmas turmas_serie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.turmas
+    ADD CONSTRAINT turmas_serie_id_fkey FOREIGN KEY (serie_id) REFERENCES public.series(id);
+
+
+--
+-- Name: usuarios_escolas usuarios_escolas_escola_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuarios_escolas
+    ADD CONSTRAINT usuarios_escolas_escola_id_fkey FOREIGN KEY (escola_id) REFERENCES public.escolas(id);
+
+
+--
+-- Name: usuarios_escolas usuarios_escolas_usuario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuarios_escolas
+    ADD CONSTRAINT usuarios_escolas_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(id);
+
+
+--
+-- Name: objects objects_bucketId_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.objects
+    ADD CONSTRAINT "objects_bucketId_fkey" FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id);
+
+
+--
+-- Name: prefixes prefixes_bucketId_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.prefixes
+    ADD CONSTRAINT "prefixes_bucketId_fkey" FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id);
+
+
+--
+-- Name: s3_multipart_uploads s3_multipart_uploads_bucket_id_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads
+    ADD CONSTRAINT s3_multipart_uploads_bucket_id_fkey FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id);
+
+
+--
+-- Name: s3_multipart_uploads_parts s3_multipart_uploads_parts_bucket_id_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads_parts
+    ADD CONSTRAINT s3_multipart_uploads_parts_bucket_id_fkey FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id);
+
+
+--
+-- Name: s3_multipart_uploads_parts s3_multipart_uploads_parts_upload_id_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads_parts
+    ADD CONSTRAINT s3_multipart_uploads_parts_upload_id_fkey FOREIGN KEY (upload_id) REFERENCES storage.s3_multipart_uploads(id) ON DELETE CASCADE;
+
+
+--
+-- Name: audit_log_entries; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.audit_log_entries ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: flow_state; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.flow_state ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: identities; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.identities ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: instances; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.instances ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: mfa_amr_claims; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.mfa_amr_claims ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: mfa_challenges; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.mfa_challenges ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: mfa_factors; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.mfa_factors ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: one_time_tokens; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.one_time_tokens ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: refresh_tokens; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.refresh_tokens ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: saml_providers; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.saml_providers ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: saml_relay_states; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.saml_relay_states ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: schema_migrations; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.schema_migrations ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: sessions; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.sessions ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: sso_domains; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.sso_domains ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: sso_providers; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.sso_providers ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: users; Type: ROW SECURITY; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER TABLE auth.users ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: messages; Type: ROW SECURITY; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+ALTER TABLE realtime.messages ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: buckets; Type: ROW SECURITY; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE storage.buckets ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: migrations; Type: ROW SECURITY; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE storage.migrations ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: objects; Type: ROW SECURITY; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: prefixes; Type: ROW SECURITY; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE storage.prefixes ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: s3_multipart_uploads; Type: ROW SECURITY; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE storage.s3_multipart_uploads ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: s3_multipart_uploads_parts; Type: ROW SECURITY; Schema: storage; Owner: supabase_storage_admin
+--
+
+ALTER TABLE storage.s3_multipart_uploads_parts ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: supabase_realtime; Type: PUBLICATION; Schema: -; Owner: postgres
+--
+
+CREATE PUBLICATION supabase_realtime WITH (publish = 'insert, update, delete, truncate');
+
+
+ALTER PUBLICATION supabase_realtime OWNER TO postgres;
+
+--
+-- Name: SCHEMA auth; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA auth TO anon;
+GRANT USAGE ON SCHEMA auth TO authenticated;
+GRANT USAGE ON SCHEMA auth TO service_role;
+GRANT ALL ON SCHEMA auth TO supabase_auth_admin;
+GRANT ALL ON SCHEMA auth TO dashboard_user;
+GRANT USAGE ON SCHEMA auth TO postgres;
+
+
+--
+-- Name: SCHEMA extensions; Type: ACL; Schema: -; Owner: postgres
+--
+
+GRANT USAGE ON SCHEMA extensions TO anon;
+GRANT USAGE ON SCHEMA extensions TO authenticated;
+GRANT USAGE ON SCHEMA extensions TO service_role;
+GRANT ALL ON SCHEMA extensions TO dashboard_user;
+
+
+--
+-- Name: SCHEMA net; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA net TO supabase_functions_admin;
+GRANT USAGE ON SCHEMA net TO postgres;
+GRANT USAGE ON SCHEMA net TO anon;
+GRANT USAGE ON SCHEMA net TO authenticated;
+GRANT USAGE ON SCHEMA net TO service_role;
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+--
+
+GRANT USAGE ON SCHEMA public TO postgres;
+GRANT USAGE ON SCHEMA public TO anon;
+GRANT USAGE ON SCHEMA public TO authenticated;
+GRANT USAGE ON SCHEMA public TO service_role;
+
+
+--
+-- Name: SCHEMA realtime; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA realtime TO postgres;
+GRANT USAGE ON SCHEMA realtime TO anon;
+GRANT USAGE ON SCHEMA realtime TO authenticated;
+GRANT USAGE ON SCHEMA realtime TO service_role;
+GRANT ALL ON SCHEMA realtime TO supabase_realtime_admin;
+
+
+--
+-- Name: SCHEMA storage; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA storage TO postgres;
+GRANT USAGE ON SCHEMA storage TO anon;
+GRANT USAGE ON SCHEMA storage TO authenticated;
+GRANT USAGE ON SCHEMA storage TO service_role;
+GRANT ALL ON SCHEMA storage TO supabase_storage_admin;
+GRANT ALL ON SCHEMA storage TO dashboard_user;
+
+
+--
+-- Name: SCHEMA supabase_functions; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA supabase_functions TO postgres;
+GRANT USAGE ON SCHEMA supabase_functions TO anon;
+GRANT USAGE ON SCHEMA supabase_functions TO authenticated;
+GRANT USAGE ON SCHEMA supabase_functions TO service_role;
+GRANT ALL ON SCHEMA supabase_functions TO supabase_functions_admin;
+
+
+--
+-- Name: SCHEMA vault; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA vault TO postgres WITH GRANT OPTION;
+GRANT USAGE ON SCHEMA vault TO service_role;
+SET SESSION AUTHORIZATION postgres;
+GRANT USAGE ON SCHEMA vault TO service_role;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION email(); Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON FUNCTION auth.email() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION jwt(); Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON FUNCTION auth.jwt() TO postgres;
+GRANT ALL ON FUNCTION auth.jwt() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION role(); Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON FUNCTION auth.role() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION uid(); Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON FUNCTION auth.uid() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION armor(bytea); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.armor(bytea) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.armor(bytea) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.armor(bytea) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION armor(bytea, text[], text[]); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION crypt(text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.crypt(text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.crypt(text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.crypt(text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION dearmor(text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.dearmor(text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.dearmor(text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.dearmor(text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION decrypt(bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION decrypt_iv(bytea, bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION digest(bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION digest(text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.digest(text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.digest(text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.digest(text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION encrypt(bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION encrypt_iv(bytea, bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION gen_random_bytes(integer); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION gen_random_uuid(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION gen_salt(text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.gen_salt(text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.gen_salt(text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.gen_salt(text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION gen_salt(text, integer); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION grant_pg_cron_access(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION extensions.grant_pg_cron_access() FROM supabase_admin;
+GRANT ALL ON FUNCTION extensions.grant_pg_cron_access() TO supabase_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.grant_pg_cron_access() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION grant_pg_graphql_access(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.grant_pg_graphql_access() TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION grant_pg_net_access(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION extensions.grant_pg_net_access() FROM supabase_admin;
+GRANT ALL ON FUNCTION extensions.grant_pg_net_access() TO supabase_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.grant_pg_net_access() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION hmac(bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION hmac(text, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.hmac(text, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.hmac(text, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.hmac(text, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT shared_blk_read_time double precision, OUT shared_blk_write_time double precision, OUT local_blk_read_time double precision, OUT local_blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision, OUT jit_deform_count bigint, OUT jit_deform_time double precision, OUT stats_since timestamp with time zone, OUT minmax_stats_since timestamp with time zone); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT shared_blk_read_time double precision, OUT shared_blk_write_time double precision, OUT local_blk_read_time double precision, OUT local_blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision, OUT jit_deform_count bigint, OUT jit_deform_time double precision, OUT stats_since timestamp with time zone, OUT minmax_stats_since timestamp with time zone) TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone) TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION pg_stat_statements_reset(userid oid, dbid oid, queryid bigint, minmax_only boolean); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pg_stat_statements_reset(userid oid, dbid oid, queryid bigint, minmax_only boolean) TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION pgp_armor_headers(text, OUT key text, OUT value text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_key_id(bytea); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_decrypt(bytea, bytea); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_decrypt(bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_decrypt(bytea, bytea, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_decrypt_bytea(bytea, bytea); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_decrypt_bytea(bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_decrypt_bytea(bytea, bytea, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_encrypt(text, bytea); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_encrypt(text, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_encrypt_bytea(bytea, bytea); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_pub_encrypt_bytea(bytea, bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_decrypt(bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_decrypt(bytea, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_decrypt_bytea(bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_decrypt_bytea(bytea, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_encrypt(text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_encrypt(text, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_encrypt_bytea(bytea, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgp_sym_encrypt_bytea(bytea, text, text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text, text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text, text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text, text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION pgrst_ddl_watch(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgrst_ddl_watch() TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION pgrst_drop_watch(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.pgrst_drop_watch() TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION set_graphql_placeholder(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.set_graphql_placeholder() TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: FUNCTION uuid_generate_v1(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_generate_v1mc(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_generate_v3(namespace uuid, name text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_generate_v4(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_generate_v5(namespace uuid, name text); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_nil(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_nil() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_nil() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_nil() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_ns_dns(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_ns_oid(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_ns_url(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION uuid_ns_x500(); Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO dashboard_user;
+GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION graphql("operationName" text, query text, variables jsonb, extensions jsonb); Type: ACL; Schema: graphql_public; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO postgres;
+GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO anon;
+GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO authenticated;
+GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO service_role;
+
+
+--
+-- Name: FUNCTION http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer); Type: ACL; Schema: net; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) FROM PUBLIC;
+GRANT ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) TO supabase_functions_admin;
+GRANT ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) TO postgres;
+GRANT ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) TO anon;
+GRANT ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) TO authenticated;
+GRANT ALL ON FUNCTION net.http_get(url text, params jsonb, headers jsonb, timeout_milliseconds integer) TO service_role;
+
+
+--
+-- Name: FUNCTION http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer); Type: ACL; Schema: net; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) FROM PUBLIC;
+GRANT ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) TO supabase_functions_admin;
+GRANT ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) TO postgres;
+GRANT ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) TO anon;
+GRANT ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) TO authenticated;
+GRANT ALL ON FUNCTION net.http_post(url text, body jsonb, params jsonb, headers jsonb, timeout_milliseconds integer) TO service_role;
+
+
+--
+-- Name: FUNCTION get_auth(p_usename text); Type: ACL; Schema: pgbouncer; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION pgbouncer.get_auth(p_usename text) FROM PUBLIC;
+GRANT ALL ON FUNCTION pgbouncer.get_auth(p_usename text) TO pgbouncer;
+GRANT ALL ON FUNCTION pgbouncer.get_auth(p_usename text) TO postgres;
+
+
+--
+-- Name: FUNCTION fn_buscar_alunos(p_nome character varying, p_matricula character varying, p_escola_id uuid, p_turma_id uuid, p_serie_id uuid, p_turno_id uuid); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.fn_buscar_alunos(p_nome character varying, p_matricula character varying, p_escola_id uuid, p_turma_id uuid, p_serie_id uuid, p_turno_id uuid) TO anon;
+GRANT ALL ON FUNCTION public.fn_buscar_alunos(p_nome character varying, p_matricula character varying, p_escola_id uuid, p_turma_id uuid, p_serie_id uuid, p_turno_id uuid) TO authenticated;
+GRANT ALL ON FUNCTION public.fn_buscar_alunos(p_nome character varying, p_matricula character varying, p_escola_id uuid, p_turma_id uuid, p_serie_id uuid, p_turno_id uuid) TO service_role;
+
+
+--
+-- Name: FUNCTION fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_matricula character varying, p_turma_id uuid, p_ano_letivo integer, p_responsaveis uuid[]); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_matricula character varying, p_turma_id uuid, p_ano_letivo integer, p_responsaveis uuid[]) TO anon;
+GRANT ALL ON FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_matricula character varying, p_turma_id uuid, p_ano_letivo integer, p_responsaveis uuid[]) TO authenticated;
+GRANT ALL ON FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_matricula character varying, p_turma_id uuid, p_ano_letivo integer, p_responsaveis uuid[]) TO service_role;
+
+
+--
+-- Name: FUNCTION fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_escola_id uuid, p_turma_id uuid, p_ano_letivo integer, p_matricula character varying, p_created_by uuid); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_escola_id uuid, p_turma_id uuid, p_ano_letivo integer, p_matricula character varying, p_created_by uuid) TO anon;
+GRANT ALL ON FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_escola_id uuid, p_turma_id uuid, p_ano_letivo integer, p_matricula character varying, p_created_by uuid) TO authenticated;
+GRANT ALL ON FUNCTION public.fn_cadastrar_aluno(p_nome character varying, p_email character varying, p_senha character varying, p_cpf character varying, p_rg character varying, p_celular character varying, p_logradouro character varying, p_complemento character varying, p_bairro character varying, p_cidade character varying, p_uf character varying, p_cep character varying, p_escola_id uuid, p_turma_id uuid, p_ano_letivo integer, p_matricula character varying, p_created_by uuid) TO service_role;
+
+
+--
+-- Name: FUNCTION apply_rls(wal jsonb, max_record_bytes integer); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO postgres;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO anon;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO authenticated;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO service_role;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text) TO postgres;
+GRANT ALL ON FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text) TO dashboard_user;
+
+
+--
+-- Name: FUNCTION build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO postgres;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO anon;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO authenticated;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO service_role;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION "cast"(val text, type_ regtype); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO postgres;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO anon;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO authenticated;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO service_role;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO postgres;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO anon;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO authenticated;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO service_role;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO postgres;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO anon;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO authenticated;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO service_role;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO postgres;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO anon;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO authenticated;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO service_role;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION quote_wal2json(entity regclass); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO postgres;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO anon;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO authenticated;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO service_role;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION send(payload jsonb, event text, topic text, private boolean); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean) TO postgres;
+GRANT ALL ON FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean) TO dashboard_user;
+
+
+--
+-- Name: FUNCTION subscription_check_filters(); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO postgres;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO anon;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO authenticated;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO service_role;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION to_regrole(role_name text); Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO postgres;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO anon;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO authenticated;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO service_role;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION topic(); Type: ACL; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+GRANT ALL ON FUNCTION realtime.topic() TO postgres;
+GRANT ALL ON FUNCTION realtime.topic() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION http_request(); Type: ACL; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+REVOKE ALL ON FUNCTION supabase_functions.http_request() FROM PUBLIC;
+GRANT ALL ON FUNCTION supabase_functions.http_request() TO postgres;
+GRANT ALL ON FUNCTION supabase_functions.http_request() TO anon;
+GRANT ALL ON FUNCTION supabase_functions.http_request() TO authenticated;
+GRANT ALL ON FUNCTION supabase_functions.http_request() TO service_role;
+
+
+--
+-- Name: FUNCTION _crypto_aead_det_decrypt(message bytea, additional bytea, key_id bigint, context bytea, nonce bytea); Type: ACL; Schema: vault; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION vault._crypto_aead_det_decrypt(message bytea, additional bytea, key_id bigint, context bytea, nonce bytea) TO postgres WITH GRANT OPTION;
+GRANT ALL ON FUNCTION vault._crypto_aead_det_decrypt(message bytea, additional bytea, key_id bigint, context bytea, nonce bytea) TO service_role;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION vault._crypto_aead_det_decrypt(message bytea, additional bytea, key_id bigint, context bytea, nonce bytea) TO service_role;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION create_secret(new_secret text, new_name text, new_description text, new_key_id uuid); Type: ACL; Schema: vault; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION vault.create_secret(new_secret text, new_name text, new_description text, new_key_id uuid) TO postgres WITH GRANT OPTION;
+GRANT ALL ON FUNCTION vault.create_secret(new_secret text, new_name text, new_description text, new_key_id uuid) TO service_role;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION vault.create_secret(new_secret text, new_name text, new_description text, new_key_id uuid) TO service_role;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: FUNCTION update_secret(secret_id uuid, new_secret text, new_name text, new_description text, new_key_id uuid); Type: ACL; Schema: vault; Owner: supabase_admin
+--
+
+GRANT ALL ON FUNCTION vault.update_secret(secret_id uuid, new_secret text, new_name text, new_description text, new_key_id uuid) TO postgres WITH GRANT OPTION;
+GRANT ALL ON FUNCTION vault.update_secret(secret_id uuid, new_secret text, new_name text, new_description text, new_key_id uuid) TO service_role;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON FUNCTION vault.update_secret(secret_id uuid, new_secret text, new_name text, new_description text, new_key_id uuid) TO service_role;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE audit_log_entries; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON TABLE auth.audit_log_entries TO dashboard_user;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.audit_log_entries TO postgres;
+GRANT SELECT ON TABLE auth.audit_log_entries TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.audit_log_entries TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE flow_state; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.flow_state TO postgres;
+GRANT SELECT ON TABLE auth.flow_state TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.flow_state TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.flow_state TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE identities; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.identities TO postgres;
+GRANT SELECT ON TABLE auth.identities TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.identities TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.identities TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE instances; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON TABLE auth.instances TO dashboard_user;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.instances TO postgres;
+GRANT SELECT ON TABLE auth.instances TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.instances TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE mfa_amr_claims; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.mfa_amr_claims TO postgres;
+GRANT SELECT ON TABLE auth.mfa_amr_claims TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.mfa_amr_claims TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.mfa_amr_claims TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE mfa_challenges; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.mfa_challenges TO postgres;
+GRANT SELECT ON TABLE auth.mfa_challenges TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.mfa_challenges TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.mfa_challenges TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE mfa_factors; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.mfa_factors TO postgres;
+GRANT SELECT ON TABLE auth.mfa_factors TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.mfa_factors TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.mfa_factors TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE one_time_tokens; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.one_time_tokens TO postgres;
+GRANT SELECT ON TABLE auth.one_time_tokens TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.one_time_tokens TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.one_time_tokens TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE refresh_tokens; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON TABLE auth.refresh_tokens TO dashboard_user;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.refresh_tokens TO postgres;
+GRANT SELECT ON TABLE auth.refresh_tokens TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.refresh_tokens TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: SEQUENCE refresh_tokens_id_seq; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON SEQUENCE auth.refresh_tokens_id_seq TO dashboard_user;
+GRANT ALL ON SEQUENCE auth.refresh_tokens_id_seq TO postgres;
+
+
+--
+-- Name: TABLE saml_providers; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.saml_providers TO postgres;
+GRANT SELECT ON TABLE auth.saml_providers TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.saml_providers TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.saml_providers TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE saml_relay_states; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.saml_relay_states TO postgres;
+GRANT SELECT ON TABLE auth.saml_relay_states TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.saml_relay_states TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.saml_relay_states TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE schema_migrations; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT SELECT ON TABLE auth.schema_migrations TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: TABLE sessions; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.sessions TO postgres;
+GRANT SELECT ON TABLE auth.sessions TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.sessions TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.sessions TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE sso_domains; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.sso_domains TO postgres;
+GRANT SELECT ON TABLE auth.sso_domains TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.sso_domains TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.sso_domains TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE sso_providers; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.sso_providers TO postgres;
+GRANT SELECT ON TABLE auth.sso_providers TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE auth.sso_providers TO dashboard_user;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.sso_providers TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE users; Type: ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+GRANT ALL ON TABLE auth.users TO dashboard_user;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,MAINTAIN,UPDATE ON TABLE auth.users TO postgres;
+GRANT SELECT ON TABLE auth.users TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT ON TABLE auth.users TO dashboard_user;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE pg_stat_statements; Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE extensions.pg_stat_statements TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: TABLE pg_stat_statements_info; Type: ACL; Schema: extensions; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE extensions.pg_stat_statements_info TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: TABLE albuns; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.albuns TO anon;
+GRANT ALL ON TABLE public.albuns TO authenticated;
+GRANT ALL ON TABLE public.albuns TO service_role;
+
+
+--
+-- Name: TABLE albuns_alunos; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.albuns_alunos TO anon;
+GRANT ALL ON TABLE public.albuns_alunos TO authenticated;
+GRANT ALL ON TABLE public.albuns_alunos TO service_role;
+
+
+--
+-- Name: TABLE albuns_escolas; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.albuns_escolas TO anon;
+GRANT ALL ON TABLE public.albuns_escolas TO authenticated;
+GRANT ALL ON TABLE public.albuns_escolas TO service_role;
+
+
+--
+-- Name: TABLE albuns_series; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.albuns_series TO anon;
+GRANT ALL ON TABLE public.albuns_series TO authenticated;
+GRANT ALL ON TABLE public.albuns_series TO service_role;
+
+
+--
+-- Name: TABLE albuns_turmas; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.albuns_turmas TO anon;
+GRANT ALL ON TABLE public.albuns_turmas TO authenticated;
+GRANT ALL ON TABLE public.albuns_turmas TO service_role;
+
+
+--
+-- Name: TABLE alunos_turmas; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.alunos_turmas TO anon;
+GRANT ALL ON TABLE public.alunos_turmas TO authenticated;
+GRANT ALL ON TABLE public.alunos_turmas TO service_role;
+
+
+--
+-- Name: TABLE escolas; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.escolas TO anon;
+GRANT ALL ON TABLE public.escolas TO authenticated;
+GRANT ALL ON TABLE public.escolas TO service_role;
+
+
+--
+-- Name: TABLE fotos; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.fotos TO anon;
+GRANT ALL ON TABLE public.fotos TO authenticated;
+GRANT ALL ON TABLE public.fotos TO service_role;
+
+
+--
+-- Name: TABLE logs_auditoria; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.logs_auditoria TO anon;
+GRANT ALL ON TABLE public.logs_auditoria TO authenticated;
+GRANT ALL ON TABLE public.logs_auditoria TO service_role;
+
+
+--
+-- Name: TABLE responsaveis_alunos; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.responsaveis_alunos TO anon;
+GRANT ALL ON TABLE public.responsaveis_alunos TO authenticated;
+GRANT ALL ON TABLE public.responsaveis_alunos TO service_role;
+
+
+--
+-- Name: TABLE segmentos; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.segmentos TO anon;
+GRANT ALL ON TABLE public.segmentos TO authenticated;
+GRANT ALL ON TABLE public.segmentos TO service_role;
+
+
+--
+-- Name: TABLE series; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.series TO anon;
+GRANT ALL ON TABLE public.series TO authenticated;
+GRANT ALL ON TABLE public.series TO service_role;
+
+
+--
+-- Name: TABLE turmas; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.turmas TO anon;
+GRANT ALL ON TABLE public.turmas TO authenticated;
+GRANT ALL ON TABLE public.turmas TO service_role;
+
+
+--
+-- Name: TABLE turnos; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.turnos TO anon;
+GRANT ALL ON TABLE public.turnos TO authenticated;
+GRANT ALL ON TABLE public.turnos TO service_role;
+
+
+--
+-- Name: TABLE usuarios; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.usuarios TO anon;
+GRANT ALL ON TABLE public.usuarios TO authenticated;
+GRANT ALL ON TABLE public.usuarios TO service_role;
+
+
+--
+-- Name: TABLE usuarios_escolas; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.usuarios_escolas TO anon;
+GRANT ALL ON TABLE public.usuarios_escolas TO authenticated;
+GRANT ALL ON TABLE public.usuarios_escolas TO service_role;
+
+
+--
+-- Name: TABLE messages; Type: ACL; Schema: realtime; Owner: supabase_realtime_admin
+--
+
+GRANT ALL ON TABLE realtime.messages TO postgres;
+GRANT ALL ON TABLE realtime.messages TO dashboard_user;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.messages TO anon;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.messages TO authenticated;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.messages TO service_role;
+
+
+--
+-- Name: TABLE messages_2025_06_23; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_23 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_06_24; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_24 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_06_25; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_25 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_06_26; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_26 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_06_27; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_27 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_06_28; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_28 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_06_29; Type: ACL; Schema: realtime; Owner: postgres
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_06_29 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_07_01; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_07_01 TO postgres;
+GRANT ALL ON TABLE realtime.messages_2025_07_01 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_07_02; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_07_02 TO postgres;
+GRANT ALL ON TABLE realtime.messages_2025_07_02 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_07_03; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_07_03 TO postgres;
+GRANT ALL ON TABLE realtime.messages_2025_07_03 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_07_04; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_07_04 TO postgres;
+GRANT ALL ON TABLE realtime.messages_2025_07_04 TO dashboard_user;
+
+
+--
+-- Name: TABLE messages_2025_07_05; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.messages_2025_07_05 TO postgres;
+GRANT ALL ON TABLE realtime.messages_2025_07_05 TO dashboard_user;
+
+
+--
+-- Name: TABLE schema_migrations; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.schema_migrations TO postgres;
+GRANT ALL ON TABLE realtime.schema_migrations TO dashboard_user;
+GRANT SELECT ON TABLE realtime.schema_migrations TO anon;
+GRANT SELECT ON TABLE realtime.schema_migrations TO authenticated;
+GRANT SELECT ON TABLE realtime.schema_migrations TO service_role;
+GRANT ALL ON TABLE realtime.schema_migrations TO supabase_realtime_admin;
+
+
+--
+-- Name: TABLE subscription; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE realtime.subscription TO postgres;
+GRANT ALL ON TABLE realtime.subscription TO dashboard_user;
+GRANT SELECT ON TABLE realtime.subscription TO anon;
+GRANT SELECT ON TABLE realtime.subscription TO authenticated;
+GRANT SELECT ON TABLE realtime.subscription TO service_role;
+GRANT ALL ON TABLE realtime.subscription TO supabase_realtime_admin;
+
+
+--
+-- Name: SEQUENCE subscription_id_seq; Type: ACL; Schema: realtime; Owner: supabase_admin
+--
+
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO postgres;
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO dashboard_user;
+GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO anon;
+GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO authenticated;
+GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO service_role;
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO supabase_realtime_admin;
+
+
+--
+-- Name: TABLE buckets; Type: ACL; Schema: storage; Owner: supabase_storage_admin
+--
+
+GRANT ALL ON TABLE storage.buckets TO anon;
+GRANT ALL ON TABLE storage.buckets TO authenticated;
+GRANT ALL ON TABLE storage.buckets TO service_role;
+GRANT ALL ON TABLE storage.buckets TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.buckets TO anon;
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.buckets TO authenticated;
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.buckets TO service_role;
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.buckets TO postgres;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE objects; Type: ACL; Schema: storage; Owner: supabase_storage_admin
+--
+
+GRANT ALL ON TABLE storage.objects TO anon;
+GRANT ALL ON TABLE storage.objects TO authenticated;
+GRANT ALL ON TABLE storage.objects TO service_role;
+GRANT ALL ON TABLE storage.objects TO postgres WITH GRANT OPTION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.objects TO anon;
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.objects TO authenticated;
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.objects TO service_role;
+RESET SESSION AUTHORIZATION;
+SET SESSION AUTHORIZATION postgres;
+GRANT ALL ON TABLE storage.objects TO postgres;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE prefixes; Type: ACL; Schema: storage; Owner: supabase_storage_admin
+--
+
+GRANT ALL ON TABLE storage.prefixes TO service_role;
+GRANT ALL ON TABLE storage.prefixes TO authenticated;
+GRANT ALL ON TABLE storage.prefixes TO anon;
+
+
+--
+-- Name: TABLE s3_multipart_uploads; Type: ACL; Schema: storage; Owner: supabase_storage_admin
+--
+
+GRANT ALL ON TABLE storage.s3_multipart_uploads TO service_role;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads TO authenticated;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads TO anon;
+
+
+--
+-- Name: TABLE s3_multipart_uploads_parts; Type: ACL; Schema: storage; Owner: supabase_storage_admin
+--
+
+GRANT ALL ON TABLE storage.s3_multipart_uploads_parts TO service_role;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads_parts TO authenticated;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads_parts TO anon;
+
+
+--
+-- Name: TABLE hooks; Type: ACL; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+GRANT ALL ON TABLE supabase_functions.hooks TO postgres;
+GRANT ALL ON TABLE supabase_functions.hooks TO anon;
+GRANT ALL ON TABLE supabase_functions.hooks TO authenticated;
+GRANT ALL ON TABLE supabase_functions.hooks TO service_role;
+
+
+--
+-- Name: SEQUENCE hooks_id_seq; Type: ACL; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+GRANT ALL ON SEQUENCE supabase_functions.hooks_id_seq TO postgres;
+GRANT ALL ON SEQUENCE supabase_functions.hooks_id_seq TO anon;
+GRANT ALL ON SEQUENCE supabase_functions.hooks_id_seq TO authenticated;
+GRANT ALL ON SEQUENCE supabase_functions.hooks_id_seq TO service_role;
+
+
+--
+-- Name: TABLE migrations; Type: ACL; Schema: supabase_functions; Owner: supabase_functions_admin
+--
+
+GRANT ALL ON TABLE supabase_functions.migrations TO postgres;
+GRANT ALL ON TABLE supabase_functions.migrations TO anon;
+GRANT ALL ON TABLE supabase_functions.migrations TO authenticated;
+GRANT ALL ON TABLE supabase_functions.migrations TO service_role;
+
+
+--
+-- Name: TABLE secrets; Type: ACL; Schema: vault; Owner: supabase_admin
+--
+
+GRANT SELECT,REFERENCES,DELETE,TRUNCATE ON TABLE vault.secrets TO postgres WITH GRANT OPTION;
+GRANT SELECT,DELETE ON TABLE vault.secrets TO service_role;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT,DELETE ON TABLE vault.secrets TO service_role;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: TABLE decrypted_secrets; Type: ACL; Schema: vault; Owner: supabase_admin
+--
+
+GRANT SELECT,REFERENCES,DELETE,TRUNCATE ON TABLE vault.decrypted_secrets TO postgres WITH GRANT OPTION;
+GRANT SELECT,DELETE ON TABLE vault.decrypted_secrets TO service_role;
+SET SESSION AUTHORIZATION postgres;
+GRANT SELECT,DELETE ON TABLE vault.decrypted_secrets TO service_role;
+RESET SESSION AUTHORIZATION;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON SEQUENCES TO dashboard_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON FUNCTIONS TO dashboard_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: auth; Owner: supabase_auth_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON TABLES TO dashboard_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: extensions; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON SEQUENCES TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: extensions; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON FUNCTIONS TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: extensions; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON TABLES TO postgres WITH GRANT OPTION;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: graphql; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: graphql; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: graphql; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: graphql_public; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: graphql_public; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: graphql_public; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: public; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: public; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON SEQUENCES TO dashboard_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON FUNCTIONS TO dashboard_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: realtime; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON TABLES TO dashboard_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: storage; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: storage; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: storage; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: supabase_functions; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: supabase_functions; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS TO service_role;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: supabase_functions; Owner: supabase_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON TABLES TO anon;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON TABLES TO authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA supabase_functions GRANT ALL ON TABLES TO service_role;
+
+
+--
+-- Name: issue_graphql_placeholder; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
+--
+
+CREATE EVENT TRIGGER issue_graphql_placeholder ON sql_drop
+         WHEN TAG IN ('DROP EXTENSION')
+   EXECUTE FUNCTION extensions.set_graphql_placeholder();
+
+
+ALTER EVENT TRIGGER issue_graphql_placeholder OWNER TO supabase_admin;
+
+--
+-- Name: issue_pg_cron_access; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
+--
+
+CREATE EVENT TRIGGER issue_pg_cron_access ON ddl_command_end
+         WHEN TAG IN ('CREATE EXTENSION')
+   EXECUTE FUNCTION extensions.grant_pg_cron_access();
+
+
+ALTER EVENT TRIGGER issue_pg_cron_access OWNER TO supabase_admin;
+
+--
+-- Name: issue_pg_graphql_access; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
+--
+
+CREATE EVENT TRIGGER issue_pg_graphql_access ON ddl_command_end
+         WHEN TAG IN ('CREATE FUNCTION')
+   EXECUTE FUNCTION extensions.grant_pg_graphql_access();
+
+
+ALTER EVENT TRIGGER issue_pg_graphql_access OWNER TO supabase_admin;
+
+--
+-- Name: issue_pg_net_access; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
+--
+
+CREATE EVENT TRIGGER issue_pg_net_access ON ddl_command_end
+         WHEN TAG IN ('CREATE EXTENSION')
+   EXECUTE FUNCTION extensions.grant_pg_net_access();
+
+
+ALTER EVENT TRIGGER issue_pg_net_access OWNER TO supabase_admin;
+
+--
+-- Name: pgrst_ddl_watch; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
+--
+
+CREATE EVENT TRIGGER pgrst_ddl_watch ON ddl_command_end
+   EXECUTE FUNCTION extensions.pgrst_ddl_watch();
+
+
+ALTER EVENT TRIGGER pgrst_ddl_watch OWNER TO supabase_admin;
+
+--
+-- Name: pgrst_drop_watch; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
+--
+
+CREATE EVENT TRIGGER pgrst_drop_watch ON sql_drop
+   EXECUTE FUNCTION extensions.pgrst_drop_watch();
+
+
+ALTER EVENT TRIGGER pgrst_drop_watch OWNER TO supabase_admin;
+
+--
+-- PostgreSQL database dump complete
+--
+
