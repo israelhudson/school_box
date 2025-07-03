@@ -11,6 +11,42 @@
         "chrome",
         "--web-experimental-hot-reload"
       ]
+    },
+    {
+      "name": "Flutter Android (SM S911B)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "RXCX6024F1A"
+      ]
+    },
+    {
+      "name": "Flutter iOS (iPhone 16 Plus)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "66C4E6C3-EF4A-4CB4-A8C6-7FC687C0680C"
+      ]
+    },
+    {
+      "name": "Flutter macOS",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "macos"
+      ]
+    },
+    {
+      "name": "Flutter (Select Device)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart"
     }
   ]
 } 
