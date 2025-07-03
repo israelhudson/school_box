@@ -121,7 +121,7 @@ class AlunoDetalhado {
     partes.add(segmentoNome);
     partes.add(serieNome);
     partes.add(turmaNome);
-    partes.add('(${turnoNome})');
+    partes.add('($turnoNome)');
     return partes.join(' - ');
   }
 

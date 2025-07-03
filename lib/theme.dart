@@ -20,9 +20,7 @@ class SchoolTheme {
       primary: primaryColor,
       secondary: secondaryColor,
       tertiary: accentColor,
-      background: backgroundColor,
       surface: surfaceColor,
-      onBackground: textColor,
       onSurface: textColor,
     ),
     scaffoldBackgroundColor: backgroundColor,
@@ -51,7 +49,9 @@ class SchoolTheme {
       prefixIconColor: secondaryColor,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: textSecondaryColor.withOpacity(0.3)),
+        borderSide: BorderSide(
+          color: textSecondaryColor.withValues(alpha: 0.3),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -59,7 +59,9 @@ class SchoolTheme {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: textSecondaryColor.withOpacity(0.3)),
+        borderSide: BorderSide(
+          color: textSecondaryColor.withValues(alpha: 0.3),
+        ),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
