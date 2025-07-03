@@ -1,11 +1,11 @@
 {
-    "name": "school_box",
-    "short_name": "school_box",
-    "start_url": ".",
+    "name": "School Box",
+    "short_name": "School Box",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Nuvem de imagens de alunos",
+    "description": "Sistema de Gestão Escolar - Colégio Pequenos Passos",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
